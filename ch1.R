@@ -1,4 +1,4 @@
-require('astsa')
+library('astsa')
 source('grid.r')
 
 
