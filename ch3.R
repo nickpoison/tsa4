@@ -1,8 +1,8 @@
-library('astsa')
+require('astsa')
 source('grid.r')
 
 ##########
-pdf(file="ar1sim.pdf",width=7.5,height=4.5)  
+pdf(file="ar1sim.pdf",width=7.5,height=4.5)  # works with scale=.6
 set.seed(101010)
 par(mfrow = c(2,1), mar=c(1.5,2,1,0)+.5, mgp=c(1.6,.6,0), cex.main=1.05)
 x<-arima.sim(list(order=c(1,0,0), ar=.9), n=100)
@@ -17,7 +17,7 @@ mtext('Time', side=1, line=1)
 dev.off()
 
 #####################
-pdf(file="ma1sim.pdf",width=7.5,height=4.5)  
+pdf(file="ma1sim.pdf",width=7.5,height=4.5)  # works with scale=.6
 par(mfrow = c(2,1), mar=c(1.5,2,1,0)+.5, mgp=c(1.6,.6,0), cex.main=1.05)
 set.seed(101010)
 plot(x<-arima.sim(list(order=c(0,0,1), ma=.9), n=100), ylab="x", xlab="", main=(expression(MA(1)~~~theta==+.9)), type='n')
@@ -50,6 +50,7 @@ dev.off()
 
 
 ####################
+
 set.seed(8675309)
 pdf(file="ar2sim.pdf",width=7.5,height=3.25) 
 par(mar=c(2,2,1,0)+.5, mgp=c(1.6,.6,0))
@@ -60,7 +61,6 @@ abline(v=seq(0,144,by=12), lty=2)
 abline(h=c(-5,0,5), lty=1, col=gray(.9))
 lines(ar2)
 dev.off()
-
 
 ################
 pdf(file="ar2acf.pdf",width=7.25,height=3.25) 
@@ -101,16 +101,23 @@ fore = predict(regr, n.ahead=24)
 ts.plot(rec, fore$pred, col=1:2, xlim=c(1980,1990), ylab="Recruitment", type='n')
 grid(lty=1); par(new=TRUE)
 ts.plot(rec, fore$pred, col=1:2, xlim=c(1980,1990), ylab="Recruitment")
-lines(fore$pred, type="p", col=2)
-lines(fore$pred+fore$se, lty="dashed", col=4)
-lines(fore$pred-fore$se, lty="dashed", col=4)
+#
+   U=  fore$pred+fore$se
+   L = fore$pred-fore$se	
+ xx = c(time(U), rev(time(U)))
+   yy = c(L, rev(U))
+   polygon(xx, yy, border = 8, col = gray(0.6, alpha = 0.2))
+   lines(fore$pred, type="p", col=2)
+#lines(fore$pred+fore$se, lty=6, col=4)
+#lines(fore$pred-fore$se, lty=6, col=4)
 dev.off()
 
 
 ############
 set.seed(90210)
 x = arima.sim(list(order = c(1,0,1), ar =.9, ma=.5), n = 100)
-xr = replace(x, TRUE, rev(x))                 # xr is the reversed data
+#xr = replace(x, TRUE, rev(x))                 # xr is the reversed data
+xr = rev(x)
 pxr = predict(arima(xr, order=c(1,0,1)), 10)  # predict the reversed data
 pxrp = rev(pxr$pred)              # reorder the predictors (for plotting)
 pxrse = rev(pxr$se)               # reorder the SEs
@@ -120,9 +127,15 @@ par(mar=c(3,3,1.5,1), mgp=c(1.6,.6,0), cex.main=1.1)
 plot(nx, ylab=expression(X[~t]), main='Backcasting', type='n')
 grid(lty=1)
 lines(nx)
-lines(-9:0, nx[1:10], col=2, type='o')#, pch=20)
-lines(-9:0, nx[1:10] + pxrse, col=4, lty=2)
-lines(-9:0, nx[1:10] - pxrse, col=4, lty=2)
+
+   U=  nx[1:10] + pxrse
+   L = nx[1:10] - pxrse	
+   xx = c(-9:0, 0:-9)
+   yy = c(L, rev(U))
+   polygon(xx, yy, border = 8, col = gray(0.6, alpha = 0.2))
+   lines(-9:0, nx[1:10], col=2, type='o') 
+#lines(-9:0, nx[1:10] + pxrse, col=4, lty=6)
+#lines(-9:0, nx[1:10] - pxrse, col=4, lty=6)
 dev.off()
 
 
@@ -198,15 +211,27 @@ dev.off()
 
 
 ############
-#  bootstrap (all in one)
+# pdf(file="boottrue.pdf",width=7.25,height=3.75) 
 set.seed(111)
 phi.yw = rep(NA, 1000)
 for (i in 1:1000){
   e = rexp(150, rate=.5); u = runif(150,-1,1); de = e*sign(u)
   x = 50 + arima.sim(n=100,list(ar=.95), innov=de, n.start=50)
   phi.yw[i] = ar.yw(x, order=1)$ar }
-#
-#
+# par(mar=c(3,3,1,1), mgp=c(1.6,.6,0))
+# hist(phi.yw, prob=TRUE, main="",  ylim=c(0,14), xlim=c(.70,1.05))
+# lines(density(phi.yw, bw=.015))
+# u = seq(.75, 1.1, by=.001)
+# lines(u, dnorm(u, mean=.96, sd=.03), lty="dashed", lwd=2)
+#dev.off()
+
+
+
+###############
+# set.seed(101010)
+# e = rexp(150, rate=.5); u = runif(150,-1,1); de = e*sign(u)
+# dex = 50 + arima.sim(n=100,list(ar=.95), innov=de, n.start=50)
+#pdf(file="boothist.pdf",width=7.25,height=3.75) 
 set.seed(666)
 fit = ar.yw(dex, order=1)
 m = fit$x.mean
@@ -219,19 +244,30 @@ for (i in 1:nboot) {
   resid.star = sample(resids, replace=TRUE)
   for (t in 1:99){ x.star[t+1] = m + phi*(x.star[t]-m) + resid.star[t] }
   phi.star.yw[i] = ar.yw(x.star, order=1)$ar } 
+#par(mar=c(3,3,1,1), mgp=c(1.6,.6,0))  
+#hist(phi.star.yw, 10, main="", prob=TRUE,  xlim=c(.70,1.05))
+#lines(density(phi.star.yw, bw=.02))
+####lines(density(phi.yw, bw=.015), lty=2, col=4)
+#dev.off()
 #
-#
+#round(cbind(fit$x.mean, fit$ar, fit$var.pred ),2)
+
 pdf(file="newboot.pdf",width=7.25,height=3.75) 
-culer=  rgb(.5,.7,1,.5)
+
+ culer=  rgb(.5,.7,1,.5)
 par(mar=c(3,3,1,1), mgp=c(1.6,.6,0))
+
 hist(phi.star.yw, 15, main="", prob=TRUE, xlim=c(.65,1.05), ylim=c(0,14), col=culer, xlab=expression(hat(phi)))
+ #lines(density(phi.star.yw, bw=.02))
+#hist(phi.yw, prob=TRUE, main="",  ylim=c(0,14), xlim=c(.70,1.05), col=rgb(.9,0,.9,.25), add=TRUE) 
 lines(density(phi.yw, bw=.02), lwd=2) 
 u = seq(.75, 1.1, by=.001)
-lines(u, dnorm(u, mean=.96, sd=.03), lty="dashed", lwd=2) 
+ lines(u, dnorm(u, mean=.96, sd=.03), lty="dashed", lwd=2) 
 legend(.65,14, legend=c('true distribution', 'bootstrap distribution', 'normal approximation'),
         bty='n', col=1, lty=c(1,0,2), lwd=c(2,0,2),
 		pch=c(NA,22,NA), pt.bg=c(NA,culer,NA), pt.cex=2.5)
-#
+
+
 dev.off()
 
 
@@ -244,7 +280,6 @@ grid(lty=1, col=gray(.9)); lines(gnp)
 # acf  
 acf(gnp, 48, panel.first=grid(lty=1))
 dev.off()
-
 
 #############
 pdf(file="gnp96gr.pdf",width=7.5,height=3.5)
@@ -456,6 +491,8 @@ par(mar=c(2,2,0,0)+.5, mgp=c(1.4,.6,0))
     n = length(xdata)
     U = fore$pred + 2 * fore$se
     L = fore$pred - 2 * fore$se
+	 U1 = fore$pred + fore$se
+    L1 = fore$pred - fore$se
     a = max(1, n - 100)
     minx = min(xdata[a:n], L)
     maxx = max(xdata[a:n], U)
@@ -463,11 +500,19 @@ par(mar=c(2,2,0,0)+.5, mgp=c(1.4,.6,0))
     ts.plot(xnew, fore$pred, col = 1:2, ylim = c(minx, maxx), type='n')
     grid(lty=1); par(new=TRUE)
 	ts.plot(xnew, fore$pred, col = 1:2, type = "o", ylim = c(minx, maxx), ylab='log(AirPassengers)')
-    lines(fore$pred, col = "red", type = "p")
-    lines(U, col = "blue", lty = "dashed")
-    lines(L, col = "blue", lty = "dashed")
+	xx = c(time(U), rev(time(U)))
+    yy = c(L, rev(U))
+    polygon(xx, yy, border = 8, col = gray(0.6, alpha = 0.2))
+    yy1 = c(L1, rev(U1))
+    polygon(xx, yy1, border = 8, col = gray(0.6, alpha = 0.2))
+    lines(fore$pred, col = "red", type = "o")	
+	#lines(fore$pred, col = "red", type = "p")
+    # lines(U, col = "blue", lty = "dashed")
+    # lines(L, col = "blue", lty = "dashed")
 dev.off()
 
+
+###########################
 
 
 
