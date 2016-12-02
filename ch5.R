@@ -94,9 +94,10 @@ dev.off()
 
 ################ djiapred ##########################
 #-- try fGarch on djia data
- require(TTR)                                          
- djia = getYahooData("^DJI",start=20060420,end=20160420,freq="daily") 
-djiar = diff(log(djia$Close))[-1]  
+ # library(TTR)                                          
+ # djia = getYahooData("^DJI",start=20060420,end=20160420,freq="daily") 
+library(xts) 
+djiar = diff(log(djia$Close))[-1]   # djia is in astsa now 
 # acf2(djiar)     # exhibits some acf
 # acf2(djiar^2)   # exhibits a lot of autocorr
 library(fGarch)
@@ -110,7 +111,7 @@ lines((u+djiar-djiar)[400:900], col=4)
 dev.off()
 
 
-################# power arch (assuming djiar are still available)
+################# power arch (assuming djiar still available)
 summary(fit <- garchFit(~arma(1,0)+aparch(1,2), data=djiar, cond.dist='std'))
 v = volatility(fit, type = "sigma")
 #par(mfrow=c(2,1))
