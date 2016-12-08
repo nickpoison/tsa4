@@ -359,6 +359,8 @@ plot(LAG, PACF, type="h", ylim = c(minu, maxu) , panel.first=grid(lty=1)); ablin
 abline(h = c(L, U), col=4, lty=2)  
 dev.off()
 
+
+
 #######################
 pdf(file="sAR1.pdf",width=7.5, height=4)
 set.seed(666)
@@ -375,7 +377,7 @@ points(sAR, pch=Months, cex=1.35, font=4, col=1:4)
 axis(1,1:4) 
 axis(2)
 box()
-
+#
 ACF = ARMAacf(ar=phi, ma=0, 100)[-1]  # [-1] removes 0 lag
 PACF = ARMAacf(ar=phi, ma=0, 100, pacf=TRUE)
 plot(ACF, type="h", xlab="LAG", ylim=c(-.1,1), axes=FALSE);
@@ -391,8 +393,9 @@ box()
 abline(h=0)
 dev.off()
 
+
 ###################
-pdf(file="sarmaacf.pdf",width=7.25, height=3.25)
+pdf(file="sarmaacf.pdf",width=7.25,height=3.25)
 phi = c(rep(0,11),.8)
 ACF = ARMAacf(ar=phi, ma=-.5, 50)[-1]     # [-1] removes 0 lag
 PACF = ARMAacf(ar=phi, ma=-.5, 50, pacf=TRUE)
@@ -408,6 +411,7 @@ axis(1, seq(0,50,by=12))
 axis(2)
 box()
 dev.off()
+
 
 #####################
 pdf(file="AirPdata.pdf", width=7.5, height=6)
@@ -425,6 +429,7 @@ plot.ts(u[,4], ylab='ddlx', yaxt='no', type='n')
 grid(lty=1, col=gray(.9)); axis(4); lines(u[,4])
 title(xlab="Time", outer=TRUE)
 dev.off()
+
 
 #################
 pdf(file="AirPacf.pdf",width=7, height=3.5)
@@ -449,21 +454,25 @@ plot(LAG, PACF, type="h", xlab="LAG",  ylim = c(minu, maxu) , panel.first=grid(l
 abline(h = c(L, U), col=4, lty=2)  
 dev.off()
 
+
 ##############
 pdf(file="AirPresid.pdf",width=7.5)
 sarima(log(AirPassengers), 0, 1, 1, 0, 1, 1, 12) 
 dev.off()
 
+
 ####################
 x = AirPassengers
 xdata = log(x)
-fore = sarima.for(xdata, 12, 0,1,1, 0,1,1,12); dev.off()
+fore = sarima.for(xdata, 12, 0,1,1, 0,1,1,12)
+ dev.off()
+# -- for publication
 pdf(file="AirPfore.pdf",width=7.5, height=3.5)
 par(mar=c(2,2,0,0)+.5, mgp=c(1.4,.6,0))
     n = length(xdata)
     U = fore$pred + 2 * fore$se
     L = fore$pred - 2 * fore$se
-	 U1 = fore$pred + fore$se
+	U1 = fore$pred + fore$se
     L1 = fore$pred - fore$se
     a = max(1, n - 100)
     minx = min(xdata[a:n], L)
@@ -478,9 +487,6 @@ par(mar=c(2,2,0,0)+.5, mgp=c(1.4,.6,0))
     yy1 = c(L1, rev(U1))
     polygon(xx, yy1, border = 8, col = gray(0.6, alpha = 0.2))
     lines(fore$pred, col = "red", type = "o")	
-	#lines(fore$pred, col = "red", type = "p")
-    # lines(U, col = "blue", lty = "dashed")
-    # lines(L, col = "blue", lty = "dashed")
 dev.off()
 
 
