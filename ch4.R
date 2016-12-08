@@ -185,7 +185,6 @@ dev.off()
 
 ######################
 pdf(file="taper2.pdf",width=7.5, height=3.5) 
-#dev.new(width=7.5, height=3.5)
 par(mar=c(2.5,2.5,1,1),  mgp=c(1.5,.6,0))
 s0 = mvspec(soi, spans=c(7,7), plot=FALSE)             # no taper
 s50 = mvspec(soi, spans=c(7,7), taper=.5, plot=FALSE)  # full taper
@@ -299,7 +298,6 @@ dev.off()
 
 ############################
 ## SigExtract(soi, L=9, M=64, max.freq=.05)
-
 L = 9;  M = 64; max.freq=.05
 series = ts(soi, frequency = 1)  
 spectra = stats::spec.pgram(series, spans=L, plot = FALSE)
@@ -336,7 +334,7 @@ A.theoretical[k] = A(fr.N[k])
 }
 series.filt = stats::filter(series, a, sides = 2) # The filtered series
 
-##
+###########
 pdf(file="sigextract.pdf",width=7.5, height=4)
 par(mfrow=c(2,1), mar=c(2.5,2.5,1,.5), mgp=c(1.25,.6,0), cex.lab=.8, cex.axis=.8, font.main=1, cex.main=.9)
 plot.ts(series, type='n') 
@@ -349,7 +347,7 @@ lines(series.filt)
 mtext(side=3, "Filtered series")
 dev.off()
 
-##
+###########
 pdf(file="sigextract_coef.pdf",width=7.5, height=4)
 par(mfrow=c(2,1), mar=c(2.5,2.5,1,.5), mgp=c(1.25,.6,0), cex.lab=.8, cex.axis=.8, font.main=1, cex.main=.9)
 plot(S, a, xlab = "s", ylab = "a(s)", main = "Filter coefficients", panel.first=grid(lty=1))
@@ -360,7 +358,6 @@ dev.off()
 
 
 ###############################
-
  pdf(file="2dfft.pdf", height=5)
  per = abs(fft(soiltemp-mean(soiltemp))/sqrt(64*36))^2       
  per2 = cbind(per[1:32,18:2], per[1:32,1:18])   
@@ -369,15 +366,12 @@ dev.off()
  persp(-31:31/64, -17:17/36, per3, phi=30, theta=30, expand=.6, ticktype="detailed", xlab="cycles/row",  ylab="cycles/column", zlab="Periodogram Ordinate")
  dev.off()
 
- #######################
  
+#######################
 pdf(file="sunspotz.pdf",width=7.5,height=3)  # works with scale=.6
 par(mar=c(2,2,1,0)+.5, mgp=c(1.6,.6,0))
 plot(sunspotz, type='n')
 grid(lty=1)
 lines(sunspotz)
 dev.off()
-
-
-
 
