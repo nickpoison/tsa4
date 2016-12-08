@@ -24,8 +24,9 @@ grid(lty=1);   lines(speech);
 dev.off()
 
 ###########
- require(TTR)                                          
-#   djia = getYahooData("^DJI",start=20060420,end=20160420,freq="daily") 
+# library(TTR)                                          
+# djia = getYahooData("^DJI",start=20060420,end=20160420,freq="daily") 
+library(xts)
 djiar = diff(log(djia$Close))[-1]         
 pdf(file="djiar.pdf", width=7.5,height=3.25)   
 par(mar=c(3,3,1,1), mgp=c(1.6,.6,0))
@@ -35,7 +36,7 @@ dev.off()
 
 
 #########
-pdf(file="fish.pdf",width=7.5,height=6)  # works with scale=.6
+pdf(file="fish.pdf",width=7.5,height=6)  
 par(mfrow = c(2,1), mar=c(2,2,1,0)+.5, mgp=c(1.6,.6,0), cex.main=1.05)
 plot(soi, ylab="", xlab="", main="Southern Oscillation Index",   type='n')
 grid(lty=1); lines(soi)
@@ -43,10 +44,9 @@ plot(rec, ylab="", main="Recruitment",  type='n')
 grid(lty=1); lines(rec)
 dev.off()
 
+
 #########
-
-
-pdf(file="fmri1.pdf",width=7.5,height=6)  # works with scale=.6
+pdf(file="fmri1.pdf",width=7.5,height=6)  
 par(mfrow = c(2,1), mar=c(2,2,1,0)+.5, mgp=c(1.6,.6,0), cex.main=1.05)
 ts.plot(fmri1[,2:5], ylab="BOLD", xlab="", main="Cortex", type='n')
 grid(lty=1); par(new=TRUE)
@@ -59,10 +59,6 @@ mtext("Time (1 pt = 2 sec)", side=1, line=1.5)
 dev.off()
 
 
-
-
-
-
 #####################
 pdf(file="eqexp.pdf",width=7.5,height=6)   
 par(mfrow = c(2,1), mar=c(2,2,1,0)+.5, mgp=c(1.6,.6,0), cex.main=1.05)
@@ -72,6 +68,7 @@ plot(EXP6, main="Explosion", xlab="", type='n')
 grid(lty=1); lines(EXP6)
 mtext("Time", side=1, line=1.5)
 dev.off()
+
 
 ####################
 pdf(file="wn_ma.pdf",width=7.5,height=6)   
@@ -85,6 +82,7 @@ plot.ts(v, ylim=c(-3,3), main="moving average", type='n')
 grid(lty=1, col=gray(.9)); lines(v)
 dev.off()
 
+
 ####################
 pdf(file="ar2.pdf",width=7.5,height=3.25)   
 par(mar=c(2,2,1,0)+.5, mgp=c(1.6,.6,0))
@@ -93,6 +91,7 @@ x = filter(w, filter=c(1,-.9), method="recursive")[-(1:50)]
 plot.ts(x, main="autoregression", type='n')
 grid(lty=1, col=gray(.9)); lines(x)
 dev.off()
+
 
 #################
 pdf(file="rw.pdf",width=7.5,height=3.25)   
@@ -113,15 +112,13 @@ par(mfrow = c(3,1), mar=c(2,2.5,1,0)+.5, mgp=c(1.6,.6,0))
 cs = 2*cos(2*pi*1:500/50 + .6*pi);  w = rnorm(500,0,1)
 par(mfrow=c(3,1), mar=c(3,2,2,1), cex.main=1.05)
 plot.ts(cs, ylab='',xlab='', main=expression(2*cos(2*pi*t/50+.6*pi)), type='n', cex.main=1.5)
-grid(lty=1, col=gray(.9)); lines(cs) 
-
+ grid(lty=1, col=gray(.9)); lines(cs) 
 plot.ts(cs+w, ylab='',xlab='',main=expression(2*cos(2*pi*t/50+.6*pi) + N(0,1)), type='n', cex.main=1.5)
-grid(lty=1, col=gray(.9)); lines(cs+w) 
-
+ grid(lty=1, col=gray(.9)); lines(cs+w) 
 plot.ts(cs+5*w, ylab='', main=expression(2*cos(2*pi*t/50+.6*pi) + N(0,5^2)), type='n', cex.main=1.5)
-grid(lty=1, col=gray(.9)); lines(cs+5*w) 
-
+ grid(lty=1, col=gray(.9)); lines(cs+5*w) 
 dev.off()
+
 
 ###################
 pdf(file="ma3.pdf",width=6,height=2.5) 
@@ -149,10 +146,6 @@ title(main="y & x", cex.main=1)
 dev.off()
 
 
-
-
-
-
 #######################
 pdf(file="acf_scatter_soi.pdf",width=6,height=3) 
 r = round(acf(soi, 6, plot=FALSE)$acf[-1], 3) # first 6 sample acf values
@@ -161,22 +154,24 @@ plot(lag(soi,-1), soi,panel.first=grid(lty=1)); legend('topleft', legend=r[1], b
 plot(lag(soi,-6), soi,panel.first=grid(lty=1)); legend('topleft', legend=r[6], bg='white', adj=.25, cex = 0.8)
 dev.off()
 
+
 ######################
 pdf(file="acfspeech.pdf",width=7.5,height=3.25)   
 ACF = acf(speech, 250, plot = FALSE)$acf[-1]
 LAG = 1:250
 minA = min(ACF)
-    maxA = max(ACF)
-    U = 2/sqrt(num)
-    L = -U
-    minu = min(minA, L) - 0.01
-    maxu = min(maxA + 0.1, 1)
-    plot(LAG, ACF, type = "n", ylim = c(minu, maxu))
-    grid(lty = 1, col = gray(0.9))
-    abline(h = c(0, L, U), lty = c(1, 2, 2), col = c(1, 4, 4))
-    lines(LAG, ACF, type = "h")
+maxA = max(ACF)
+U = 2/sqrt(num)
+L = -U
+minu = min(minA, L) - 0.01
+maxu = min(maxA + 0.1, 1)
+plot(LAG, ACF, type = "n", ylim = c(minu, maxu))
+grid(lty = 1, col = gray(0.9))
+abline(h = c(0, L, U), lty = c(1, 2, 2), col = c(1, 4, 4))
+lines(LAG, ACF, type = "h")
 #acf(speech, 250, panel.first=grid(lty=1))
 dev.off()
+
 
 ###################
 pdf(file="soiltempplot.pdf",  height=4.5)          
@@ -191,6 +186,7 @@ plot.ts(rowMeans(soiltemp), xlab="row", ylab="Average Temperature" , type='n')
 grid(lty=1); lines(rowMeans(soiltemp))
 dev.off()
 
+
 #######################
 pdf(file="soiltemp2dacf.pdf",height=4.5) 
 par(mar=c(1,1,0,0)+.5)
@@ -202,6 +198,7 @@ rs3 = rbind(rs2[41:2,], rs2)
 persp(-40:40, -20:20, rs3, phi=30, theta=30, expand=30, scale="FALSE",
 ticktype="detailed", xlab="row lags", ylab="column lags", zlab="ACF")
 dev.off()
+
 
 ########
 pdf(file="ccfsoirec.pdf",width=7.5,height=6) 
