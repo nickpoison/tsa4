@@ -5,7 +5,7 @@ source('grid.r')
 ###############
 pdf(file="chickline.pdf",width=7.25,height=2.75)  
 par(mar=c(2,2.5,0,0)+.5, mgp=c(1.6,.3,0), tcl=-.2, las=1, cex.axis=.8)
-summary(fit <- lm(chicken~time(chicken)))  # regress gtemp on time - view results
+summary(fit <- lm(chicken~time(chicken)))  
 plot(chicken, ylab="cents per pound",  type='n', ylim=c(58,122), yaxt='n')
 grid(lty=1); abline(fit) ; lines(chicken, col=4, lwd=2)
 axis(2, at = seq(60, 120, by = 10), las=2 )
@@ -27,7 +27,6 @@ dev.off()
 
 ###########
 pdf(file="scatter.pdf",width=7.5,height=6)
-#par(mar=c(0,0,0,0)+.5, mgp=c(1.6,.6,0))
 pairs(cbind(Mortality=cmort, Temperature=tempr, Particulates=part))
 dev.off()
 
@@ -41,6 +40,7 @@ grid(lty=1); lines(resid(fit))
 plot(diff(chicken),  main="first difference",   type='n')
 grid(lty=1); lines(diff(chicken))
 dev.off()
+
 
 ##########
 pdf(file="acfchick.pdf",width=7.5,height=5.5)  
@@ -67,8 +67,6 @@ mtext("LAG", side=1, line=1)
 dev.off()
 
 
-
-
 ############
 pdf(file="varve.pdf",width=7.5,height=4.75) 
 par(mfrow = c(2,1), mar=c(2,1.5,.75,0)+.5, mgp=c(1.6,.6,0), cex.main=1.05)
@@ -87,6 +85,7 @@ dev.off()
 pdf(file="soirscat1.pdf",width=7,height=6)
 lag2.plot(soi, rec, 8)
 dev.off()
+
 
 #####################
 pdf(file="lag_reg.pdf",width=7.5,height=2.75)  
@@ -130,9 +129,10 @@ par(fig = c(.65, 1, .65, 1),   new = TRUE)
 nwgts = c(rep(0,20),w1,rep(0,20))
 plot(nwgts, type="l", ylim = c(-.02,.1), xaxt='n', yaxt='n', ann=FALSE)
 dev.off()
- 
-###############################################
 
+
+
+###############################################
 pdf(file="soi_kern.pdf",width=7.5,height=3.25) 
 par(mar=c(2.5,2.5,.5,.5), mgp=c(1.6,.6,0))
 plot(soi,  col=rgb(.5,.5,.5, 1), ylim=c(-1,1.15),   type='n')
@@ -143,6 +143,7 @@ par(fig = c(.65, 1, .65, 1), new = TRUE)
  x <- seq(from = -3, to = 3, by = 0.001)
  plot(x, gauss(x), type = "l", ylim = c(-.02,.45), lty = 1,  xaxt='n', yaxt='n', ann=FALSE)
 dev.off()
+ 
  
 ############################# 
 pdf(file="soi_lowess.pdf",width=7.5,height=3.25) 
