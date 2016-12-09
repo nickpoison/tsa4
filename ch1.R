@@ -1,5 +1,6 @@
 library('astsa')
-source('grid.r')
+source('grid.r')  # I changed the defaults so that
+#  grid() gives grid(lty=1, col = gray(.9))
 
 
 ################
