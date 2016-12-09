@@ -21,6 +21,9 @@ dev.off()
 
 ###############
 library(fracdiff)
+# I might suggest another package such as 'arfima' because 
+# this package gives questionable results and it's not easy to
+# pull out the residuals
 pdf(file="acfvarve3.pdf",width=7.25,height=4) 
 lvarve = log(varve)-mean(log(varve))
 varve.fd = fracdiff(lvarve, nar=0, nma=0, M=30)
@@ -66,7 +69,7 @@ dev.off()
    
 ###############
 library(fracdiff)
-fdGPH(log(varve), bandw = .9)
+fdGPH(log(varve), bandw = .9)  # fdGPH doesn't seem to work very well either
 ##########################
 
 # {innov2acf}
@@ -92,14 +95,13 @@ abline(h = c(L, U), col=4, lty=2)
 dev.off()
 
 
-################ djiapred ##########################
-#-- try fGarch on djia data
+###############
  # library(TTR)                                          
  # djia = getYahooData("^DJI",start=20060420,end=20160420,freq="daily") 
 library(xts) 
 djiar = diff(log(djia$Close))[-1]   # djia is in astsa now 
-# acf2(djiar)     # exhibits some acf
-# acf2(djiar^2)   # exhibits a lot of autocorr
+ acf2(djiar)     # exhibits some acf
+ acf2(djiar^2)   # exhibits a lot of autocorr
 library(fGarch)
 summary(djia.g <- garchFit(~arma(1,0)+garch(2,1), data=djiar, cond.dist='std'))
 u = djia.g@sigma.t
@@ -134,6 +136,7 @@ lines(flu, type="c")
 Months = c("J","F","M","A","M","J","J","A","S","O","N","D")
 points(flu, pch=Months, cex=.8, font=2)
 dev.off()
+
 
 #########  setar flu ###################
 dflu = diff(flu)
@@ -181,8 +184,6 @@ dev.off()
 ######
 pdf(file="dflu_scat.pdf",width=6,height=3) 
 par(mar=c(2.5,2.5,0,0)+.5, mgp=c(1.6,.6,0))
-# v=ifelse(cycle(lag(dflu,-1))<4, 2, ifelse(cycle(lag(dflu,-1))>11,2,3))
-
  U= matrix(Z, ncol=5)
  plot(U[,2],U[,1], panel.first=grid(lty=1), xlab=expression(dflu[~t-1]), ylab=expression(dflu[~t]))#,pch=20, col=v)
  lines(lowess(U[,2], U[,1], f =2/3), col=2)
@@ -233,9 +234,7 @@ fish = ts.intersect(R=rec, RL1=lag(rec,-1), SL5=lag(soi.d,-5))
 (u = lm(fish[,1]~fish[,2:3], na.action=NULL))
 # acf2(resid(u))  # suggests ar1
 uar = sarima(fish[,1], 1, 0, 0, xreg=fish[,2:3])   # armax model
-# pred = rec + resid(u$fit)
-# colp = rgb(.6,.6,.6, alpha=.25)
-# ts.plot(rec, pred, col=c(1,colp), lwd=c(1,15)) 
+
 ######################
 #transfer plot
 pdf(file="transfer.pdf",width=7.5,height=4) 
