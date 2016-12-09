@@ -18,6 +18,7 @@ lines(blood[,3], type='o', pch=19)
 title(xlab="Time", outer=TRUE)
 dev.off()
 
+
 #################################################################
 ###################################################################
 pdf(file="gtemp2.pdf", width=7.6, height=3)
@@ -29,10 +30,6 @@ lines(globtempl, lwd=2, col = rgb( 0, .7, .9, .7) )
 legend('topleft', col=c(rgb(.9, 0, .7),  rgb(0, .7, .9)), lty=1, lwd=2, 
         legend=c("Land/Ocean", "Land Only"), bg='white')  
 dev.off()
-
-
-
-
 
 
 ###########################################################
@@ -222,10 +219,8 @@ lines(y3s)
 yy=c(y3s-p3, rev(y3s+p3))
 polygon(xx, yy, border=NA, col=gray(.5, alpha = .2)) 
 title(xlab="Time", outer=TRUE, cex.lab=1.1) 
-
 miss=ifelse(y[,1]==0,20.1,0)            # try to put a tick at missing days
 lines(miss, type='h', lwd=2)
-
 dev.off()
 
 
