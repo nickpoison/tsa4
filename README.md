@@ -1,6 +1,6 @@
 ## tsa4
-
-* Thanks to Nicky for taking care of me on GitHub. She's been a great asset! :DSS
+<img src="http://www.stat.pitt.edu/stoffer/tsa4/NickyApproved.png"><br/>
+ _Thanks to Nicky for taking care of me on GitHub. She's been a great asset!_  
 
 * Because R code takes up so much space in the text, I shortened most of the R code for the **graphics** in Time Series Analysis and Its Applications, Edition 4
 
