@@ -85,7 +85,7 @@ maxP = max(PACF)
 U = 2/sqrt(num)
 L = -U
 minu = min(minA, minP, L) - 0.01
-maxu = min(maxA + 0.2, maxP + 0.2, 1)
+maxu = min(max(maxA + 0.1, maxP + 0.1), 1)
 pdf(file="recacf.pdf",width=7,height=4) 
 par(mfrow=c(2,1), mar=c(2,2,0,0)+.5, mgp=c(1.5,.6,0))
 plot(LAG, ACF, type="h", xlab="LAG", ylim = c(minu, maxu), panel.first=grid(lty=1)); abline(h=0)
