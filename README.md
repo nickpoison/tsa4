@@ -1,6 +1,7 @@
 ## tsa4
 <a href="https://github.com/nickpoison"><img src="https://img.shields.io/badge/NickyPoison-approved-ff69b4.svg?style=flat"></a>
- _Thanks to Nicky for taking care of me on GitHub. She's been a great asset!_  
+
+_Thanks to Nicky for taking care of me on GitHub. She's been a great asset!_  
 
 * Because R code takes up so much space in the text, I shortened most of the R code for the **graphics** in Time Series Analysis and Its Applications, Edition 4
 
