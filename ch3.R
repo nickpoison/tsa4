@@ -325,12 +325,12 @@ pdf(file="uspop.pdf",width=7, height=3)
 par(mar=c(2,2.5,.5,0)+.5, mgp=c(1.6,.6,0))
 dat = read.table("uspop.dat")
 y = dat[,2]
-x = dat[,1]-1955
+x = dat[,1]
 b = dat[,3]
 g = function(x) (b[1]+b[2]*(x-1955)+b[3]*(x-1955)^2+b[4]*(x-1955)^3+b[5]*(x-1955)^4+b[6]*(x-1955)^5+b[7]*(x-1955)^6+b[8]*(x-1955)^7+b[9]*(x-1955)^8)/10^8
 curve(g, 1910,2002, ylab="Population", xlab="Year", main="U.S. Population by Official Census", panel.first=grid(ny=NULL,lty=1), cex.main=1, font.main=1)
 abline(v=c(1910,1930,1950,1970,1990), lty=1, col='lightgray')
-points((x+1955),y/10^8, pch=16)
+points(x, y/10^8, pch=16)
 mtext(expression(""%*% 10^8), side=2, line=1.5, adj=.95)
 axis(1, seq(1910,1990,by=10), labels=FALSE)
 dev.off()
