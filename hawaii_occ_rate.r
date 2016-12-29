@@ -40,16 +40,17 @@ hor = ts(x, freq=4, start=1982)
 
 
 ######################
+pdf(file="hor.pdf", width=6.5, height=4)
+#
 culer= c(rgb(0,.55,0),4,2,6)
-pdf(file="hor.pdf", width=6.5, height=4) 
 par(mfrow = c(2,1), mar=c(1.5,2,1,0)+.5, mgp=c(1.6,.6,0), cex.main=1)
 x = window(hor, start=2002)
 plot(x, main='Hawaiian Quarterly Occupancy Rate', type='c', xlab='', ylab='% rooms', ylim=c(62,86))
 text(x, labels=1:4, col=culer, cex=.9)
-#
 Qx = stl(x,4)$time.series[,1] 
 plot(Qx, main="Seasonal Component", type='c', xlab='',ylab='% rooms', ylim=c(-4.7,4.7))
 text(Qx, labels=1:4, col=culer, cex=.9)
+#
 dev.off()
 
 
