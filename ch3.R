@@ -163,8 +163,8 @@ pdf(file="gaussnewton.pdf",width=7,height=3.75)
 x=diff(log(varve))
 r=acf(x, lag=1, plot=FALSE)$acf[-1]
 rstart = (1-sqrt(1-4*(r^2)))/(2*r)    #example 3.29 (e2.27)
-c(0) -> w -> z
-c() -> Sc -> Sz -> Szw
+c(0) -> w 
+c() -> Sc 
 num = length(x)
 th = seq(-.3,-.94,-.01)
 for (p in 1:length(th)){
