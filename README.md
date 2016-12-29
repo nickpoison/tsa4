@@ -9,5 +9,6 @@
 
 * `grid.r` as listed here was used instead of writing out the details each time... the change was to `col = gray(.9), lty = 1` in the defaults from the original `col = "lightgray", lty = "dotted"` ... not a big deal but a pain if it's called a lot.
 
+* Chapter 7 code is long, so there are a number of files in that directory.
 
-* Chapter 7 code is long, so there is a different file for each example in that directory.
+* The use of `ggplot2` in the new edition of the text was considered for about 2 seconds, but it's not what the text is about and it would have added too much space to address it.  Instead, a web page is devoted to `ggplot`, `ggfortify` and base graphics. See the [graphics fix](http://www.stat.pitt.edu/stoffer/tsa4/tsgraphics.htm) page at [tsa4](http://www.stat.pitt.edu/stoffer/tsa4/).
