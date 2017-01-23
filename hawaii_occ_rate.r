@@ -1,6 +1,24 @@
 #  This is used in tsaEZ but not in Ed 4 because it was too late to add it
+#  the data set is now in astsa v1.7.1+ 
 
-x <- c(
+######################
+library(astsa)   # if use version 1.7.1 or higher
+pdf(file="hor.pdf", width=6.5, height=4)
+#
+culer= c(rgb(0,.55,0),4,2,6)
+par(mfrow = c(2,1), mar=c(1.5,2,1,0)+.5, mgp=c(1.6,.6,0), cex.main=1)
+x = window(hor, start=2002)
+plot(x, main='Hawaiian Quarterly Occupancy Rate', type='c', xlab='', ylab='% rooms', ylim=c(62,86))
+text(x, labels=1:4, col=culer, cex=.9)
+Qx = stl(x,15)$time.series[,1] 
+plot(Qx, main="Seasonal Component", type='c', xlab='',ylab='% rooms', ylim=c(-4.7,4.7))
+text(Qx, labels=1:4, col=culer, cex=.9)
+#
+dev.off()
+
+#####################################
+########## original data set ########
+hor <- c(
 79.0, 65.9, 70.9, 66.7,   
 75.2, 68.1, 71.7, 66.5,   
 84.0, 75.6, 74.6, 75.1,   
@@ -36,26 +54,9 @@ x <- c(
 80.8, 74.0, 78.7, 74.7,   
 80.0, 77.9, 79.9, 78.0)  
                               
-hor = ts(x, freq=4, start=1982)
-
-
-######################
-pdf(file="hor.pdf", width=6.5, height=4)
-#
-culer= c(rgb(0,.55,0),4,2,6)
-par(mfrow = c(2,1), mar=c(1.5,2,1,0)+.5, mgp=c(1.6,.6,0), cex.main=1)
-x = window(hor, start=2002)
-plot(x, main='Hawaiian Quarterly Occupancy Rate', type='c', xlab='', ylab='% rooms', ylim=c(62,86))
-text(x, labels=1:4, col=culer, cex=.9)
-Qx = stl(x,4)$time.series[,1] 
-plot(Qx, main="Seasonal Component", type='c', xlab='',ylab='% rooms', ylim=c(-4.7,4.7))
-text(Qx, labels=1:4, col=culer, cex=.9)
-#
-dev.off()
-
-
-
-
+hor = ts(hor, freq=4, start=1982)
+###################################
+###################################
 
 
 
