@@ -10,6 +10,24 @@ plot(jj, ylab="Quarterly Earnings per Share",   type='n')
 grid(lty=1); lines(jj, type="o")
 dev.off()
 
+############ this is in the EZ version only #########
+pdf(file="4bros.pdf", width=6.5, height=2.75)
+par(mfrow=1:2, mar=c(2.5,2.5,.5,.5)+.1, mgp=c(1.5,.6,0))
+t=1:(10*2)
+x = 100*1.1^t
+y = 150*1.1^t
+z = 200*1.1^t
+w = 75*1.1^t 
+culer = c(1,2,'darkgreen',4)
+u=t(cbind(x,y,z,w))
+x=ts(c(u), freq=4)
+plot(x, xlab='quarter', ylab='value', col=gray(.6))
+points(x,  pch=c('1','2','3','4'), col=culer, cex=.8)
+plot(log(x), xlab='quarter', ylab='log(value)', col=gray(.6))
+points(log(x),  pch=c('1','2','3','4'), col=culer, cex=.8)
+dev.off()
+
+
 ###########
 pdf(file="globtemp.pdf",  width=7.5,height=3.25)  
 par(mar=c(3,3,1,1), mgp=c(1.6,.6,0))
