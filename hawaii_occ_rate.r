@@ -3,8 +3,8 @@
 
 ######################
 library(astsa)   # if use version 1.7.1 or higher
-culer= c(rgb(0,.55,0),4,2,6)
 pdf(file="hor.pdf", width=6.5, height=4) 
+culer = c(rgb(0,.55,0), 4, 2, 6)
 par(mfrow = c(2,1), mar=c(1.5,2,1,0)+.5, mgp=c(1.6,.6,0), cex.main=1)
 x = window(hor, start=2002)
 plot(x, main='Hawaiian Quarterly Occupancy Rate', xlab='', ylab='% rooms', ylim=c(62,86), col=gray(.7))
