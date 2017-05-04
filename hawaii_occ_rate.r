@@ -15,6 +15,31 @@ plot(Qx, main="Seasonal Component",  xlab='',ylab='% rooms', ylim=c(-4.7,4.7), c
 text(Qx, labels=1:4, col=culer, cex=.8)
 dev.off()
 
+##### with all the components #######################
+library(astsa)   # if use version 1.7.1 or higher
+pdf(file="hor2.pdf", width=6.5, height=6.5) 
+par(mar=c(1.5,2,1,0)+.5, mgp=c(1.6,.6,0), cex.main=1)
+x = window(hor, start=2002)
+culer = c(rgb(0,.55,0), 4, 2, rgb(.7,0,.7))
+par(mfrow = c(4,1), mar=c(1.5,2,1,0)+.5, mgp=c(1.6,.6,0), cex.main=1)
+x = window(hor, start=2002)
+plot(x, main='Hawaiian Quarterly Occupancy Rate', xlab='', ylab='% rooms', ylim=c(62,86), col=gray(.7))
+text(x, labels=1:4, col=culer)
+STL = stl(x, s.window=15)
+#
+Qx = STL$time.series[,1] 
+plot(Qx, main="Seasonal Component",  xlab='',ylab='% rooms', ylim=c(-4,4),  col=gray(.7))
+text(Qx, labels=1:4, col=culer)
+#
+Tx = STL$time.series[,2] 
+plot(Tx, main="Trend Component",  xlab='',ylab='% rooms',  ylim=c(64,82), col=gray(.7))
+text(Tx, labels=1:4, col=culer)
+#
+Nx = STL$time.series[,3] 
+plot(Nx, main="Noise Component",  xlab='',ylab='% rooms', ylim=c(-2.4,2.2),  col=gray(.7))
+text(Nx, labels=1:4, col=culer)
+dev.off()
+
 #####################################
 ########## original data set ########
 hor <- c(
