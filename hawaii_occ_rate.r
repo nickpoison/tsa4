@@ -18,8 +18,6 @@ dev.off()
 ##### with all the components #######################
 library(astsa)   # if use version 1.7.1 or higher
 pdf(file="hor2.pdf", width=6.5, height=6.5) 
-par(mar=c(1.5,2,1,0)+.5, mgp=c(1.6,.6,0), cex.main=1)
-x = window(hor, start=2002)
 culer = c(rgb(0,.55,0), 4, 2, rgb(.7,0,.7))
 par(mfrow = c(4,1), mar=c(1.5,2,1,0)+.5, mgp=c(1.6,.6,0), cex.main=1)
 x = window(hor, start=2002)
