@@ -31,3 +31,6 @@ vignettes/*.pdf
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
+/Old Stuff/grid.r
+/Old Stuff/hawaii_occ_rate.r
+/Old Stuff/uspop.dat
