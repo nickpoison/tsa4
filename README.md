@@ -7,4 +7,6 @@
 
 - The code is being updated to use the newest version of `astsa`, so it won't match the code in the text exactly - but it should be better. 
 
-- Right now, we're in Chapter 4.
+- The stuff that used to be here is now in the folder Old_Stuff
+
+- Right now, we're in Chapter 4 in `textRcode.md`
