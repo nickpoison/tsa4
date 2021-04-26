@@ -948,7 +948,11 @@ soi.smo$df           # df = 17.42618
 soi.smo$bandwidth    # B  = 0.2308103
 
 # An easier way to obtain soi.smo:
-soi.smo = mvspec(soi, spans=c(7,7), taper=.1)        
+soi.smo = mvspec(soi, spans=c(7,7), taper=.1, nxm=4)
+
+# hightlight El Nino cycle
+rect(1/7, -1e5, 1/3, 1e5, density=NA, col=gray(.5,.2))
+mtext("1/4", side=1, line=0, at=.25, cex=.75)     
 ```
 
 
@@ -992,45 +996,48 @@ C = f/(18+f)              # C = 0.3188779
 abline(h = C)
 ```
 
-###############  here =======================
 
 Example 4.22
 ```r
 par(mfrow=c(3,1))
-tsplot(soi)                         # plot data
-tsplot(diff(soi))                   # plot first difference
-k = kernel("modified.daniell", 6)   # filter weights
-tsplot(soif <- kernapply(soi, k))   # plot 12 month filter
+tsplot(soi, col=4)                         # plot data
+tsplot(diff(soi), col=4)                   # plot first difference
+k = kernel("modified.daniell", 6)          # filter weights
+tsplot(soif <- kernapply(soi, k), col=4)   # plot 12 month filter
 dev.new()
-spectrum(soif, spans=9, log="no") # spectral analysis (not shown)
-abline(v=12/52, lty="dashed")
+mvspec(soif, spans=9, lwd=2, col=5, nxm=4, taper=.1) # spectral analysis (not shown)
+rect(1/7, -1e5, 1/3, 1e5, density=NA, col=gray(.5,.2))
+mtext("1/4", side=1, line=0, at=.25, cex=.75)
 dev.new()
 ##-- frequency responses --##
-par(mfrow=c(2,1), mar=c(3,3,1,1), mgp=c(1.6,.6,0))
+par(mfrow=c(2,1))
 w = seq(0, .5, by=.01)
 FRdiff = abs(1-exp(2i*pi*w))^2
-plot(w, FRdiff, type='l', xlab='frequency')
+tsplot(w, FRdiff, xlab='frequency')
 u = cos(2*pi*w)+cos(4*pi*w)+cos(6*pi*w)+cos(8*pi*w)+cos(10*pi*w)
 FRma = ((1 + cos(12*pi*w) + 2*u)/12)^2
-plot(w, FRma, type='l', xlab='frequency')
+tsplot(w, FRma, xlab='frequency')
 ```
-
-
 
 
 Example 4.24
 ```r
 LagReg(soi, rec, L=15, M=32, threshold=6)
+ dev.new()
 LagReg(rec, soi, L=15, M=32, inverse=TRUE, threshold=.01)
-# armax model
+ dev.new()
 fish = ts.intersect(R=rec, RL1=lag(rec,-1), SL5=lag(soi,-5))
 (u = lm(fish[,1]~fish[,2:3], na.action=NULL))
 acf2(resid(u))       # suggests ar1
-sarima(fish[,1], 1, 0, 0, xreg=fish[,2:3]) 
-```ple 4.25
+sarima(fish[,1], 1, 0, 0, xreg=fish[,2:3], details=FALSE) 
+```
+
+Example 4.25
 ```r
 SigExtract(soi, L=9, M=64, max.freq=.05) 
-```ple 4.26
+```
+
+Example 4.26
 ```r
 per = abs(fft(soiltemp-mean(soiltemp))/sqrt(64*36))^2       
 per2 = cbind(per[1:32,18:2], per[1:32,1:18])   # this and line below is just rearranging
@@ -1040,7 +1047,13 @@ par(mar=c(1,2.5,0,0)+.1)
 persp(-31:31/64, -17:17/36, per3, phi=30, theta=30, expand=.6, ticktype="detailed", xlab="cycles/row", 
        ylab="cycles/column", zlab="Periodogram Ordinate")
 ```
-<div class="up"> <h3><a href="javascript:cl_colall();">[-]</a></h3></div>
+
+[<sub>top</sub>](#table-of-contents)
+
+---
+
+## Chapter 5
+
 
 <a name="ch5"></a>
 <h2><a href="javascript:cl_expcol('ex5');">[+]</a> Chapter 5</h2>
