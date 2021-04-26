@@ -218,7 +218,8 @@ rs2 = cbind(rs[1:41,21:2], rs[1:41,1:21])   #  these lines are just to center
 rs3 = rbind(rs2[41:2,], rs2)                #  the 0 lag  
 
 par(mar = c(1,2.5,0,0)+.1)
-persp(-40:40, -20:20, rs3, phi=30, theta=30, expand=30, scale="FALSE",  ticktype="detailed", xlab="row lags", ylab="column lags", zlab="ACF")
+persp(-40:40, -20:20, rs3, phi=30, theta=30, expand=30, scale="FALSE",  
+       ticktype="detailed", xlab="row lags", ylab="column lags", zlab="ACF")
 ```
 
 [<sub>top</sub>](#table-of-contents)
