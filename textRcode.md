@@ -1657,7 +1657,6 @@ sarima(u[,1], 0,0,0, xreg=u[,2:7])
 
 Example 6.13
 ```r
-library(psych)                   # load psych package for scatter.hist  
 library(plyr)                    # load plyr to track iterations
 
 ################ 
@@ -1724,12 +1723,12 @@ for(i in 1:5){rmse[i]=sqrt(sum((para.star[,i]-est$par[i])^2)/nboot)
               cat(i, rmse[i],"\n") 
              }              
 # Plot phi and sigw  
+library(psych)                   # load psych package for scatter.hist  
 phi  = para.star[,1] 
 sigw = abs(para.star[,4]) 
 phi  = ifelse(phi<0, NA, phi)    # any phi < 0 not plotted
-scatter.hist(sigw, phi, ylab=expression(phi), xlab=expression(sigma[~w]), smooth=FALSE, correl=FALSE,
-              density=FALSE, ellipse=FALSE, title='', pch=19, col=gray(.1,alpha=.33), 
-              panel.first=grid(lty=2), cex.lab=1.2)
+scatter.hist(sigw, phi, ylab=expression(phi), xlab=expression(sigma[~w]), 
+            smooth=FALSE, correl=FALSE, density=FALSE, ellipse=FALSE, title='')
 ```
 
 Example 6.14
@@ -1739,8 +1738,6 @@ num   = 50
 w     = rnorm(num,0,.1)
 x     = cumsum(cumsum(w))
 y     = x + rnorm(num,0,1)
-tsplot(x, ylab="", lwd=2, ylim=c(-1,8))
-lines(y, type='o', col=8)
 ## State Space ##
 Phi   = matrix(c(2,1,-1,0),2)
 A     = matrix(c(1,0),1)
@@ -1767,21 +1764,25 @@ ks    = Ksmooth0(num, y, A, mu0, Sigma0, Phi, cQ, sigv)
 xsmoo = ts(ks$xs[1,1,]); psmoo = ts(ks$Ps[1,1,])
 upp   = xsmoo+2*sqrt(psmoo)
 low   = xsmoo-2*sqrt(psmoo)
+#
+tsplot(x, ylab="", ylim=c(-1,8), col=1)
+lines(y, type='o', col=8)
 lines(xsmoo, col=4, lty=2, lwd=3)
 lines(upp, col=4, lty=2); lines(low, col=4, lty=2)
 lines(smooth.spline(y), lty=1, col=2)
 legend("topleft", c("Observations","State"), pch=c(1,-1), lty=1, lwd=c(1,2), col=c(8,1))
 legend("bottomright", c("Smoother", "GCV Spline"), lty=c(2,1), lwd=c(3,1), col=c(4,2))
-```mple 6.16
+```
+
+Example 6.16
 ```r
 library(depmixS4)
-##  note - as of updata 1.4-2, you can get standard errors ##
 model <- depmix(EQcount ~1, nstates=2, data=data.frame(EQcount), family=poisson('identity'), respstart=c(15,25))
 set.seed(90210)
 summary(fm <- fit(model))   # estimation results  
 standardError(fm)           # with standard errors
 
-##-- Get + Display Parameters --##
+##-- A little nicer display of the parameters --##
 para.mle = as.vector(getpars(fm))[3:8]  
 ( mtrans = matrix(para.mle[1:4], byrow=TRUE, nrow=2) )
 ( lams   = para.mle[5:6] )  
@@ -1791,8 +1792,8 @@ para.mle = as.vector(getpars(fm))[3:8]
 #-- Graphics --##
 par(mfrow=c(3,1))
 # data and states
-tsplot(EQcount, main="", ylab='EQcount', type='h', col=gray(.7))
-text(EQcount, col=6*posterior(fm)[,1]-2, labels=posterior(fm)[,1], cex=.9)
+tsplot(EQcount, main="", ylab='EQcount', type='h', col=gray(.7), ylim=c(0,50))
+text(EQcount, col=6*posterior(fm)[,1]-2, labels=posterior(fm)[,1])
 # prob of state 2
 tsplot(ts(posterior(fm)[,3], start=1900), ylab = expression(hat(pi)[~2]*'(t|n)'));  abline(h=.5, lty=2)
 # histogram
@@ -1801,115 +1802,44 @@ xvals = seq(1,45)
 u1 = pi1*dpois(xvals, lams[1])  
 u2 = pi2*dpois(xvals, lams[2])
 lines(xvals, u1, col=4)   
-lines(xvals, u2, col=2)<!--model <- depmix(EQcount ~1, nstates=2, data=data.frame(EQcount), family=poisson())
-set.seed(90210)
-summary(fm <- fit(model))   # estimation results  
-##-- Get Parameters --##
-u = as.vector(getpars(fm))  # ensure state 1 has smaller lambda
- if (u[7] <= u[8]) {  para.mle = c(u[3:6], exp(u[7]), exp(u[8])) 
-  }  else  {  para.mle = c(u[6:3], exp(u[8]), exp(u[7])) }
-mtrans = matrix(para.mle[1:4], byrow=TRUE, nrow=2)
-lams   = para.mle[5:6]   
-pi1    = mtrans[2,1]/(2 - mtrans[1,1] - mtrans[2,2]);  pi2 = 1-pi1
-################## ################## ################## 
-############ not in text ################### ##########
-# stnd errors of transition matrix & log lambdas
-standardError(fm)
-# for the lambdas
-lams                     # parameters here and SEs below
-sqrt(diag(vcov(fm)$vcov[5:6,5:6]))*lams  # details below
-################## ################## 
-# Call &Lambda; the MLE of &lambda; - then
-# log &Lambda; &approx; log &lambda; +  log &lambda;' (&Lambda;- &lambda;) =  log &lambda; + (&Lambda;- &lambda;)/&lambda;
-# Thus &lambda;<sup>2</sup> Var log &Lambda; &approx; Var &Lambda; or SD(&Lambda;) &approx; &lambda; SD(log &Lambda;) 
-################## ################## 
-##-- Graphics --##
-layout(matrix(c(1,2,1,3), 2))
-par(mar = c(3,3,1,1), mgp = c(1.6,.6,0))
-# data and states
-plot(EQcount, main="", ylab='EQcount', type='h', col=gray(.7))
-text(EQcount, col=6*posterior(fm)[,1]-2, labels=posterior(fm)[,1], cex=.9)
-# prob of state 2
-plot(ts(posterior(fm)[,3], start=1900), ylab = expression(hat(pi)[~2]*'(t|n)'));  abline(h=.5, lty=2)
-# histogram
-hist(EQcount, breaks=30, prob=TRUE, main="")
-xvals = seq(1,45)
-u1 = pi1*dpois(xvals, lams[1])  
-u2 = pi2*dpois(xvals, lams[2])
-lines(xvals, u1, col=4);   lines(xvals, u2, col=2)
-#########  below is not needed if you update depmixS4 ####
-# ##--  Bootstap --##
-# # function to generate data
-# pois.HMM.generate_sample = function(n,m,lambda,Mtrans,StatDist=NULL){
-#  # n = data length, m = number of states, 
-#  # Mtrans = transition matrix, StatDist = stationary distn 
-#  if(is.null(StatDist)) StatDist = solve(t(diag(m)-Mtrans +1),rep(1,m))
-#   mvect = 1:m
-#   state = numeric(n)
-#   state[1] = sample(mvect ,1, prob=StatDist)
-#   for (i in 2:n)
-#        state[i] = sample(mvect ,1,prob=Mtrans[state[i-1] ,])
-#   y = rpois(n,lambda=lambda[state ])
-#   list(y= y, state= state)   
-# }
-# # start it up
-# set.seed(10101101)
-# nboot     = 100
-# nobs      = length(EQcount)
-# para.star = matrix(NA, nrow=nboot, ncol = 6)
-# for (j in 1:nboot){
-#  x.star = pois.HMM.generate_sample(n=nobs, m=2, lambda=lams, Mtrans=mtrans)$y
-#  model <- depmix(x.star ~1, nstates=2, data=data.frame(x.star), family=poisson())
-#  u = as.vector(getpars(fit(model, verbose=0)))
-#  # make sure state 1 is the one with the smaller intensity parameter 
-#  if (u[7] <= u[8]) { para.star[j,] = c(u[3:6], exp(u[7]), exp(u[8])) }
-#      else  { para.star[j,] = c(u[6:3], exp(u[8]), exp(u[7])) }         }
-# # bootstrapped std errors 
-# SE = sqrt(apply(para.star,2,var) + (apply(para.star,2,mean)-para.mle)^2)[c(1,4:6)]
-# names(SE)=c('seM11/M12', 'seM21/M22', 'seLam1', 'seLam2'); SE -->
+lines(xvals, u2, col=2)
 ```
 
 Example 6.17
 ```r
 library(depmixS4)
-##  same as previous example re standard errors ###
 y = ts(sp500w, start=2003, freq=52)  # make data depmix friendly
 mod3 <- depmix(y~1, nstates=3, data=data.frame(y))
 set.seed(2)
-summary(fm3 <- fit(mod3))
-##-- Graphics --##  
-layout(matrix(c(1,2, 1,3), 2), heights=c(1,.75))
-par(mar=c(2.5,2.5,.5,.5), mgp=c(1.6,.6,0))
-plot(y, main="", ylab='S&P500 Weekly Returns', col=gray(.7), ylim=c(-.11,.11))
- culer = 4-posterior(fm3)[,1];  culer[culer==3]=4  # switch labels 1 and 3
- text(y, col=culer, labels=4-posterior(fm3)[,1])
-##-- MLEs --## 
+summary(fm3 <- fit(mod3))   # estimation results  
+
+##-- a little nicer display --## 
  para.mle    = as.vector(getpars(fm3)[-(1:3)])
  permu       = matrix(c(0,0,1,0,1,0,1,0,0), 3,3)   # for the label switch 
  (mtrans.mle = permu%*%round(t(matrix(para.mle[1:9],3,3)),3)%*%permu)
  (norms.mle  = round(matrix(para.mle[10:15],2,3),3)%*%permu)
-acf(y^2, xlim=c(.02,.5), ylim=c(-.09,.5), panel.first=grid(lty=2) ) 
-hist(y, 25, prob=TRUE, main='')
- culer=c(1,2,4); pi.hat = colSums(posterior(fm3)[-1,2:4])/length(y)
- for (i in 1:3) { mu=norms.mle[1,i]; sig = norms.mle[2,i]
- x = seq(-.15,.12, by=.001)
-lines(x, pi.hat[4-i]*dnorm(x, mean=mu, sd=sig), col=culer[i])   }
-##-- Bootstrap --##
-set.seed(666);  n.obs = length(y);  n.boot = 100       
-para.star = matrix(NA, nrow=n.boot, ncol = 15)
-respst <- para.mle[10:15];  trst <- para.mle[1:9]
-for ( nb in 1:n.boot ){
-  mod <- simulate(mod3)
-  y.star = as.vector(mod@response[[1]][[1]]@y)
-  dfy = data.frame(y.star)
-  mod.star <- depmix(y.star~1, data=dfy, respst=respst, trst=trst, nst=3)
-  fm.star = fit(mod.star, emcontrol=em.control(tol = 1e-5), verbose=FALSE)
-  para.star[nb,] = as.vector(getpars(fm.star)[-(1:3)]) }
-# bootstrap stnd errors 
-SE = sqrt(apply(para.star,2,var) + (apply(para.star,2,mean)-para.mle)^2)
-(SE.mtrans.mle = permu%*%round(t(matrix(SE[1:9],3,3)),3)%*%permu)
-(SE.norms.mle = round(matrix(SE[10:15], 2,3),3)%*%permu)
-```mple 6.18
+
+##-- Graphics --##  
+layout(matrix(c(1,2, 1,3), 2), heights=c(1,.75))
+
+tsplot(y, main="", ylab='S&P500 Weekly Returns', col=gray(.7), ylim=c(-.11,.11))
+ culer = 4-posterior(fm3)[,1];  culer[culer==3]=4  # switch labels 1 and 3
+ text(y, col=culer, labels=4-posterior(fm3)[,1])
+
+acf1(y^2, 25) 
+
+hist(y, 25, prob=TRUE, main='', col=astsa.col(8,.2))
+pi.hat = colSums(posterior(fm3)[-1,2:4])/length(y)
+culer = c(1,2,4)
+for (i in 1:3) { 
+ mu = norms.mle[1,i]; sig = norms.mle[2,i]
+ x = seq(-.2,.15, by=.001)
+lines(x, pi.hat[4-i]*dnorm(x, mean=mu, sd=sig), col=culer[i], lwd=2)  
+ }
+
+```
+
+Example 6.18
 ```r
 library(MSwM)
 set.seed(90210)
@@ -1920,9 +1850,13 @@ summary(mod)
 plotProb(mod, which=3)
 ```
 
+######################  here -------------------
+
 Example 6.22
 ```r
-y = as.matrix(flu); num = length(y); nstate = 4;
+y   = flu  
+num = length(y)
+nstate = 4                      # state dimenstion
 M1 = as.matrix(cbind(1,0,0,1))  # obs matrix normal
 M2 = as.matrix(cbind(1,0,1,1))  # obs matrix flu epi
 prob = matrix(0,num,1); yp = y  # to store pi2(t|t-1) & y(t|t-1)
@@ -1971,33 +1905,37 @@ init.par = c(alpha1, alpha2, beta0, sQ1, sQ2)
 SE   = sqrt(diag(solve(est$hessian)))
 u    = cbind(estimate=est$par, SE)
 rownames(u)=c('alpha1','alpha2','beta0','sQ1','sQ2'); u
+
 # Graphics
-predepi = ifelse(prob<.5,0,1); k = 6:length(y)       
-Time    = time(flu)[k]
-regime  = predepi[k]+1
-par(mfrow=c(3,1), mar=c(2,3,1,1)+.1)     
-plot(Time, y[k], type="n", ylab="")
- grid(lty=2); lines(Time, y[k],  col=gray(.7))
- text(Time, y[k], col=regime, labels=regime, cex=1.1)  
- text(1979,.95,"(a)") 
-plot(Time, xfilter[1,,k], type="n", ylim=c(-.1,.4), ylab="")
- grid(lty=2); lines(Time, xfilter[1,,k]) 
- lines(Time, xfilter[3,,k]); lines(Time, xfilter[4,,k])
- text(1979,.35,"(b)")
-plot(Time, y[k], type="n",   ylim=c(.1,.9),ylab="")
- grid(lty=2); points(Time, y[k], pch=19)
+predepi = ifelse(prob<.5,0,1)
+FLU = window(flu, start=1968.4)
+Time = window(time(flu), start=1968.4)  
+k = 6:num     
+par(mfrow=c(3,1))     
+tsplot(FLU, col=8, ylab='flu')
+ text(FLU, col= predepi[k]+1, labels=predepi[k]+1, cex=1.1) 
+ legend('topright', '(a)', bty='n')
+
+filters = ts(t(xfilter[c(1,3,4),,]), start=tsp(flu)[1], frequency=tsp(flu)[3])
+tsplot(window(filters, start=1968.4),  spag=TRUE, col=2:4, ylab='filter')
+ legend('topright', '(b)', bty='n')
+
+tsplot(FLU, type='p', pch=19, ylab='flu', cex=1.2)
  prde1 = 2*sqrt(innov.sig[1]); prde2 = 2*sqrt(innov.sig[2])
- prde = ifelse(predepi[k]<.5, prde1,prde2)
+ prde = ifelse(predepi[k]<.5, prde1, prde2)
    xx = c(Time, rev(Time))
    yy = c(yp[k]-prde, rev(yp[k]+prde))
  polygon(xx, yy, border=8, col=gray(.6, alpha=.3)) 
- text(1979,.85,"(c)")
+ legend('topright', '(c)', bty='n')
 ```
+
+############### here =---------------------
+
 
 Example 6.23
 ```r
 y   = log(nyse^2) 
-num =length(y)
+num = length(y)
 
 # Initial Parameters
 phi0=0; phi1=.95; sQ=.2; alpha=mean(y); sR0=1; mu1=-3; sR1=2
@@ -2028,13 +1966,19 @@ f = exp(-.5*(exp(x)-x))/(sqrt(2*pi))
 f0 = exp(-.5*(x^2)/sR0^2)/(sR0*sqrt(2*pi))
 f1 = exp(-.5*(x-mu1)^2/sR1^2)/(sR1*sqrt(2*pi))
 fm = (f0+f1)/2
-plot(x, f, type="l"); lines(x, fm, lty=2,lwd=2)
+tsplot(x, f, xlab='x')
+lines(x, fm, lty=2, lwd=2)
+legend('topleft', legend=c('log chi-square', 'normal mixture'), lty=1:2)
 
 dev.new()
 Time = 701:1100
-plot (Time, nyse[Time], type='l', col=4, lwd=2, ylab='', xlab='', ylim=c(-.18,.12))
+tsplot(Time, nyse[Time], type='l', col=4, lwd=2, ylab='', xlab='', ylim=c(-.18,.12))
 lines(Time, sv$xp[Time]/10, lwd=2, col=6)
-```ample 6.24
+```
+
+############## here -----------------------
+
+Example 6.24
 ```r
 n.boot = 500        # number of bootstrap replicates
 tol = sqrt(.Machine$double.eps)  # convergence limit 
