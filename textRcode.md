@@ -1581,7 +1581,7 @@ polygon(xx, yy, border=8, col=gray(.5, alpha = .3))
 abline(v=1981, lty=3)
 ```
 
-############ ------------ here
+
 
 Example 6.12
 ```r
@@ -1653,7 +1653,7 @@ u      = ts.intersect(M=cmort, M1=lag(cmort,-1), M2=lag(cmort,-2), T1=lag(tempr,
 sarima(u[,1], 0,0,0, xreg=u[,2:7])
 ```
 
-##############  here --------------------------------------
+
 
 Example 6.13
 ```r
@@ -1836,7 +1836,6 @@ for (i in 1:3) {
  x = seq(-.2,.15, by=.001)
 lines(x, pi.hat[4-i]*dnorm(x, mean=mu, sd=sig), col=culer[i], lwd=2)  
  }
-
 ```
 
 Example 6.18
@@ -1850,7 +1849,7 @@ summary(mod)
 plotProb(mod, which=3)
 ```
 
-######################  here -------------------
+
 
 Example 6.22
 ```r
@@ -1929,7 +1928,7 @@ tsplot(FLU, type='p', pch=19, ylab='flu', cex=1.2)
  legend('topright', '(c)', bty='n')
 ```
 
-############### here =---------------------
+
 
 
 Example 6.23
@@ -1976,7 +1975,7 @@ tsplot(Time, nyse[Time], type='l', col=4, lwd=2, ylab='', xlab='', ylim=c(-.18,.
 lines(Time, sv$xp[Time]/10, lwd=2, col=6)
 ```
 
-############## here -----------------------
+
 
 Example 6.24
 ```r
@@ -2063,9 +2062,10 @@ for(i in 1:6){rmse[i] = sqrt(sum((para.star[,i]-est$par[i])^2)/n.boot)
              }  
 dev.new()
 phi = para.star[,1]
-hist(phi, 15, prob=TRUE, main="", xlim=c(.4,1.2), xlab="")
- xx = seq(.4, 1.2, by=.01)
-lines(xx, dnorm(xx, mean=u[1,1], sd=u[2,1]), lty=2, lwd=2)
+hist(phi, 15, prob=TRUE, main="", xlim=c(0,2), xlab="", col=astsa.col(4,.3))
+abline(v=mean(phi), col=4)
+curve(dnorm(x, mean=u[1,1], sd=u[2,1]), 0, 2, add=TRUE)
+abline(v=u[1,1])
 ```
 
 
@@ -2155,9 +2155,10 @@ xs    = draws[,3:(n+2)]
 lx    = apply(xs,2,q025)
 mx    = apply(xs,2,mean)
 ux    = apply(xs,2,q975)
+
 ##  plot of the data
-par(mfrow=c(2,2), mgp=c(1.6,.6,0), mar=c(3,3.2,1,1))
-ts.plot(ts(x), ts(y), ylab='', col=c(1,8), lwd=2)
+par(mfrow=c(2,2))
+tsplot(cbind(x,y), spag=TRUE,  ylab='', col=c(1,8), lwd=2)
 points(y)
 legend(0, 11, legend=c("x(t)","y(t)"), lty=1, col=c(1,8), lwd=2, bty="n", pch=c(-1,1))
 contour(Vs, Ws, exp(likes), xlab=expression(sigma[v]^2), ylab=expression(sigma[w]^2), 
@@ -2167,21 +2168,24 @@ hist(draws[,1], ylab="Density",main="", xlab=expression(sigma[v]^2))
 abline(v=mean(draws[,1]), col=3, lwd=3)
 hist(draws[,2],main="", ylab="Density", xlab=expression(sigma[w]^2))
 abline(v=mean(draws[,2]), col=3, lwd=3)
+
 ## plot states
-par(mgp=c(1.6,.6,0), mar=c(2,1,.5,0)+.5)
-plot(ts(mx), ylab='', type='n', ylim=c(min(y),max(y)))
-grid(lty=2); points(y)
+dev.new()
+tsplot(y, ylab='', type='o', col=8)
 lines(xsmooth, lwd=4, col=rgb(1,0,1,alpha=.4))
 lines(mx, col= 4) 
  xx=c(1:100, 100:1)
  yy=c(lx, rev(ux))
 polygon(xx, yy, border=NA, col= gray(.6,alpha=.2))
-lines(y, col=gray(.4))
 legend('topleft', c('true smoother', 'data', 'posterior mean', '95% of draws'), lty=1, 
          lwd=c(3,1,1,10), pch=c(-1,1,-1,-1), col=c(6, gray(.4), 4, gray(.6, alpha=.5)), 
          bg='white' )  
-```mple 6.27<br/>
+```
+
+Example 6.27
+
 ```r
+
 library(plyr)   # used to view progress (install it if you don't have it)
 y = jj
 ### setup - model and initial parameters
@@ -2227,13 +2231,15 @@ ffbs = function(y,F,G,V,W11,W22,a1,R1){
     CCC = solve(t(G)%*%iW%*%G + iC)
     mmm = CCC%*%(t(G)%*%iW%*%xb[t+1,] + iC%*%m[t,])
     xb[t,] = mmm + t(chol(CCC))%*%rnorm(4)  }
-  return(xb)                                }
+  return(xb)                                
+}
 ##-- Prior hyperparameters --##
-# b0 = 0    # mean for beta = phi -1
-# B0 = Inf  # var for  beta  (non-informative => use OLS for sampling beta)
-n0 = 10  # use same for all- the prior is 1/Gamma(n0/2, n0*s20_/2)
+# b0 = 0     # mean for beta = phi -1
+# B0 = Inf   # var for  beta  (non-informative => use OLS for sampling beta)
+n0 = 10      # use same for all- the prior is 1/Gamma(n0/2, n0*s20_/2)
 s20v = .001  # for V
 s20w =.05    # for Ws
+
 ##-- MCMC scheme --##
 set.seed(90210)
 burnin  = 100 
@@ -2258,19 +2264,23 @@ G[1,1] = phies[1] + rt(1,dft)*phies[2]  # use a t
                   xb[2:(n-2),2] +xb[1:(n-3),2])^2)/2)
    xbs[iter,,] = xb
    pars[iter,] = c(G[1,1], sqrt(V), sqrt(W11), sqrt(W22))
-   pr$step()             }
+   pr$step()             
+}
+
 # Plot results
-ind = seq(burnin+1,niter,by=step)
+ind = seq(burnin+1, niter, by=step)
 names= c(expression(phi), expression(sigma[v]), expression(sigma[w~11]), expression(sigma[w~22]))
-dev.new(height=5)
-par(mfcol=c(3,4), mar=c(2,2,.25,0)+.75, mgp=c(1.6,.6,0), oma=c(0,0,1,0))
+par(mfcol=c(3,4))
 for (i in 1:4){
- plot.ts(pars[ind,i],xlab="iterations", ylab="trace", main="")
+ tsplot(pars[ind,i],xlab="iterations", ylab="trace", main="")
  mtext(names[i], side=3, line=.5, cex=1) 
  acf(pars[ind,i],main="", lag.max=25, xlim=c(1,25), ylim=c(-.4,.4))
  hist(pars[ind,i],main="",xlab="")
- abline(v=mean(pars[ind,i]), lwd=2, col=3)  }
- par(mfrow=c(2,1), mar=c(2,2,0,0)+.7, mgp=c(1.6,.6,0))
+ abline(v=mean(pars[ind,i]), lwd=2, col=3) 
+}
+
+dev.new()
+par(mfrow=c(2,1))
   mxb = cbind(apply(xbs[ind,,1],2,mean), apply(xbs[,,2],2,mean))
   lxb = cbind(apply(xbs[ind,,1],2,quantile,0.005), apply(xbs[ind,,2],2,quantile,0.005))
   uxb = cbind(apply(xbs[ind,,1],2,quantile,0.995), apply(xbs[ind,,2],2,quantile,0.995))   
@@ -2279,52 +2289,57 @@ for (i in 1:4){
   uxb = ts(cbind(uxb,rowSums(uxb)), start = tsp(jj)[1], freq=4)
   names=c('Trend', 'Season', 'Trend + Season')
   L = min(lxb[,1])-.01; U = max(uxb[,1]) +.01
-plot(mxb[,1],  ylab=names[1], ylim=c(L,U), type='n')
-  grid(lty=2); lines(mxb[,1])	 
+tsplot(mxb[,1],  ylab=names[1], ylim=c(L,U))
   xx=c(time(jj), rev(time(jj)))
   yy=c(lxb[,1], rev(uxb[,1]))
   polygon(xx, yy, border=NA, col=gray(.4, alpha = .2)) 
   L = min(lxb[,3])-.01; U = max(uxb[,3]) +.01
-plot(mxb[,3],  ylab=names[3], ylim=c(L,U), type='n')
-  grid(lty=2); lines(mxb[,3]) 
+tsplot(mxb[,3],  ylab=names[3], ylim=c(L,U))
   xx=c(time(jj), rev(time(jj)))
   yy=c(lxb[,3], rev(uxb[,3]))
   polygon(xx, yy, border=NA, col=gray(.4, alpha = .2)) 
 ```
 
 
+[<sub>top</sub>](#table-of-contents)
 
+---
 
-<div class="up"> <h3><a href="javascript:cl_colall();">[-]</a></h3></div>
+## Chapter 7
 
+Code in Introduction ... not original and a little ad hoc - if you want to see how it was done before `tsplot`, [the original code is here](https://github.com/nickpoison/tsa4/blob/master/Old_Stuff/ch7/ch7_intro.r).
 
-<a name="ch7"></a>
-<h2><a href="javascript:cl_expcol('ex7');">[+]</a> Chapter 7 </h2>
-<ul id="ex7">
-<p></p>
-
-Code in Introduction
 ```r
 x = matrix(0, 128, 6)
 for (i in 1:6) x[,i] = rowMeans(fmri[[i]])
 colnames(x)=c("Brush", "Heat", "Shock", "Brush", "Heat", "Shock")
-plot.ts(x, main="")
-mtext("Awake", side=3, line=1.2, adj=.05,cex=1.2)
-mtext("Sedated", side=3, line=1.2, adj=.85, cex=1.2) 
+# if you want to get cute and not have load another package just to get some space
+main = expression(Awake~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Sedated)
+tsplot(x, ncol=2, byrow=FALSE, main=main)
+```
 
-attach(eqexp)
+You could use `mtext` instead of `main`, but it would be dependent on your machine and the size of the window - if you change the size, the locations of the titles would change.
+
+```r
+attach(eqexp)  # to use the names
+
 P = 1:1024; S = P+1024
-x = cbind(EQ5[P], EQ6[P], EX5[P], EX6[P], NZ[P], EQ5[S], EQ6[S], EX5[S], EX6[S], NZ[S])
+x = cbind(EQ5[P], EQ6[P], EX5[P], EX6[P], NZ[P], EQ5[S], EQ6[S], 
+          EX5[S], EX6[S], NZ[S])
 x.name = c("EQ5","EQ6","EX5","EX6","NZ")
 colnames(x) = c(x.name, x.name)
-plot.ts(x, main="")
-mtext("P waves", side=3, line=1.2, adj=.05, cex=1.2)
-mtext("S waves", side=3, line=1.2, adj=.85, cex=1.2)
+main = expression(P~waves~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~S~waves)
+tsplot(x, ncol=2, byrow=FALSE, main=main)
+tsplot(x, ncol=2, byrow=FALSE, main=main)
+
+detach(eqexp)  # Redemption 
 ```
+
+
 Example 7.1
 ```r
-plot.ts(climhyd)    # figure 7.3
-Y = climhyd         # Y holds the transformed series
+tsplot(climhyd, ncol=2, col=2:7, lwd=2)    # figure 7.3
+Y = climhyd         # Y to hold transformed series
 Y[,6] = log(Y[,6])  # log inflow
 Y[,5] = sqrt(Y[,5]) # sqrt precipitation 
                               
@@ -2346,11 +2361,10 @@ Fq = qf(1-alpha, 2, L-2); cn = Fq/(L-1+Fq)
 plt.name = c("(a)","(b)","(c)","(d)","(e)","(f)")
 dev.new()
 par(mfrow=c(2,3), cex.lab=1.2) 
-
 # The coherencies are listed as 1,2,...,15=choose(6,2) 
 for (i in 11:15){
- plot(Fr,Yspec$coh[,i], type="l", ylab="Sq Coherence", xlab="Frequency", ylim=c(0,1), 
-      main=c("Inflow with", names(climhyd[i-10])))
+ tsplot(Fr,Yspec$coh[,i], ylab="Sq Coherence", xlab="Frequency", ylim=c(0,1),
+      main=paste("Inflow with", names(climhyd[i-10]), sep=' '))
  abline(h = cn); text(.45,.98, plt.name[i-10], cex=1.2)  
 } 
 
@@ -2366,6 +2380,7 @@ denom.df = Yspec$df-2*nq
 dev.new()
 par(mfrow=c(3,1), mar=c(3,3,2,1)+.5, mgp = c(1.5,0.4,0), cex.lab=1.2)  
 out.15 = stoch.reg(Y, cols.full = c(1,5), cols.red = 5, alpha, L, M, plot.which = "F.stat")
+ Grid()
  eF = out.15$eF 
  pvals = pf(eF, numer.df, denom.df, lower.tail = FALSE)
  pID = FDR(pvals, fdr)
@@ -2375,15 +2390,17 @@ title(main = "Partial F Statistic")
 # Regression Coefficients
 S = seq(from = -M/2+1, to = M/2 - 1, length = M-1)
 
-plot(S, coh.15$Betahat[,1], type = "h", xlab = "", ylab =names(climhyd[1]), 
+tsplot(S, coh.15$Betahat[,1], type = "h", xlab = "", ylab =names(climhyd[1]), 
         ylim = c(-.025, .055), lwd=2)
 abline(h=0)
 title(main = "Impulse Response Functions")
 
-plot(S, coh.15$Betahat[,2], type = "h", xlab = "Index", ylab = names(climhyd[5]), 
+tsplot(S, coh.15$Betahat[,2], type = "h", xlab = "Index", ylab = names(climhyd[5]), 
         ylim = c(-.015, .055), lwd=2)
 abline(h=0)
 ```
+
+
 Example 7.2
 ```r
 attach(beamd)
@@ -2408,6 +2425,9 @@ plot(Time, beam, type='n')
 grid(); lines(Y[,4]) 
 title(xlab="Time", outer=TRUE)
 ```
+
+
+
 Example 7.4
 ```r
 attach(beamd)
@@ -2429,23 +2449,24 @@ SSE = filter(sse, sides=2, filter=rep(1/L,L), circular=TRUE)
 SSR = filter(ssr, sides=2, filter=rep(1/L,L), circular=TRUE)
 SST = SSE + SSR
 
-par(mfrow=c(2,1), mar=c(4,4,2,1)+.1)
+par(mfrow=c(2,1))
 Fr  = 0:(n-1)/n
 nFr = 1:200   # freqs to plot
 
-plot( Fr[nFr], SST[nFr], type="l", ylab="log Power", xlab="", main="Sum of Squares",log="y")
+tsplot( Fr[nFr], SST[nFr], type="l", ylab="log Power", xlab="", main="Sum of Squares",log="y")
 lines(Fr[nFr], SSE[nFr], type="l", lty=2)
 
 eF = (N-1)*SSR/SSE; df1 = 2*L;  df2 = 2*L*(N-1)
 pvals = pf(eF, df1, df2, lower=FALSE)  # p values for FDR
 pID = FDR(pvals, fdr); Fq = qf(1-fdr, df1, df2)  
 
-plot(Fr[nFr], eF[nFr], type="l", ylab="F-statistic", xlab="Frequency",  main="F Statistic")
+tsplot(Fr[nFr], eF[nFr], type="l", ylab="F-statistic", xlab="Frequency",  main="F Statistic")
 abline(h=c(Fq, eF[pID]), lty=1:2)
 ```
+
+
 Example 7.5
 ```r
-attach(beamd)
 L  = 9
 M  = 100 
 M2 = M/2
@@ -2488,13 +2509,13 @@ Fr = (nFr-1)/n  # frequencies
 
 layout(matrix(c(1, 2, 4, 1, 3, 4), nc=2))
 par(mar=c(4,4,2,1)+.1)
-plot(10*Fr, fb[nFr], type="l", ylab="Power", xlab="Frequency (Hz)")
+tsplot(10*Fr, fb[nFr], type="l", ylab="Power", xlab="Frequency (Hz)")
  lines(10*Fr, fv[nFr], lty=2); text(.24, 5, "(a)", cex=1.2)
-plot(10*Fr, H0[nFr], type="l", ylab="Frequency Response", xlab="Frequency(Hz)")
+tsplot(10*Fr, H0[nFr], type="l", ylab="Frequency Response", xlab="Frequency(Hz)")
  text(.23, .84, "(b)", cex=1.2)
-plot(-M2:M2, k1, type="l", ylab="Impulse Response", xlab="Index", lwd=1.5)
+tsplot(-M2:M2, k1, type="l", ylab="Impulse Response", xlab="Index", lwd=1.5)
  text(45, .022, "(c)", cex=1.2)
-ts.plot(cbind(f.beam,beam), lty=1:2, ylab="beam")
+tsplot(cbind(f.beam,beam), spag=TRUE, lty=1:2, ylab="beam")
  text(2040, 2, "(d)", cex=1.2)
 ```
 
@@ -2527,7 +2548,7 @@ SSEF <- rep(NA, n) -> SSER
 HatF = Z%*%solve(ZZ, t(Z))
 HatR = Z[,1]%*%t(Z[,1])/ZZ[1,1]
 
-par(mfrow=c(3,3), mar=c(3.5,4,0,0), oma=c(0,0,2,2), mgp = c(1.6,.6,0))
+par(mfrow=c(3,3))
 loc.name = c("Cortex 1","Cortex 2","Cortex 3","Cortex 4","Caudate","Thalamus 1","Thalamus 2",
              "Cerebellum 1","Cerebellum 2")
 
@@ -2552,11 +2573,12 @@ sSSER = filter(SSER, rep(1/L, L), circular = TRUE)
 
 eF =(den.df/num.df)*(sSSER-sSSEF)/sSSEF
 
-plot(Fr, eF[1:n.freq], type="l", xlab="Frequency", ylab="F Statistic", ylim=c(0,7))
-abline(h=qf(.999, num.df, den.df),lty=2)
-text(.25, 6.5, loc.name[Loc], cex=1.2)   
+tsplot(Fr, eF[1:n.freq], xlab="Frequency", ylab="F Statistic", ylim=c(0,7), main=loc.name[Loc])
+abline(h=qf(.999, num.df, den.df),lty=2) 
 }
-```mple 7.7
+```
+
+Example 7.7
 ```r
 n      = 128
 n.freq = 1 + n/2  
@@ -2587,9 +2609,9 @@ rep(NA, n)-> SSEF -> SSE.stm -> SSE.con -> SSE.int
 HatF    = Z%*%solve(ZZ,t(Z))     
 Hat.stm = Z[,-(2:3)]%*%solve(ZZ[-(2:3),-(2:3)], t(Z[,-(2:3)]))  
 Hat.con = Z[,-4]%*%solve(ZZ[-4,-4], t(Z[,-4]))   
-Hat.int = Z[,-(5:6)]%*%solve(ZZ[-(5:6),-(5:6)], t(Z[,-(5:6)]))                                                            
+Hat.int = Z[,-(5:6)]%*%solve(ZZ[-(5:6),-(5:6)], t(Z[,-(5:6)]))                                                           
 
-par(mfrow=c(5,3),mar=c(3.5,4,0,0),oma=c(0,0,2,2),mgp = c(1.6,.6,0)) 
+par(mfrow=c(5,3), oma=c(0,2,0,0))
 loc.name = c("Cortex 1","Cortex 2","Cortex 3","Cortex 4","Caudate", "Thalamus 1","Thalamus 2",
              "Cerebellum 1","Cerebellum 2")
 for(Loc in c(1:4,9)) {   # only Loc 1 to 4 and 9 used                
@@ -2617,18 +2639,21 @@ for(Loc in c(1:4,9)) {   # only Loc 1 to 4 and 9 used
   eF.con   = (den.df/df.con)*(sSSE.con-sSSEF)/sSSEF
   eF.int   = (den.df/df.int)*(sSSE.int-sSSEF)/sSSEF
 
- plot(Fr[nFr],eF.stm[nFr], type="l", xlab="Frequency", ylab="F Statistic", ylim=c(0,12))
+tsplot(Fr[nFr],eF.stm[nFr],xlab="Frequency", ylab="F Statistic", ylim=c(0,12))
    abline(h=qf(.999, df.stm, den.df),lty=2)       
-  if(Loc==1) mtext("Stimulus", side=3, line=.3, cex=1)
-  mtext(loc.name[Loc], side=2, line=3, cex=.9)
- plot(Fr[nFr],eF.con[nFr], type="l", xlab="Frequency", ylab="F Statistic", ylim=c(0,12))
+  if(Loc==1) mtext("Stimulus", side=3, line=.3, cex=.8)
+  mtext(loc.name[Loc], side=2, line=3, cex=.8)
+ tsplot(Fr[nFr],eF.con[nFr], xlab="Frequency", ylab="F Statistic", ylim=c(0,12))
   abline(h=qf(.999, df.con, den.df),lty=2)
-  if(Loc==1)  mtext("Consciousness", side=3, line=.3, cex=1)   
- plot(Fr[nFr],eF.int[nFr], type="l", xlab="Frequency",ylab="F Statistic", ylim=c(0,12))
+  if(Loc==1)  mtext("Consciousness", side=3, line=.3, cex=.8)   
+ tsplot(Fr[nFr],eF.int[nFr], xlab="Frequency",ylab="F Statistic", ylim=c(0,12))
   abline(h=qf(.999, df.int, den.df),lty=2)
-  if(Loc==1) mtext("Interaction", side=3, line= .3, cex=1)   
+  if(Loc==1) mtext("Interaction", side=3, line= .3, cex=.8)   
 } 
 ```
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++  here
+
 Example 7.8
 ```r
 n      = 128
