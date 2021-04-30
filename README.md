@@ -1,14 +1,24 @@
 ## tsa4
 
 
-- This is going to be the new home of the text code for [Time Series Analysis and Its Applications, Edition 4](http://www.stat.pitt.edu/stoffer/tsa4/).
+- This is the new home of  [Time Series Analysis and Its Applications, Edition 4](http://www.stat.pitt.edu/stoffer/tsa4/).
 
-- All the code used in the text (updated) is in [textRcode.md](https://github.com/nickpoison/tsa4/blob/master/textRcode.md)
+- All the (updated) code used in the text  is in [textRcode.md](https://github.com/nickpoison/tsa4/blob/master/textRcode.md)
 
-- The code is being updated to use the newest version of `astsa`, so it won't match the code in the text exactly - but it should be better. 
+- Hopefully having the code here will make things simpler. You can download the file `textRcode.md` and use it directly:
 
-- Hopefully it will make things simpler... you can download the file `textRcode.md` and use it in `VSCode` (maybe change the name to `textRcode.r`), or rename it to `textRcode.Rmd` and use it with RRodeo.
+    - For example, with [Notepad++](https://notepad-plus-plus.org/) and [NpptoR](https://sourceforge.net/projects/npptor/files/npptor%20installer/), just change the file name to `textRcode.R` and you're off...
+    - or use it in [VSCode](https://code.visualstudio.com/) (probably change the name to `textRcode.r` also) ...
+    - or use it with [RStudio](https://www.rstudio.com/products/rstudio/download/#download) for all your business needs.
 
-- The stuff that used to be here is now in the folder Old_Stuff
+ - The stuff that used to be here is now in the folder Old_Stuff   
 
-- Right now, we're in Chapter 4 in `textRcode.md`
+
+## astsa
+
+- The home of [astsa - the package for the text](https://github.com/nickpoison/astsa) is here too.
+
+- See the [News for further details about the state of the package and the changelog](https://github.com/nickpoison/astsa/blob/master/NEWS.md) .
+
+- A demonstration of the capabilities of `astsa` can be found here at
+[**FUN WITH ASTSA**](https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/fun_with_astsa.md)
