@@ -4,14 +4,22 @@
 This is an updated version of the code in [Time Series Analysis and Its Applications, 4th Edition](http://www.stat.pitt.edu/stoffer/tsa4/) 
 
 
-&#x2728; While the text was written under `astsa` version 1.8, the code below
-uses the most recent version, which has some additional capabilities. 
-You can install the latest version of the package from GitHub:
+&#x2728; While the text was written under `astsa` version 1.8, the code below uses the most recent version, which has some additional capabilities.  You can install the latest version of the package from GitHub:
 
-> install.packages("remotes")     # only need to do this once <br/>
-> remotes::install_github("nickpoison/astsa")
+```r
+install.packages("remotes")     # only need to do this once 
+remotes::install_github("nickpoison/astsa")
+```
+
+&#x1F4A1; This page is written in markdown and hopefully it will make the material easier to use ... you can download this file `textRcode.md` and use it in `VSCode` (maybe change the name to `textRcode.R`), or rename it to `textRcode.Rmd` and use it with RRodeo.
+
+&#x1F4A1; Please note that the code here is updated to use the newest version of `astsa`, so it won't match the code in the text exactly - but it should be better. 
 
 ### An intro to `astsa` capabilities can be found at  [FUN WITH ASTSA](https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/fun_with_astsa.md)
+
+
+
+
 
 -----
 ------ 
@@ -52,7 +60,7 @@ tsplot(speech)
 Example 1.4  
 
 ```r
-library(xts)                         # install it if you don't have it
+library(xts)         # install it if you don't have it
 djiar = diff(log(djia$Close))[-1]        
 plot(djiar, col=4 main="DJIA Returns") 
 ```
@@ -3143,3 +3151,7 @@ gabs = function(x) { b[2]*abs(x) } # corresponding to |x|
  curve(gabs, -.2, .2, add=TRUE, col=6)
 legend('bottomright', lty=1, col=c(4,6), legend=c('optimal', 'absolute value'), bg='white') 
 ```
+
+[<sub>top</sub>](#table-of-contents)
+
+---
