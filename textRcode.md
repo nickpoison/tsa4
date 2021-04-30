@@ -2307,18 +2307,16 @@ tsplot(mxb[,3],  ylab=names[3], ylim=c(L,U))
 
 ## Chapter 7
 
-Code in Introduction ... not original and a little ad hoc - if you want to see how it was done before `tsplot`, [the original code is here](https://github.com/nickpoison/tsa4/blob/master/Old_Stuff/ch7/ch7_intro.r).
+Code in Introduction ... if you want to see how it was done before `tsplot`, [the original code is here](https://github.com/nickpoison/tsa4/blob/master/Old_Stuff/ch7/ch7_intro.r).
 
 ```r
 x = matrix(0, 128, 6)
 for (i in 1:6) x[,i] = rowMeans(fmri[[i]])
 colnames(x)=c("Brush", "Heat", "Shock", "Brush", "Heat", "Shock")
-# if you want to get cute and not have load another package just to get some space
-main = expression(Awake~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Sedated)
-tsplot(x, ncol=2, byrow=FALSE, main=main)
+tsplot(x, ncol=2, byrow=FALSE, main='')
+mtext('Awake', outer=T, adj=.25)
+mtext('Sedated', outer=T, adj=.75)
 ```
-
-You could use `mtext` instead of `main`, but it would be dependent on your machine and the size of the window - if you change the size, the locations of the titles would change.
 
 ```r
 attach(eqexp)  # to use the names
@@ -2328,9 +2326,9 @@ x = cbind(EQ5[P], EQ6[P], EX5[P], EX6[P], NZ[P], EQ5[S], EQ6[S],
           EX5[S], EX6[S], NZ[S])
 x.name = c("EQ5","EQ6","EX5","EX6","NZ")
 colnames(x) = c(x.name, x.name)
-main = expression(P~waves~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~S~waves)
-tsplot(x, ncol=2, byrow=FALSE, main=main)
-tsplot(x, ncol=2, byrow=FALSE, main=main)
+tsplot(x, ncol=2, byrow=FALSE, main='')
+mtext('P waves', outer=T, adj=.25)
+mtext('S waves', outer=T, adj=.75)
 
 detach(eqexp)  # Redemption 
 ```
@@ -2652,7 +2650,7 @@ tsplot(Fr[nFr],eF.stm[nFr],xlab="Frequency", ylab="F Statistic", ylim=c(0,12))
 } 
 ```
 
-#+++++++++++++++++++++++++++++++++++++++++++++++++++++++  here
+
 
 Example 7.8
 ```r
@@ -2683,7 +2681,7 @@ HatF   = Z%*%solve(ZZ, t(Z))           # full model hat matrix
 rep(NA, n)-> SSEF -> SSER 
 eF = matrix(0,n,3)
 
-par(mfrow=c(5,3), mar=c(3.5,4,0,0), oma=c(0,0,2,2), mgp = c(1.6,.6,0)) 
+par(mfrow=c(5,3), oma=c(0,2,0,0)) 
 
 loc.name = c("Cortex 1","Cortex 2","Cortex 3","Cortex 4","Caudate","Thalamus 1","Thalamus 2",
              "Cerebellum 1","Cerebellum 2")
@@ -2708,18 +2706,20 @@ for(Loc in c(1:4,9)) {
  sSSEF = filter(SSEF, rep(1/L, L), circular = TRUE)
  sSSER = filter(SSER, rep(1/L, L), circular = TRUE)       
  eF[,cond]= (den.df/num.df)*(sSSER/sSSEF)   }                                    
- plot(Fr[nFr], eF[nFr,1], type="l", xlab="Frequency", ylab="F Statistic", ylim=c(0,5))
+ tsplot(Fr[nFr], eF[nFr,1], xlab="Frequency", ylab="F Statistic", ylim=c(0,5), main='')
   abline(h=qf(.999, num.df, den.df),lty=2)       
   if(Loc==1) mtext("Brush", side=3, line=.3, cex=1)
   mtext(loc.name[Loc], side=2, line=3, cex=.9)
- plot(Fr[nFr], eF[nFr,2], type="l", xlab="Frequency", ylab="F Statistic", ylim=c(0,5))
+ tsplot(Fr[nFr], eF[nFr,2], xlab="Frequency", ylab="F Statistic", ylim=c(0,5), main='')
   abline(h=qf(.999, num.df, den.df),lty=2)
   if(Loc==1)  mtext("Heat", side=3, line=.3, cex=1)   
- plot(Fr[nFr], eF[nFr,3], type="l", xlab="Frequency", ylab="F Statistic", ylim=c(0,5))
+ tsplot(Fr[nFr], eF[nFr,3], xlab="Frequency", ylab="F Statistic", ylim=c(0,5), main='')
   abline(h = qf(.999, num.df, den.df) ,lty=2)
   if(Loc==1) mtext("Shock", side=3, line=.3, cex=1)  
 }  
 ```
+
+
 Example 7.9
 ```r
 P = 1:1024 
@@ -2755,9 +2755,11 @@ for (k  in 1:512){
  dk = as.matrix(m.diff[k,])
  T2[k] = Re((N/2)*Conj(t(dk))%*%solve(fvk,dk))  }
 eF = T2*(2*p.dim*(N-1))/(2*N-p.dim-1)
-par(mfrow=c(2,2), mar=c(3,3,2,1), mgp = c(1.6,.6,0), cex.main=1.1)
+
+par(mfrow=c(2,2))
+
 freq = 40*(0:511)/n  # in Hz (cycles per second)  
-plot(freq, eF, type="l", xlab="Frequency (Hz)", ylab="F Statistic", main="Equal Means")
+tsplot(freq, eF, xlab="Frequency (Hz)", ylab="F Statistic", main="Equal Means")
 abline(h=qf(.999, 2*p.dim, 2*(2*N-p.dim-1)))
 
 # Equal P   
@@ -2767,7 +2769,7 @@ feq.P = kernapply(u, kd, circular=TRUE)
 u     = Re(rowSums(ex.Pf*Conj(ex.Pf))/(N-1))
 fex.P =	kernapply(u, kd, circular=TRUE)
 
-plot(freq, feq.P[1:512]/fex.P[1:512], type="l", xlab="Frequency (Hz)", ylab="F Statistic", 
+tsplot(freq, feq.P[1:512]/fex.P[1:512], xlab="Frequency (Hz)", ylab="F Statistic", 
       main="Equal P-Spectra")
 abline(h = qf(.999, 2*L*(N-1),  2*L*(N-1))) 
 
@@ -2777,7 +2779,7 @@ feq.S = kernapply(u, kd, circular=TRUE)
 u     = Re(rowSums(ex.Sf*Conj(ex.Sf))/(N-1))
 fex.S =	kernapply(u, kd, circular=TRUE)
 
-plot(freq, feq.S[1:512]/fex.S[1:512], type="l", xlab="Frequency (Hz)", ylab="F Statistic", 
+tsplot(freq, feq.S[1:512]/fex.S[1:512], xlab="Frequency (Hz)", ylab="F Statistic", 
       main="Equal S-Spectra")
 abline(h=qf(.999, 2*L*(N-1),  2*L*(N-1))) 
 
@@ -2807,9 +2809,13 @@ for (k  in 1:512){
  TS[k] = -2*r*(log.n1+log.n2-log.d1-log.d2)   
 }
 
-plot(freq, TS, type="l", xlab="Frequency (Hz)", ylab="Chi-Sq Statistic", main="Equal Spectral Matrices")
-abline(h = qchisq(.9999, p.dim^2)) 
+tsplot(freq, TS, xlab="Frequency (Hz)", ylab="Chi-Sq Statistic", main="Equal Spectral Matrices")
+abline(h = qchisq(.9999, p.dim^2))   # about 23.5, so not on the plot
 ```
+
+
+
+
 Example 7.10
 ```r
 P     = 1:1024
@@ -2847,15 +2853,16 @@ post.eq = exp(d)/(1+exp(d))
 cat(d.slopes[1], "mag.P +" , d.slopes[2], "mag.S +" , d.inter,"\n")  
 cat("P(EQ|data) =", post.eq,  "  P(EX|data) =", 1-post.eq, "\n" )    
 
-plot(eq.P, eq.S, xlim=c(0,1.5), ylim=c(.75,1.25), xlab="log mag(P)", ylab ="log mag(S)", pch = 8, 
-      cex=1.1, lwd=2, main="Classification Based on Magnitude Features")
- points(ex.P, ex.S, pch = 6, cex=1.1, lwd=2)
- points(new.data, pch = 3, cex=1.1, lwd=2)
+tsplot(eq.P, eq.S, type='p', xlim=c(0,1.5), ylim=c(.75,1.25), 
+        xlab="log mag(P)", ylab ="log mag(S)", pch = 8, cex=1.1, lwd=2, 
+        main="Classification Based on Magnitude Features", col=4)
+ points(ex.P, ex.S, pch = 6, cex=1.1, lwd=2, col=6)
+ points(new.data, pch = 3, cex=1.1, lwd=2, col=3)
  abline(a = -d.inter/d.slopes[2], b = -d.slopes[1]/d.slopes[2])
  text(eq.P-.07,eq.S+.005, label=names(eqexp[1:8]), cex=.8)
  text(ex.P+.07,ex.S+.003, label=names(eqexp[9:16]), cex=.8)
  text(NZ.P+.05,NZ.S+.003, label=names(eqexp[17]), cex=.8)
- legend("topright",c("EQ","EX","NZ"),pch=c(8,6,3),pt.lwd=2,cex=1.1)
+ legend("topright",c("EQ","EX","NZ"),pch=c(8,6,3),pt.lwd=2,cex=1.1, col=c(4,6,3))
 
 # Cross-validation 
 all.data = rbind(cbind(eq.P,eq.S), cbind(ex.P,ex.S))
@@ -2886,7 +2893,11 @@ colnames(Posterior) = c("EQ","P(EQ|data)","EX","P(EX|data)")
 # results from cross-validation 
 round(Posterior, 3)   
 ```
+
+
+
 Example 7.11
+
 ```r
 P = 1:1024
 S = P+1024
@@ -2913,19 +2924,17 @@ fhat.eq = apply(f.eq, 2:4, mean)  # average spectra
 fhat.ex = apply(f.ex, 2:4, mean)
 
 # plot the average spectra
-par(mfrow=c(2,2), mar=c(3,3,2,1),  mgp = c(1.6,.6,0))
+par(mfrow=c(2,2))
 Fr = 40*(1:512)/n
-plot(Fr, Re(fhat.eq[1,1,]), type="l", xlab="Frequency (Hz)", ylab="")
-plot(Fr, Re(fhat.eq[2,2,]), type="l", xlab="Frequency (Hz)", ylab="")
-plot(Fr, Re(fhat.ex[1,1,]), type="l", xlab="Frequency (Hz)", ylab="")
-plot(Fr, Re(fhat.ex[2,2,]), type="l", xlab="Frequency (Hz)", ylab="")
+tsplot(Fr, Re(fhat.eq[1,1,]), main="", xlab="Frequency (Hz)", ylab="")
+tsplot(Fr, Re(fhat.eq[2,2,]), main="", xlab="Frequency (Hz)", ylab="")
+tsplot(Fr, Re(fhat.ex[1,1,]), xlab="Frequency (Hz)", ylab="")
+tsplot(Fr, Re(fhat.ex[2,2,]), xlab="Frequency (Hz)", ylab="")
 mtext("Average P-spectra", side=3, line=-1.5, adj=.2, outer=TRUE)
 mtext("Earthquakes", side=2, line=-1, adj=.8,  outer=TRUE)
 mtext("Average S-spectra", side=3, line=-1.5, adj=.82, outer=TRUE)
 mtext("Explosions", side=2, line=-1, adj=.2, outer=TRUE)
-
-dev.new()
-par(fig = c(.75, 1, .75, 1), new = TRUE)
+par(fig = c(.75, .995, .75, .98), new = TRUE)
 ker = kernel("modified.daniell", L)$coef; ker = c(rev(ker),ker[-1])
 plot((-33:33)/40,ker,type="l",ylab="",xlab="",cex.axis=.7,yaxp=c(0,.04,2))
 
@@ -2961,17 +2970,20 @@ x.b = max(KLDiff)+.1; x.a = min(KLDiff)-.1
 y.b = max(BDiff)+.01; y.a = min(BDiff)-.01
 
 dev.new()                                 
-plot(KLDiff[9:16], BDiff[9:16], type="p", xlim=c(x.a,x.b), ylim=c(y.a,y.b), cex=1.1, lwd=2, 
-      xlab="Kullback-Leibler Difference",ylab="Chernoff Difference", main="Classification 
-      Based on Chernoff and K-L Distances", pch=6)
-points(KLDiff[1:8], BDiff[1:8], pch=8, cex=1.1, lwd=2)
-points(KLDiff[17], BDiff[17],  pch=3, cex=1.1, lwd=2)
-legend("topleft", legend=c("EQ", "EX", "NZ"), pch=c(8,6,3), pt.lwd=2)
-abline(h=0, v=0, lty=2, col="gray")
+tsplot(KLDiff[9:16], BDiff[9:16], type="p", xlim=c(x.a,x.b), ylim=c(y.a,y.b), cex=1.1, lwd=2, 
+      xlab="Kullback-Leibler Difference",ylab="Chernoff Difference", col=6,
+      main="Classification Based on Chernoff and K-L Distances", pch=6)
+points(KLDiff[1:8], BDiff[1:8], pch=8, cex=1.1, lwd=2, col=4)
+points(KLDiff[17], BDiff[17],  pch=3, cex=1.1, lwd=2, col=3)
+legend("topleft", legend=c("EQ", "EX", "NZ"), pch=c(8,6,3), pt.lwd=2, col=c(4,6,3))
+abline(h=0, v=0, lty=2, col=8)
 text(KLDiff[-c(1,2,3,7,14)]-.075, BDiff[-c(1,2,3,7,14)], label=names(eqexp[-c(1,2,3,7,14)]), cex=.7)
 text(KLDiff[c(1,2,3,7,14)]+.075, BDiff[c(1,2,3,7,14)], label=names(eqexp[c(1,2,3,7,14)]), cex=.7)
 ```
+
+
 Example 7.12
+
 ```r
 library(cluster)
 P = 1:1024
@@ -3009,20 +3021,28 @@ rownames(JD) = colnames(JD)
 cluster.2 = pam(JD, k = 2, diss = TRUE)  
 
 summary(cluster.2)  # print results
-par(mgp = c(1.6,.6,0), cex=3/4, cex.lab=4/3, cex.main=4/3)
-clusplot(JD, cluster.2$cluster, col.clus=1, labels=3, lines=0, col.p=1, 
-               main="Clustering Results for Explosions and Earthquakes")
-text(-7,-.5, "Group I", cex=1.1, font=2)
-text(1, 5, "Group II", cex=1.1, font=2)
+par(mar=c(2,2,1,.5)+2, cex=3/4, cex.lab=4/3, cex.main=4/3)
+clusplot(JD, cluster.2$cluster, col.clus=gray(.5), labels=3, lines=0, 
+         col.p = c(rep(4,8), rep(6,8), 3),  
+         main="Clustering Results for Explosions and Earthquakes")
+text(-3.5,-1.5, "Group I", cex=1.1, font=2) 
+text(1.5,5,"Group II", cex=1.1, font=2)
 ```
+
+
 Example 7.13
+
 ```r
 n = 128
 Per = abs(mvfft(fmri1[,-1]))^2/n
 
 par(mfrow=c(2,4), mar=c(3,2,2,1),  mgp = c(1.6,.6,0), oma=c(0,1,0,0))
-for (i in 1:8) plot(0:20, Per[1:21,i], type="l", ylim=c(0,8), main=colnames(fmri1)[i+1], 
-        xlab="Cycles", ylab="", xaxp=c(0,20,5))
+for (i in 1:8){
+ plot(0:20, Per[1:21,i], type="n", xaxt='n', ylim=c(0,8), main=colnames(fmri1)[i+1], xlab="Cycles", ylab="")
+ axis(1, seq(0,20,by=4))
+ Grid(nx=NA, ny=NULL, minor=FALSE)
+ abline(v=seq(0,60,by=4), col='lightgray', lty=1)
+ lines(0:20, Per[1:21,i]) }
 mtext("Periodogram", side=2, line=-.3, outer=TRUE, adj=c(.2,.8))
 
 fxx = mvspec(fmri1[,-1], kernel("daniell", c(1,1)), taper=.5, plot=FALSE)$fxx
@@ -3033,8 +3053,12 @@ for (k in 1:64) {
 }
 
 dev.new()
-plot(l.val, type="l", xaxp=c(0,64,8), xlab="Cycles (Frequency x 128)", ylab="First Principal Component")
-axis(1, seq(4,60,by=8), labels=FALSE)
+par(mar=c(2.25,2,.5,.5)+.5,  mgp = c(1.6,.6,0))  
+plot(l.val, type="n", xaxt='n',xlab="Cycles (Frequency x 128)", ylab="First Principal Component")
+axis(1, seq(4,60,by=8))
+Grid(nx=NA, ny=NULL, minor=FALSE)
+abline(v=seq(4,60,by=8), col='lightgray', lty=1)
+lines(l.val)
 
 # at freq k=4
 u = eigen(fxx[,,4], symmetric=TRUE)
@@ -3049,28 +3073,26 @@ sig.e1 = Re(sig.e1)*lam[1]*sum(kernel("daniell", c(1,1))$coef^2)
 p.val = round(pchisq(2*abs(evec[,1])^2/diag(sig.e1), 2, lower.tail=FALSE), 3)
 cbind(colnames(fmri1)[-1], abs(evec[,1]), p.val) # print table values
 ```
+
+
 Example 7.14
 ```r
 bhat = sqrt(lam[1])*evec[,1]
 Dhat = Re(diag(fxx[,,4] - bhat%*%Conj(t(bhat))))
 res = Mod(fxx[,,4] - Dhat - bhat%*%Conj(t(bhat)))
 ```
-Example 7.14
+
+Example 7.15
 ```r
 gr = diff(log(ts(econ5, start=1948, frequency=4))) # growth rate
-plot(100*gr, main="Growth Rates (%)")
+tsplot(100*gr, col=2:6, lwd=2, ncol=2, main="Growth Rates (%)")
+
 
 # scale each series to have variance 1
 gr = ts(apply(gr,2,scale), freq=4)   # scaling strips ts attributes
-L = c(7,7)   # degree of smoothing 
-gr.spec = mvspec(gr, spans=L, detrend=FALSE, taper=.25, plot=FALSE)
-
 dev.new()
-plot(kernel("modified.daniell", L))  # view the kernel - not shown 
-
-dev.new()
-plot(gr.spec, log="no",col=1, main="Individual Spectra", lty=1:5, lwd=2)
-legend("topright", colnames(econ5), lty=1:5, lwd=2)  
+gr.spec = mvspec(gr, spans=c(7,7), detrend=FALSE, taper=.25, col=2:6, lwd=2)
+legend("topright", colnames(econ5), lty=1:5, lwd=2, col=2:6)
 
 dev.new()
 plot.spec.coherency(gr.spec, ci=NA,  main="Squared Coherencies")
@@ -3081,142 +3103,43 @@ lam = matrix(0,n.freq,5)
 for (k in 1:n.freq) lam[k,] = eigen(gr.spec$fxx[,,k], symmetric=TRUE, only.values=TRUE)$values 
 
 dev.new()
-par(mfrow=c(2,1), mar=c(4,2,2,1), mgp=c(1.6,.6,0))
-plot(gr.spec$freq, lam[,1], type="l", ylab="", xlab="Frequency", main="First Eigenvalue")
-abline(v=.25, lty=2)
-plot(gr.spec$freq, lam[,2], type="l", ylab="", xlab="Frequency", main="Second Eigenvalue")
-abline(v=.125, lty=2)
+par(mfrow=c(2,1))
+tsplot(gr.spec$freq, lam[,1], ylab="", xlab="Frequency", main="First Eigenvalue")
+ abline(v=.25, lty=2)
+tsplot(gr.spec$freq, lam[,2], ylab="", xlab="Frequency", main="Second Eigenvalue")
+ abline(v=.125, lty=2)
+
 e.vec1 = eigen(gr.spec$fxx[,,10], symmetric=TRUE)$vectors[,1] 
 e.vec2 =  eigen(gr.spec$fxx[,,5], symmetric=TRUE)$vectors[,2]
 round(Mod(e.vec1), 2);  round(Mod(e.vec2), 3) 
 ```
-Example 7.17
+
+
+Example 7.17  (there is now a script for the spectral envelope)
+
 ```r
-u = factor(bnrf1ebv)  # first, input the data as factors and then 
-x = model.matrix(~u-1)[,1:3]  # make an indicator matrix
-# x = x[1:1000,]  # select subsequence if desired
+xdata = dna2vector(bnrf1ebv)
+u     = specenv(xdata, spans=c(7,7))  
 
-Var = var(x)  # var-cov matrix 
-xspec = mvspec(x, spans=c(7,7), detrend=FALSE, plot=FALSE)  
-fxxr = Re(xspec$fxx)  # fxxr is real(fxx) 
+# details near the peak (coefs are for A, C, G, and T)
+round(u,4)[1330:1336,]
+```
 
-# compute Q = Var^-1/2 
-ev = eigen(Var)  
-Q = ev$vectors%*%diag(1/sqrt(ev$values))%*%t(ev$vectors)             
+Example 7.18
 
-# compute spec env and scale vectors     
-num     = xspec$n.used  # sample size used for FFT
-nfreq   = length(xspec$freq)  # number of freqs used   
-specenv = matrix(0,nfreq,1)   # initialize the spec envelope
-beta    = matrix(0,nfreq,3)   # initialize the scale vectors
- 
-for (k in 1:nfreq){ 
-  ev = eigen(2*Q%*%fxxr[,,k]%*%Q/num, symmetric=TRUE)   
-  specenv[k] = ev$values[1]   # spec env at freq k/n is max evalue
-  b = Q%*%ev$vectors[,1]      # beta at freq k/n 
-  beta[k,] = b/sqrt(sum(b^2)) # helps to normalize beta
-}  
- 
-# output and graphics  
-frequency = xspec$freq
-plot(frequency, 100*specenv, type="l", ylab="Spectral Envelope (%)")
-
-# add significance threshold to plot 
-m = xspec$kernel$m
-etainv = sqrt(sum(xspec$kernel[-m:m]^2))
-thresh = 100*(2/num)*exp(qnorm(.9999)*etainv)*rep(1,nfreq)
-lines(frequency, thresh, lty="dashed", col="blue")
-
-# details 
-output = cbind(frequency, specenv, beta)
-colnames(output) = c("freq","specenv", "A", "C", "G")
-round(output,3)
-```xample 7.18
 ```r
-u   = astsa::nyse             
-x   = cbind(u, abs(u), u^2)   # possible transforms (identity, absolute value, square)
-#
-Var = var(x)                  # var-cov matrix 
-xspec = mvspec(x, spans=c(5,3), taper=.5, plot=FALSE)  # spectral matrices are called fxx 
-fxxr = Re(xspec$fxx)          # fxxr is real(fxx) 
-#- compute Q = Var^-1/2 
-ev = eigen(Var)  
-Q = ev$vectors%*%diag(1/sqrt(ev$values))%*%t(ev$vectors)             
-#- compute spec env and scale vectors    
-num     = xspec$n.used             # sample size used for FFT
-nfreq   = length(xspec$freq)       # number of freqs used   
-specenv = matrix(0,nfreq,1)        # initialize the spec envelope
-beta    = matrix(0,nfreq,3)        # initialize the scale vectors
- for (k in 1:nfreq){ 
-  ev = eigen(2*Q%*%fxxr[,,k]%*%Q/num)  # get evalues of normalized spectral matrix at freq k/n
-  specenv[k] = ev$values[1]            # spec env at freq k/n is max evalue
-  b = Q%*%ev$vectors[,1]               # beta at freq k/n 
-  beta[k,] = b/b[1]                    # first coef is always 1
-  }
-#--- output and graphics ---# 
-par(mar=c(2.5,2.75,.5,.5), mgp=c(1.5,.6,0))
-frequency = xspec$freq
-plot(frequency, 100*specenv, type="l", ylab="Spectral Envelope (%)", panel.first=grid(lty=2))
- ## add significance threshold to plot ##
- m=xspec$kernel$m
- etainv=sqrt(sum(xspec$kernel[-m:m]^2))
-thresh=100*(2/num)*exp(qnorm(.9999)*etainv)*matrix(1,nfreq,1)
-lines(frequency,thresh, lty="dashed", col="blue")
-#--  details  --# 
-output = cbind(frequency, specenv, beta)
-colnames(output)=c("freq","specenv","x", "|x|", "x^2")
-round(output,4) 
-b = sign(b[2])*output[2,3:5]
-
-dev.new() 
-par(mar=c(2.5,2.5,.5,.5), mgp=c(1.5,.6,0))
-# plot transform
-g = function(x) {b[1]*x+b[2]*abs(x)+b[3]*x^2}
-curve(g, -.2, .2, panel.first=grid())
-g2 = function(x) {b[2]*abs(x)}
-curve(g2, -.2,.2, add=TRUE, lty=6, col=4)
-```<div class="up"> <h3><a href="javascript:cl_colall();">[-]</a></h3></div>
-
-
-
-						</div>
-					</div>
-				</div>
-				
-			</section>		
-			
-</div>
-		<!-- Footer -->
-			<footer id="footer">
-				<div class="copyright">
-					&copy; <a href="http://www.stat.pitt.edu/stoffer/"> D.S. Stoffer</a>
-				</div>
-			</footer>
-
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/skel.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-
-			
-<!-- Start of StatCounter Code for Default Guide 
-<script type="text/javascript">
-var sc_project=11025450; 
-var sc_invisible=1; 
-var sc_security="9f3c973f"; 
-var scJsHost = (("https:" == document.location.protocol) ?
-"https://secure." : "http://www.");
-document.write("<sc"+"ript type='text/javascript' src='" +
-scJsHost+
-"statcounter.com/counter/counter.js'></"+"script>");
-</script>
-<noscript><div class="statcounter"><a title="web analytics"
-href="http://statcounter.com/" target="_blank"><img
-class="statcounter"
-src="//c.statcounter.com/11025450/0/9f3c973f/1/" alt="web
-analytics"></a></div></noscript>
- End of StatCounter Code for Default Guide -->				
-	</body>
-</html>
+x = astsa::nyse    
+# possible transformations include absolute value and squared value
+xdata = cbind(x, abs(x), x^2)  
+par(mfrow=2:1)
+u = specenv(xdata, real=TRUE,  spans=c(3,3))
+# peak at freq = .001 so let's
+# plot the optimal transform 
+beta = u[2, 3:5]  # scalings
+b = beta/beta[2]  # makes abs(x) coef=1
+gopt = function(x) { b[1]*x+b[2]*abs(x)+b[3]*x^2 }
+ curve(gopt, -.2, .2, col=4, lwd=2, panel.first=Grid(nym=0))
+gabs = function(x) { b[2]*abs(x) } # corresponding to |x|
+ curve(gabs, -.2, .2, add=TRUE, col=6)
+legend('bottomright', lty=1, col=c(4,6), legend=c('optimal', 'absolute value'), bg='white') 
+```
