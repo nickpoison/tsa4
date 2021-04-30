@@ -11,7 +11,6 @@ install.packages("remotes")     # only need to do this once
 remotes::install_github("nickpoison/astsa")
 ```
 
-&#x1F4A1; This page is written in markdown and hopefully it will make the material easier to use ... you can download this file `textRcode.md` and use it in `VSCode` (maybe change the name to `textRcode.R`), or rename it to `textRcode.Rmd` and use it with RRodeo.
 
 &#x1F4A1; Please note that the code here is updated to use the newest version of `astsa`, so it won't match the code in the text exactly - but it should be better. 
 
