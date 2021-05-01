@@ -1139,7 +1139,7 @@ library(fGarch)
 summary(garchFit(~arma(1,0)+garch(1,0), gnpgr))
 ```
 
-##############=== here
+
 
 Example 5.5 and 5.6 
 ```r
@@ -2190,7 +2190,6 @@ legend('topleft', c('true smoother', 'data', 'posterior mean', '95% of draws'), 
 Example 6.27
 
 ```r
-
 library(plyr)   # used to view progress (install it if you don't have it)
 y = jj
 ### setup - model and initial parameters
