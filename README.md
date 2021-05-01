@@ -1,7 +1,8 @@
 ## tsa4
 
 
-- This is the new home of  [Time Series Analysis and Its Applications, Edition 4](http://www.stat.pitt.edu/stoffer/tsa4/).
+- This is the new home of  [Time Series Analysis and Its Applications, Edition 4](http://www.stat.pitt.edu/stoffer/tsa4/) but the old entry page will remain for as long as I can keep it on Pitt's server.
+
 
 - All the (updated) code used in the text  is in [textRcode.md](https://github.com/nickpoison/tsa4/blob/master/textRcode.md)
 
@@ -11,7 +12,7 @@
     - or use it in [VSCode](https://code.visualstudio.com/) (probably change the name to `textRcode.r` also) ...
     - or use it with [RStudio](https://www.rstudio.com/products/rstudio/download/#download) for all your business needs.
 
- - The stuff that used to be here is now in the folder Old_Stuff   
+ - The stuff that used to be here is now in the folder Old_Stuff.   
 
 
 ## astsa
