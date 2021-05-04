@@ -194,13 +194,29 @@ num=120; t=1:num
 X = ts(2*cos(2*pi*t/12) + rnorm(num), freq=12)
 Y = ts(2*cos(2*pi*(t+5)/12) + rnorm(num), freq=12)
 Yw = resid( lm(Y~ cos(2*pi*t/12) + sin(2*pi*t/12), na.action=NULL) )
-par(mfrow=c(3,2), mgp=c(1.6,.6,0), mar=c(3,3,1,1) )
+par(mfrow=c(3,2) )
 tsplot(X)
 tsplot(Y)
 acf1(X, 48, ylab='ACF(X)')
 acf1(Y, 48, ylab='ACF(Y)')
 ccf2(X, Y, 24)
 ccf2(X, Yw, 24, ylim=c(-.6,.6))
+################################################
+
+#  here's another example that's simpler
+#  the series are trend stationary with 
+#  just a hint of trend - but same result
+
+set.seed(90210)
+num = 250  
+t   = 1:num
+X   = .01*t + rnorm(num,0,2)
+Y   = .01*t + rnorm(num)
+par(mfrow=c(3,1))
+tsplot(cbind(X,Y), spag=TRUE, col=astsa.col(c(4,2),.7), lwd=2, ylab='data')  
+ccf2(X, Y,  ylim=c(-.3,.3), col=4, lwd=2)
+Yw = resid(lm(Y~t))  # whiten Y by removing trend
+ccf2(X, Yw, ylim=c(-.3,.3), col=4, lwd=2)
 ```
 
 Example 1.30
