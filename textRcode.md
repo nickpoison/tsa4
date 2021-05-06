@@ -1743,13 +1743,12 @@ rmse = rep(NA,5)                 # SEs from the bootstrap
 for(i in 1:5){rmse[i]=sqrt(sum((para.star[,i]-est$par[i])^2)/nboot)
               cat(i, rmse[i],"\n") 
              }              
-# Plot phi and sigw  
-library(psych)                   # load psych package for scatter.hist  
+# Plot phi and sigw  (scatter.hist in astsa v1.13)
 phi  = para.star[,1] 
 sigw = abs(para.star[,4]) 
 phi  = ifelse(phi<0, NA, phi)    # any phi < 0 not plotted
 scatter.hist(sigw, phi, ylab=expression(phi), xlab=expression(sigma[~w]), 
-            smooth=FALSE, correl=FALSE, density=FALSE, ellipse=FALSE, title='')
+             hist.col=astsa.col(5,.4), pt.col=5, pt.size=1.5)
 ```
 
 Example 6.14
