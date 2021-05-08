@@ -59,7 +59,7 @@ Example 1.4
 ```r
 library(xts)         # install it if you don't have it
 djiar = diff(log(djia$Close))[-1]        
-plot(djiar, col=4 main="DJIA Returns") 
+plot(djiar, col=4, main="DJIA Returns") 
 ```
 
 Example 1.5  
@@ -141,7 +141,7 @@ Example 1.24
 set.seed(2)
 x = rnorm(100)
 y = lag(x, -5) + rnorm(100)
-ccf(y, x, ylab='CCovF', type='covariance')
+ccf(y, x, ylab='CCovF', type='covariance', panel.first=Grid())
 abline(v=0, lty=2)
 text(11, .9, 'x leads')
 text(-9, .9, 'y leads')
@@ -150,10 +150,12 @@ text(-9, .9, 'y leads')
 Example 1.25
 
 ```r
-(r = round(acf(soi, 6, plot=FALSE)$acf[-1], 3)) # first 6 sample acf values
+(r = round( acf1(soi, 6, plot=FALSE), 2)) # sample acf values
 par(mfrow=c(1,2))
-plot(lag(soi,-1), soi); legend('topleft', legend=r[1])
-plot(lag(soi,-6), soi); legend('topleft', legend=r[6])
+tsplot(lag(soi,-1), soi, col=4, type='p')
+ legend("topleft", legend=r[1], bg="white", adj=.45, cex = 0.85)
+tsplot(lag(soi,-6), soi, col=4, type='p')
+ legend("topleft", legend=r[6], bg="white", adj=.25, cex = 0.8)
 ```
 
 Example 1.26
@@ -222,6 +224,7 @@ ccf2(X, Yw, ylim=c(-.3,.3), col=4, lwd=2)
 Example 1.30
 
 ```r
+par(mar=rep(1,4))
 persp(1:64, 1:36, soiltemp, phi=30, theta=30, scale=FALSE, expand=4, ticktype="detailed", 
           xlab="rows", ylab="cols", zlab="temperature")
 dev.new()          
@@ -367,7 +370,7 @@ Example 2.9
 dummy = ifelse(soi<0, 0, 1)
 fish  = ts.intersect(rec, soiL6=lag(soi,-6), dL6=lag(dummy,-6), dframe=TRUE)
 summary(fit <- lm(rec~ soiL6*dL6, data=fish, na.action=NULL))
-plot(fish$soiL6, fish$rec)
+tsplot(fish$soiL6, fish$rec, type='p', col=4, ylab='rec', xlab='soiL6')
 lines(lowess(fish$soiL6, fish$rec), col=4, lwd=2)
 points(fish$soiL6, fitted(fit), pch='+', col=6)
 
@@ -418,7 +421,6 @@ curve(dnorm, -3, 3,  xaxt='n', yaxt='n', ann=FALSE)
 
 Example 2.13
  
-
 ```r
 tsplot(soi, col=4)
 lines(lowess(soi, f=.05), lwd=2, col=6) # El Niño cycle
@@ -502,15 +504,15 @@ arg = Arg(a)/(2*pi)  # arg in cycles/pt
 par(mfrow=c(3,1))
 set.seed(8675309)    # Jenny, it's me again
 ar2 = sarima.sim(ar=c(1.5,-.75), n = 144, S=12)
-tsplot(ar2, col=4, xlab="Year")
+tsplot(ar2, xlab="Year")
 
 ACF = ARMAacf(ar=c(1.5,-.75), ma=0, 50)
 tsplot(ACF, type="h", xlab="lag")
-abline(h=0)
+abline(h=0, col=8)
 
 # psi-weights - not in text
 psi = ts(ARMAtoMA(ar=c(1.5,-.75), ma=0, 50), start=0, freq=12)
-tsplot(psi, type='o', ylab=expression(psi-weights), xlab='Index')
+tsplot(psi, type='o', cex=1.1, ylab=expression(psi-weights), xlab='Index')
 ```
 
 Example 3.12
@@ -598,8 +600,6 @@ acf1(ma1, 1, plot=FALSE)  # [1] .536 (lag 1 sample ACF)
 Example 3.31
 
 ```r
-# Note: I'm not convinced this is really the MLE...
-#  ... but eventually 'sarima()' will be used
 rec.mle = ar.mle(rec, order=2)
 rec.mle$x.mean
 rec.mle$ar
@@ -800,7 +800,7 @@ x     = AirPassengers
 lx    = log(x) 
 dlx   = diff(lx) 
 ddlx  = diff(dlx, 12)
-plot.ts(cbind(x, lx, dlx, ddlx), main="")
+tsplot(cbind(x, lx, dlx, ddlx), main="")
 # below of interest for showing seasonal persistence (not shown here):
 par(mfrow=c(2,1))
 monthplot(dlx)
