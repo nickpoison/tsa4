@@ -1592,8 +1592,7 @@ for (m in 1:n.ahead){
  y[num+m] = A%*%xp
  rmspe[m] = sqrt(sig) 
 }
-tsplot(y, type='o', main='', ylab='J&J QE/Share', ylim=c(5,30),
-xlim = c(1975,1984))
+tsplot(y, type='o', main='', ylab='J&J QE/Share', ylim=c(5,30), xlim = c(1975,1984))
 upp  = ts(y[(num+1):(num+n.ahead)]+2*rmspe, start=1981, freq=4)
 low  = ts(y[(num+1):(num+n.ahead)]-2*rmspe, start=1981, freq=4)
  xx  = c(time(low), rev(time(upp)))
