@@ -141,10 +141,9 @@ Example 1.24
 set.seed(2)
 x = rnorm(100)
 y = lag(x, -5) + rnorm(100)
-ccf(y, x, ylab='CCovF', type='covariance', panel.first=Grid())
-abline(v=0, lty=2)
-text(11, .9, 'x leads')
-text(-9, .9, 'y leads')
+ccf2(y, x, ylab='CCovF', type='covariance')
+text( 9, 1.1, 'x leads')
+text(-8, 1.1, 'y leads')
 ```
 
 Example 1.25
