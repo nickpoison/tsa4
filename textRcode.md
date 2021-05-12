@@ -2432,26 +2432,20 @@ abline(h=0)
 Example 7.2
 ```r
 attach(beamd)
+
 tau    = rep(0,3) 
      u = ccf(sensor1, sensor2, plot=FALSE)
 tau[1] = u$lag[which.max(u$acf)]    #  17
      u = ccf(sensor3, sensor2, plot=FALSE)
 tau[3] = u$lag[which.max(u$acf)]    # -22
 
-Y     = ts.union(lag(sensor1,tau[1]), lag(sensor2, tau[2]), lag(sensor3, tau[3]))
-Y     = ts.union(Y, rowMeans(Y))
-Time  = time(Y)
-par(mfrow=c(4,1), mar=c(0, 3.1, 0, 1.1), oma=c(2.75, 0, 2.5, 0), mgp=c(1.6,.6,0))
-plot(Time, Y[,1], ylab='sensor1', xaxt="no", type='n')
-grid(); lines(Y[,1])
-title(main="Infrasonic Signals and Beam", outer=TRUE)
-plot(Time, Y[,2], ylab='sensor2', xaxt="no",  type='n')
-grid(); lines(Y[,2]) 
-plot(Time,Y[,3], ylab='sensor3', xaxt="no", type='n')
-grid(); lines(Y[,3])
-plot(Time, beam, type='n')  
-grid(); lines(Y[,4]) 
-title(xlab="Time", outer=TRUE)
+Y = ts.union(sensor1=lag(sensor1,tau[1]), lag(sensor2, tau[2]), lag(sensor3, tau[3]))
+Y = ts.union(Y, rowMeans(Y))
+colnames(Y) = c('sensor1', 'sensor2', 'sensor3', 'beam')
+tsplot(Y, main="Infrasonic Signals and Beam")
+
+
+detach(beamd)
 ```
 
 
@@ -2459,6 +2453,7 @@ title(xlab="Time", outer=TRUE)
 Example 7.4
 ```r
 attach(beamd)
+
 L = 9
 fdr = .001 
 N = 3
@@ -2490,11 +2485,16 @@ pID = FDR(pvals, fdr); Fq = qf(1-fdr, df1, df2)
 
 tsplot(Fr[nFr], eF[nFr], type="l", ylab="F-statistic", xlab="Frequency",  main="F Statistic")
 abline(h=c(Fq, eF[pID]), lty=1:2)
+
+
+detach(beamd)
 ```
 
 
 Example 7.5
 ```r
+attach(beamd)
+
 L  = 9
 M  = 100 
 M2 = M/2
@@ -2536,7 +2536,6 @@ nFr = 1:50      # freqs to display
 Fr = (nFr-1)/n  # frequencies 
 
 layout(matrix(c(1, 2, 4, 1, 3, 4), nc=2))
-par(mar=c(4,4,2,1)+.1)
 tsplot(10*Fr, fb[nFr], type="l", ylab="Power", xlab="Frequency (Hz)")
  lines(10*Fr, fv[nFr], lty=2); text(.24, 5, "(a)", cex=1.2)
 tsplot(10*Fr, H0[nFr], type="l", ylab="Frequency Response", xlab="Frequency(Hz)")
@@ -2545,6 +2544,8 @@ tsplot(-M2:M2, k1, type="l", ylab="Impulse Response", xlab="Index", lwd=1.5)
  text(45, .022, "(c)", cex=1.2)
 tsplot(cbind(f.beam,beam), spag=TRUE, lty=1:2, ylab="beam")
  text(2040, 2, "(d)", cex=1.2)
+
+detach(beamd) 
 ```
 
 Example 7.6
@@ -2577,8 +2578,8 @@ HatF = Z%*%solve(ZZ, t(Z))
 HatR = Z[,1]%*%t(Z[,1])/ZZ[1,1]
 
 par(mfrow=c(3,3))
-loc.name = c("Cortex 1","Cortex 2","Cortex 3","Cortex 4","Caudate","Thalamus 1","Thalamus 2",
-             "Cerebellum 1","Cerebellum 2")
+loc.name = c("Cortex 1","Cortex 2","Cortex 3","Cortex 4","Caudate","Thalamus 1",
+              "Thalamus 2", "Cerebellum 1","Cerebellum 2")
 
 for(Loc in 1:9) {   
  i = n.trt*(Loc-1)   
@@ -2640,8 +2641,8 @@ Hat.con = Z[,-4]%*%solve(ZZ[-4,-4], t(Z[,-4]))
 Hat.int = Z[,-(5:6)]%*%solve(ZZ[-(5:6),-(5:6)], t(Z[,-(5:6)]))                                                           
 
 par(mfrow=c(5,3), oma=c(0,2,0,0))
-loc.name = c("Cortex 1","Cortex 2","Cortex 3","Cortex 4","Caudate", "Thalamus 1","Thalamus 2",
-             "Cerebellum 1","Cerebellum 2")
+loc.name = c("Cortex 1","Cortex 2","Cortex 3","Cortex 4","Caudate", "Thalamus 1",
+              "Thalamus 2", "Cerebellum 1","Cerebellum 2")
 for(Loc in c(1:4,9)) {   # only Loc 1 to 4 and 9 used                
   i = 6*(Loc-1)                                                                 
   Y = cbind(fmri[[i+1]], fmri[[i+2]], fmri[[i+3]], fmri[[i+4]], fmri[[i+5]], fmri[[i+6]])                     
