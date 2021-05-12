@@ -2940,7 +2940,7 @@ nz = as.ts(eqexp[,17])
 f.eq <- array(dim=c(8,2,2,512)) -> f.ex 
 f.NZ = array(dim=c(2,2,512))
 
-# below calculates determinant for 2x2 Hermitian matrix
+# below calculates determinant for 2x2 Hermitian matrix (faster than using eigenvalues)
 det.c = function(mat){return(Re(mat[1,1]*mat[2,2]-mat[1,2]*mat[2,1]))}
 L = c(15,13,5)  # for smoothing 
 for (i in 1:8){     # compute spectral matrices
