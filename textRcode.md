@@ -191,10 +191,11 @@ Example 1.29
 
 ```r
 set.seed(1492)
-num=120; t=1:num
-X = ts(2*cos(2*pi*t/12) + rnorm(num), freq=12)
-Y = ts(2*cos(2*pi*(t+5)/12) + rnorm(num), freq=12)
-Yw = resid( lm(Y~ cos(2*pi*t/12) + sin(2*pi*t/12), na.action=NULL) )
+num = 120 
+t   = 1:num
+X   = ts(2*cos(2*pi*t/12) + rnorm(num), freq=12)
+Y   = ts(2*cos(2*pi*(t+5)/12) + rnorm(num), freq=12)
+Yw  = resid( lm(Y~ cos(2*pi*t/12) + sin(2*pi*t/12), na.action=NULL) )
 par(mfrow=c(3,2) )
 tsplot(X)
 tsplot(Y)
@@ -384,7 +385,7 @@ Example 2.10
 
 ```r
 set.seed(1000)  # so you can reproduce these results
-x = 2*cos(2*pi*1:500/50 + .6*pi) + rnorm(500,0,5)
+x  = 2*cos(2*pi*1:500/50 + .6*pi) + rnorm(500,0,5)
 z1 = cos(2*pi*1:500/50)  
 z2 = sin(2*pi*1:500/50)
 summary(fit <- lm(x~0+z1+z2))  # zero to exclude the intercept
@@ -511,7 +512,8 @@ abline(h=0, col=8)
 
 # psi-weights - not in text
 psi = ts(ARMAtoMA(ar=c(1.5,-.75), ma=0, 50), start=0, freq=12)
-tsplot(psi, type='o', cex=1.1, ylab=expression(psi-weights), xlab='Index')
+tsplot(psi, type='o', cex=1.1, ylab=expression(psi-weights), xaxt='n', xlab='Index')
+axis(1, at=0:4, labels=c('0','12','24','36','48'))
 ```
 
 Example 3.12
@@ -556,15 +558,17 @@ Example 3.26
 
 ```r
 set.seed(666)
-x = sarima.sim(ar =.9, ma=.5, n=100)
-xr = rev(x) # xr is the reversed data
-pxr = predict(arima(xr, order=c(1,0,1)), 10) # predict the reversed data
-pxrp = rev(pxr$pred) # reorder the predictors (for plotting)
+x     = sarima.sim(ar =.9, ma=.5, n=100)
+xr    = rev(x) # xr is the reversed data
+pxr   = predict(arima(xr, order=c(1,0,1)), 10) # predict the reversed data
+pxrp  = rev(pxr$pred) # reorder the predictors (for plotting)
 pxrse = rev(pxr$se) # reorder the SEs
-nx = ts(c(pxrp, x), start=-9) # attach the backcasts to the data
+nx    = ts(c(pxrp, x), start=-9) # attach the backcasts to the data
 tsplot(nx, ylab=expression(X[~t]), main='Backcasting', ylim=c(-7,4))
- U = nx[1:10] + pxrse; L = nx[1:10] - pxrse
- xx = c(-9:0, 0:-9); yy = c(L, rev(U))
+ U  = nx[1:10] + pxrse
+ L  = nx[1:10] - pxrse
+ xx = c(-9:0, 0:-9) 
+ yy = c(L, rev(U))
 polygon(xx, yy, border = 8, col = gray(0.6, alpha = 0.2))
 lines(-9:0, nx[1:10], col=2, type='o')
 ```
@@ -574,8 +578,8 @@ Example 3.28
 
 ```r
 rec.yw = ar.yw(rec, order=2)
-rec.yw$x.mean  # = 62.26278 (mean estimate)
-rec.yw$ar      # = 1.3315874, -.4445447  (parameter estimates)
+rec.yw$x.mean    # = 62.26278 (mean estimate)
+rec.yw$ar        # = 1.3315874, -.4445447  (parameter estimates)
 sqrt(diag(rec.yw$asy.var.coef))  # = .04222637, .04222637  (standard errors)
 rec.yw$var.pred  # = 94.79912 (error variance estimate)
 
@@ -686,12 +690,13 @@ for (i in 1:1000){
 
 # Picture
 dev.new()
-hist(phi.star.yw, 15, main="", prob=TRUE, xlim=c(.65,1.05), ylim=c(0,14), col=astsa.col(4,.3), xlab=expression(hat(phi)))
+hist(phi.star.yw, 15, main="", prob=TRUE, xlim=c(.65,1.05), ylim=c(0,14), 
+      col=astsa.col(4,.3), xlab=expression(hat(phi)))
 lines(density(phi.yw, bw=.02), lwd=2)  
 curve(dnorm(x, mean=.96, sd=.03), .75,1.1, lty=2, lwd=2, add=TRUE)
 legend(.65, 14, bty='n', lty=c(1,0,2), lwd=c(2,0,2), col=1, pch=c(NA,22,NA), 
-        pt.bg=c(NA,astsa.col(4,.3),NA), pt.cex=2.5, 
-        legend=c('true distribution', 'bootstrap distribution', 'normal approximation'))
+      pt.bg=c(NA,astsa.col(4,.3),NA), pt.cex=2.5, 
+      legend=c('true distribution', 'bootstrap distribution', 'normal approximation'))
 ```
 
 
@@ -835,9 +840,12 @@ tsplot(x, ylim=c(-16,16), main="sum")
 
 Example 4.2
 ```r
+# x from Example 4.1 is used here
+dev.new()
 P = abs(2*fft(x)/100)^2
 Fr = 0:99/100                    
 tsplot(Fr, P, type="o", xlab="frequency", ylab="periodogram")
+abline(v=.5, lty=2)
 ```
 
 Example 4.3
@@ -891,9 +899,9 @@ Example 4.13
 ```r
 par(mfrow=c(2,1))      
 soi.per = mvspec(soi)             
-abline(v=1/4, lty="dotted")
+ abline(v=1/4, lty="dotted")
 rec.per = mvspec(rec,) 
-abline(v=1/4, lty="dotted")
+ abline(v=1/4, lty="dotted")
 
 soi.per$details[1:50,] 
   #       frequency  period spectrum
@@ -941,12 +949,12 @@ abline(v=c(.25,1,2,3), lty=2)
 
 Example 4.15
 ```r
-t = seq(0, 1, by=1/200)  #
+t = seq(0, 1, by=1/200) 
 amps = c(1, .5, .4, .3, .2, .1)
 x = matrix(0, 201, 6)
 for (j in 1:6) x[,j] = amps[j]*sin(2*pi*t*2*j)
 x = ts(cbind(x, rowSums(x)), start=0, deltat=1/200)               
-ts.plot(x, lty=c(1:6, 1), lwd=c(rep(1,6), 2), ylab="Sinusoids", col=1:6)
+tsplot(x, lty=c(1:6, 1), lwd=c(rep(1,6), 2), ylab="Sinusoids", col=1:6, spaghetti=TRUE)
 names = c("Fundamental","2nd Harmonic","3rd Harmonic","4th Harmonic","5th Harmonic", 
           "6th Harmonic","Formed Signal")
 legend("topright", names, lty=c(1:6, 1), lwd=c(rep(1,6), 2), col=1:6)
@@ -1178,6 +1186,7 @@ Months = c("J","F","M","A","M","J","J","A","S","O","N","D")
 points(flu, pch=Months, cex=.8, font=2)
 # Start analysis
 dflu = diff(flu)
+dev.new()
 lag1.plot(dflu, corr=FALSE) # scatterplot with lowess fit
 thrsh = .05 # threshold
 Z = ts.intersect(dflu, lag(dflu,-1), lag(dflu,-2), lag(dflu,-3),
@@ -1192,7 +1201,8 @@ D = cbind(rep(1, nrow(Z)), Z[,2:5]) # design matrix
 p1 = D %*% coef(fit1) # get predictions
 p2 = D %*% coef(fit2)
 prd = ifelse(Z[,2] < thrsh, p1, p2)
-plot(dflu, ylim=c(-.5,.5), type='p', pch=3)
+dev.new()
+tsplot(dflu, ylim=c(-.5,.5), type='p', pch=3)
 lines(prd)
 prde1 = sqrt(sum(resid(fit1)^2)/df.residual(fit1) )
 prde2 = sqrt(sum(resid(fit2)^2)/df.residual(fit2) )
@@ -1220,13 +1230,16 @@ fit     = arima(soi.d, order=c(1,0,0))
 ar1     = as.numeric(coef(fit)[1]) # = 0.5875
 soi.pw  = resid(fit)
 rec.fil = filter(rec, filter=c(1, -ar1), sides=1)
-ccf2(soi.pw, rec.fil, na.action=na.omit)
+dev.new()
+ccf2(soi.pw, rec.fil) 
 
 fish  = ts.intersect(rec, RL1=lag(rec,-1), SL5=lag(soi.d,-5))
 (u    = lm(fish[,1]~fish[,2:3], na.action=NULL))
+dev.new()
 acf2(resid(u)) # suggests ar1
 (arx  = sarima(fish[,1], 1, 0, 0, xreg=fish[,2:3])) # final model
 pred  = rec + resid(arx$fit) # 1-step-ahead predictions
+dev.new()
 tsplot(pred, col=astsa.col(8,.3), lwd=7, ylab='rec & prediction')
 lines(rec)
 ```
@@ -1519,7 +1532,7 @@ polygon(xx, yy, border=8, col=astsa.col(8, alpha = .1))
 Example 6.10
 ```r
 num = length(jj)
-A = cbind(1,1,0,0)                                  
+A = cbind(1,1,0,0) 
 
 # Function to Calculate Likelihood 
 Linn=function(para){
