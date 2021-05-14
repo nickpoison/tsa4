@@ -16,7 +16,7 @@ remotes::install_github("nickpoison/astsa")
 
 ---
 
->  Note: when you are in a code block below, you can copy the contents of the block by moving your mouse to the upper right corner and clicking on the copy icon ( &#128441; ).
+>  Note: when you are in a code block below, you can copy the contents of the block by moving your mouse to the upper right corner and clicking on the copy icon ( &#128203; ).
 
 
 
