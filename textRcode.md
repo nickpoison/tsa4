@@ -82,6 +82,21 @@ tsplot(fmri1[,6:9], col=1:4, ylab="BOLD", main="Thalamus & Cerebellum", spaghett
 
 # each separately (not in text)
 tsplot(fmri1[,2:9], col=1:8, lwd=2, ncol=2, ylim=c(-.6,.6))
+
+# and another view (not in text)
+par(mfrow=c(3,1))
+x = ts(fmri1[,4:9], start=0, freq=32)         
+ names = c("Cortex","Thalamus","Cerebellum")
+u = ts(rep(c(rep(.6,16), rep(-.6,16)), 4), start=0, freq=32) # stimulus signal
+
+for (i in 1:3)
+{ j = (i+(0:2))[i]
+  tsplot(x[,j:(j+1)], ylab="BOLD", xlab="", main=names[i], col=5:6, ylim=c(-.6,.6), 
+         lwd=2, xaxt="n", spaghetti=TRUE)
+  axis(seq(0,256,64), side=1, at=0:4)
+  lines(u, type="s", col=gray(.3)) 
+}
+mtext("seconds", side=1, line=1.75, cex=.9)
 ```
 
 Example 1.7
