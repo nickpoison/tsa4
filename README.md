@@ -31,6 +31,6 @@
 
 ## python
 
-- The [code  in the first 3 chapters of the text have been converted to Python is here.](https://github.com/borisgarbuzov/tsa4-python/tree/master/src) 
+- The [code in the first 3 chapters of the text have been converted to Python here.](https://github.com/borisgarbuzov/tsa4-python/tree/master/src) 
 
 - And a [Python package that contains datasets from `astsa` is here.](https://pypi.org/project/astsadata/)
