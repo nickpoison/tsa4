@@ -678,7 +678,7 @@ set.seed(101010)
 e   = rexp(150, rate=.5) 
 u   = runif(150,-1,1) 
 de  = e*sign(u)
-dex = 50 + sarima.sim(n=100, ar=.95, innov=de, burnin=0) 
+dex = 50 + sarima.sim(n=100, ar=.95, innov=de, burnin=50) 
 tsplot(dex, ylab=expression(X[~t]))
 
 # Bootstrap
