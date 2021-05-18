@@ -27,3 +27,10 @@
 
 - A demonstration of the capabilities of `astsa` can be found here at
 [**FUN WITH ASTSA**](https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/fun_with_astsa.md)
+
+
+## python
+
+- The [code  in the first 3 chapters of the text have been converted to Python is here.](https://github.com/borisgarbuzov/tsa4-python/tree/master/src) 
+
+- And a [Python package that contains datasets from `astsa` is here.](https://pypi.org/project/astsadata/)
