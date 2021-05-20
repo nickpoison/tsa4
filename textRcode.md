@@ -90,7 +90,7 @@ x = ts(fmri1[,4:9], start=0, freq=32)
 u = ts(rep(c(rep(.6,16), rep(-.6,16)), 4), start=0, freq=32) # stimulus signal
 
 for (i in 1:3)
-{ j = (i+(0:2))[i]
+{ j = c(1,3,5)[i]
   tsplot(x[,j:(j+1)], ylab="BOLD", xlab="", main=names[i], col=5:6, ylim=c(-.6,.6), 
          lwd=2, xaxt="n", spaghetti=TRUE)
   axis(seq(0,256,64), side=1, at=0:4)
