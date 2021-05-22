@@ -478,6 +478,14 @@ lines(lowess(tempr, cmort), col=6, lwd=2)
 
 ## Chapter 3
 
+> Note: In version 1.8 we changed the way AIC, AICc, and BIC were calculated in `sarima` so their values in the text will be different by log(2&pi;).
+The  results of any data analysis in the text are the same.
+
+<br/>
+
+
+
+
 Example 3.2
 
 ```r
