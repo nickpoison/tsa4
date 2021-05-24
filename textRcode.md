@@ -84,13 +84,12 @@ tsplot(fmri1[,6:9], col=1:4, ylab="BOLD", main="Thalamus & Cerebellum", spaghett
 tsplot(fmri1[,2:9], col=1:8, lwd=2, ncol=2, ylim=c(-.6,.6))
 
 # and another view (not in text)
+x     = ts(fmri1[,4:9], start=0, freq=32)         
+names = c("Cortex","Thalamus","Cerebellum")
+u     = ts(rep(c(rep(.6,16), rep(-.6,16)), 4), start=0, freq=32) # stimulus signal
 par(mfrow=c(3,1))
-x = ts(fmri1[,4:9], start=0, freq=32)         
- names = c("Cortex","Thalamus","Cerebellum")
-u = ts(rep(c(rep(.6,16), rep(-.6,16)), 4), start=0, freq=32) # stimulus signal
-
-for (i in 1:3)
-{ j = c(1,3,5)[i]
+for (i in 1:3){ 
+  j = c(1,3,5)[i]
   tsplot(x[,j:(j+1)], ylab="BOLD", xlab="", main=names[i], col=5:6, ylim=c(-.6,.6), 
          lwd=2, xaxt="n", spaghetti=TRUE)
   axis(seq(0,256,64), side=1, at=0:4)
@@ -113,7 +112,7 @@ tsplot(cbind(EQ5,EXP6), col=4)
 Example 1.9
 
 ```r
-w = rnorm(500,0,1)  # 500 N(0,1) variates
+w = rnorm(500,0,1)                  # 500 N(0,1) variates
 v = filter(w, sides=2, rep(1/3,3))  # moving average
 par(mfrow=c(2,1))
 tsplot(w, col=4, main="white noise")
@@ -243,8 +242,8 @@ Example 1.30
 
 ```r
 par(mar=rep(1,4))
-persp(1:64, 1:36, soiltemp, phi=30, theta=30, scale=FALSE, expand=4, ticktype="detailed", 
-          xlab="rows", ylab="cols", zlab="temperature")
+persp(1:64, 1:36, soiltemp, phi=30, theta=30, scale=FALSE, expand=4, 
+       ticktype="detailed", xlab="rows", ylab="cols", zlab="temperature")
 dev.new()          
 tsplot(rowMeans(soiltemp), xlab="row", ylab="Average Temperature")
 ```
