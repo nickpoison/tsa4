@@ -1,3 +1,5 @@
+<img src="https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/figs/tsa4.jpg" alt="tsa4"  height="500" > 
+
 ## tsa4
 
 - All the (updated) code used in the text  is in [textRcode.md](https://github.com/nickpoison/tsa4/blob/master/textRcode.md)
@@ -24,4 +26,4 @@
 - And a [Python package that contains datasets from `astsa` is here.](https://pypi.org/project/astsadata/)
 
 
-<img src="https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/figs/tsa4.jpg" alt="tsa4"> 
+
