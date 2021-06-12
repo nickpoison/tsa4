@@ -22,3 +22,6 @@
 - The [code in the first 3 chapters of the text has been converted to Python here.](https://github.com/borisgarbuzov/tsa4-python/tree/master/src) 
 
 - And a [Python package that contains datasets from `astsa` is here.](https://pypi.org/project/astsadata/)
+
+
+<img src="https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/figs/tsa4.jpg" alt="tsa4"> 
