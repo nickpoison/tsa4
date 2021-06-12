@@ -1,4 +1,4 @@
-<img src="https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/figs/tsa4.jpg" alt="tsa4"  height="500" > 
+<img src="https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/figs/tsa4.jpg" alt="tsa4"  height="200" > 
 
 ## tsa4
 
