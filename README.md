@@ -5,8 +5,7 @@
 
 - This is the new home of  [Time Series Analysis and Its Applications, Edition 4](http://www.stat.pitt.edu/stoffer/tsa4/) but the old entry page is still there.
 
-
-  - The stuff that used to be here is now in the folder Old_Stuff.  
+ - The stuff that used to be here is now in the folder Old_Stuff.  
 
 ## astsa
 
