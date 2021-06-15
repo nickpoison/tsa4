@@ -49,6 +49,9 @@ Example 1.2
 
 ```r
 tsplot(globtemp, col=4, type="o", ylab="Global Temperature Deviations")
+
+# or with the updated values
+tsplot(gtemp_land, col=4, type="o", ylab="Global Temperature Deviations")
 ``` 
 
 Example 1.3  
