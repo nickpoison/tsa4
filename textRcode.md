@@ -187,6 +187,23 @@ tsplot(y1, type='s')   # plot 1st series
 c(mean(y1), mean(y2))  # the sample means
 acf(y1, lag.max=4, plot=FALSE) 
 acf(y2, lag.max=4, plot=FALSE) 
+
+#########################################
+# here's the version from the other text -
+# same idea but the y values are 2-4-6-8
+# like the children's cheer
+
+set.seed(101011)
+x1 = sample(c(-2,2), 11, replace=TRUE)   # simulated coin tosses
+x2 = sample(c(-2,2), 101, replace=TRUE)
+y1 = 5 + filter(x1, sides=1, filter=c(1,-.5))[-1]
+y2 = 5 + filter(x2, sides=1, filter=c(1,-.5))[-1]
+tsplot(y1, type="s", col=4, xaxt="n", yaxt="n")  # y2 not shown
+ axis(1, 1:10); axis(2, seq(2,8,2), las=1)
+ points(y1, pch=21, cex=1.1, bg=6)
+acf(y1, lag.max=4, plot=FALSE) 
+acf(y2, lag.max=4, plot=FALSE) 
+
 ```
 
 Example 1.27
