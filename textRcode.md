@@ -1003,6 +1003,14 @@ names = c("Fundamental","2nd Harmonic","3rd Harmonic","4th Harmonic","5th Harmon
           "6th Harmonic","Formed Signal")
 legend("topright", names, lty=c(1:6, 1), lwd=c(rep(1,6), 2), col=1:6)
 rm(t)                    #Redemption
+
+##########################################################################
+# another view of the idea, sawtooth signal periodic but not sinusoidal  #
+##########################################################################
+y = ts(rev(1:100 %% 20), freq=20)         # sawtooth signal
+par(mfrow=2:1)
+tsplot(1:100, y, ylab="sawtooth signal", col=4)
+mvspec(y, main="", ylab="periodogram", col=5, xlim=c(0,7))  
 ```
 
 
