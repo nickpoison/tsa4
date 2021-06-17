@@ -7,9 +7,7 @@
 
 - This is the new home of  [Time Series Analysis and Its Applications, Edition 4](http://www.stat.pitt.edu/stoffer/tsa4/) but the old entry page is still there.
 
- - The old code that used to be here is gone -
- [textRcode.md](https://github.com/nickpoison/tsa4/blob/master/textRcode.md)
- includes all necessary code to match the text (and more).
+ 
 
 ## astsa
 
