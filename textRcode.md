@@ -2391,7 +2391,7 @@ tsplot(mxb[,3],  ylab=names[3], ylim=c(L,U))
 
 ## Chapter 7
 
-Code in Introduction ... if you want to see how it was done before `tsplot`, [the original code is here](https://github.com/nickpoison/tsa4/blob/master/Old_Stuff/ch7/ch7_intro.r).
+Code in Introduction
 
 ```r
 x = matrix(0, 128, 6)
