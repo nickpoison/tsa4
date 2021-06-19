@@ -26,13 +26,13 @@ remotes::install_github("nickpoison/astsa/astsa_build")
 
 ### Table of Contents
   
-  * [Chapter 1](#chapter-1)
-  * [Chapter 2](#chapter-2)
-  * [Chapter 3](#chapter-3)
-  * [Chapter 4](#chapter-4)
-  * [Chapter 5](#chapter-5)
-  * [Chapter 6](#chapter-6)
-  * [Chapter 7](#chapter-7)
+  * [Chapter 1 - Characteristics of Time Series](#chapter-1)
+  * [Chapter 2 - Time Series Regression and Exploratory Data Analysis](#chapter-2)
+  * [Chapter 3 - ARIMA Models](#chapter-3)
+  * [Chapter 4 - Spectral Analysis and Filtering](#chapter-4)
+  * [Chapter 5 - Additional Time Domain Topics](#chapter-5)
+  * [Chapter 6 - State Space Models](#chapter-6)
+  * [Chapter 7 - Statistical Methods in the Frequency Domain](#chapter-7)
  
 ---
 
