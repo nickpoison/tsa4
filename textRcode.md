@@ -311,9 +311,7 @@ tsplot(part, main="Particulates", col=2, type="o", pch=19, ylab="")
 
 ##-- together 
 dev.new()
-tsplot(cmort, ylab="", ylim=c(20,130), col=astsa.col(6,.8))
-lines(tempr, col=astsa.col(4,.9))
-lines(part, col=astsa.col(2,.8))
+tsplot(cbind(cmort, tempr,part), spag=TRUE, ylab="", col=c(6,4,2))
 legend("topright", legend=c("Mortality", "Temperature", "Pollution"), lty=1, lwd=2, col=c(6,4,2), bg="white")
 
 ##-- scatterplot matrix
