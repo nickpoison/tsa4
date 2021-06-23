@@ -1136,9 +1136,9 @@ persp(-31:31/64, -17:17/36, per3, phi=30, theta=30, expand=.6, ticktype="detaile
 Example 5.1
 
 ```r
-# NOTE: The example uses 'fracdiff', which is a dinosaur 
-#       and gave questionable results - this uses 'arfima' 
-#       but it didn't make it into the text.
+# NOTE: The example in the text uses the package 'fracdiff', 
+#       which is a dinosaur and gave questionable results - 
+#       this uses 'arfima' but it didn't make it into the text.
 library(arfima)
 summary(varve.fd <- arfima(log(varve)))  # d.hat = 0.3728, se(d,hat) = 0.0273
 # residual stuff
