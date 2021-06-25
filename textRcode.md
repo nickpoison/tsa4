@@ -537,19 +537,18 @@ ARMAtoAR(ar = .9, ma = .5, 10)   # first 10 pi-weights
 Example 3.9
 ```r
 # this is how Figure 3.3 was generated
-par(mar=c(3,3,2,1), mgp=c(1.6,.6,0), font.main=1)
-phi1p  =  seq(0,  2,  by=0.1)
+phi1p  =  seq( 0, 2,  by=0.1)
 phi1m  =  seq(-2, 0,  by=0.1)
 phi1   =  seq(-2, 2,  by=0.1)
 phi2   =  seq(-1, 1,  by=0.1)
 name1  =  expression(phi[1])
 name2  =  expression(phi[2])
-tsplot(phi1p, (1-phi1p), type="l", ylim=c(-1,1), xlim=c(-2,2), ylab=name2, xlab=name1,
-           main='Causal Region of an AR(2)')
- lines(phi1m, (1+phi1m), type="l", ylim=c(-1,1), xlim=c(-2,2)) 
+tsplot(phi1p, (1-phi1p),  ylim=c(-1,1), xlim=c(-2,2), ylab=name2, xlab=name1,
+        main='Causal Region of an AR(2)')
+ lines(phi1m, (1+phi1m),  ylim=c(-1,1), xlim=c(-2,2)) 
  abline(h=0, v=0, lty=2, col=8)
  lines(phi1, -(phi1^2 /4), ylim=c(-1,1))
- lines( x=c(-2,2), y=c(-1,-1), typ="l", ylim=c(-1,1))
+ lines( x=c(-2,2), y=c(-1,-1), ylim=c(-1,1))
  text(0, .35, 'real roots')
  text(0, -.5, 'complex roots')
 ```
