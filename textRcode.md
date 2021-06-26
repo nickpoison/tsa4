@@ -961,7 +961,7 @@ Example 4.13
 par(mfrow=c(2,1))      
 soi.per = mvspec(soi)             
  abline(v=1/4, lty="dotted")
-rec.per = mvspec(rec,) 
+rec.per = mvspec(rec) 
  abline(v=1/4, lty="dotted")
 
 soi.per$details[1:50,] 
