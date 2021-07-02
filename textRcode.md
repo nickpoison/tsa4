@@ -934,10 +934,12 @@ round( cbind(1/Freq[1:30], Per[1:30]), 3)
 
 Examples 4.5, 4.6, 4.7
 ```r
-par(mfrow=c(3,1))       
-arma.spec(log="no", main="White Noise")
-arma.spec(ma=.5, log="no", main="Moving Average")  
-arma.spec(ar=c(1,-.9), log="no", main="Autoregression")
+# default is to not plot on log scale 
+# add log='y' otherwise  
+par(mfrow=c(3,1))
+arma.spec(main="White Noise", col=4)
+arma.spec(ma=.5, main="Moving Average", col=4)
+arma.spec(ar=c(1,-.9), main="Autoregression", col=4)
 ```
 
 
