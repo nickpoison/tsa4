@@ -7,9 +7,13 @@
 &#x2728; While the text was written under `astsa` version 1.8, the code below uses the most recent version, which has some additional capabilities.  You can install the latest version of the package from GitHub:
 
 ```r
-install.packages("remotes")     # only need to do this once 
+install.packages("remotes")    # if you don't have the package
 remotes::install_github("nickpoison/astsa/astsa_build")
 ```
+
+&#x1F4A1; You can also install `astsa` from the archive 
+[astsa_1.13.1.tar.gz](https://github.com/nickpoison/astsa/blob/master/astsa_1.13.1.tar.gz). Download it (there's a button) and in R, use _Install package(s) from local files..._ from the Packages tab.
+
 
 
 ### An intro to `astsa` capabilities can be found at  [FUN WITH ASTSA](https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/fun_with_astsa.md)
