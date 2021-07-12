@@ -1367,6 +1367,9 @@ fit$resid.cov # estimate of noise cov matrix
 
 ## Chapter 6
 
+[Some Extra Chapter 6 Info](https://github.com/nickpoison/tsa4/blob/master/chap6.md)
+
+
 
 Example 6.1
 ```r
