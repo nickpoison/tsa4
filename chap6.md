@@ -21,7 +21,7 @@ The models for each case are (x is state, y is observation, and t = 1, &hellip;,
 
 &diams; **Level 1:**  &nbsp; &nbsp;  x<sub>t</sub> = &Phi; x<sub>t-1</sub> +  &Upsilon; u<sub>t</sub> + w<sub>t</sub>,  &nbsp; &nbsp;  y<sub>t</sub> = A<sub>t</sub> x<sub>t</sub> +  &Gamma; u<sub>t</sub> + v<sub>t</sub>,  &nbsp;   u<sub>t</sub> are r-dimensional inputs, etc.<br>
      
-&diams; **Level 2:** &nbsp; &nbsp; x<sub>t+1</sub> = &Phi; x<sub>t</sub> +  &Upsilon; u<sub>t+1</sub> + &Theta; w<sub>t</sub>, &nbsp;   &nbsp;   y<sub>t</sub> = A<sub>t</sub> x<sub>t</sub> +  &Gamma; u<sub>t</sub> + v<sub>t</sub>, &nbsp;  cov(w<sub>s</sub>, v<sub>t</sub>) = S &delta;<sub>s</sub><span style="position:relative; left: -.9ex; bottom: 2pt"><sup>t</sup></span>, &nbsp; &Theta; is p &times; m, and w<sub>t</sub> is m-dimensional, etc.
+&diams; **Level 2:** &nbsp; &nbsp; x<sub>t</sub> = &Phi; x<sub>t-1</sub> +  &Upsilon; u<sub>t</sub> + &Theta; w<sub>t-1</sub>, &nbsp;   &nbsp;   y<sub>t</sub> = A<sub>t</sub> x<sub>t</sub> +  &Gamma; u<sub>t</sub> + v<sub>t</sub>, &nbsp;  cov(w<sub>s</sub>, v<sub>t</sub>) = S &delta;<sub>s</sub><span style="position:relative; left: -.9ex; bottom: 2pt"><sup>t</sup></span>, &nbsp; &Theta; is p &times; m, and w<sub>t</sub> is m-dimensional, etc.
 
 ---  
     
