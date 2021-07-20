@@ -1347,7 +1347,8 @@ fit     = marima(xdata, ar.pattern=arp, ma.pattern=map, means=c(0,1,1), penalty=
 # resid analysis (not displayed)
 innov   = t(resid(fit))
 tsplot(innov) 
-acf(innov)
+acf(innov, na.action = na.pass)
+
 # fitted values for cmort
 pred    = ts(t(fitted(fit))[,1], start=start(cmort), freq=frequency(cmort)) +
 detr$coef[1] + detr$coef[2]*time(cmort)
