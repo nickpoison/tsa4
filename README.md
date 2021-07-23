@@ -25,6 +25,9 @@
 
 - And a [Python package that contains datasets from `astsa` is here.](https://pypi.org/project/astsadata/)
 
-- _Why use Python if you can use R?_ &nbsp; &nbsp; Boris the Spider
+- _Why use Python if you can use R?_ &nbsp; &nbsp; Mr Natural
+
+&emsp; <img src="
+https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/figs/tool.png">
 
 
