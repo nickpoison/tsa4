@@ -27,6 +27,6 @@
 
 - _Why use Python if you can use R?_ &nbsp; &nbsp; Mr Natural
 
-&emsp; &ensp;<img src="https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/figs/tool.png" alt="mr natch" height="200" >
+&emsp; &ensp;<img src="https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/figs/tool.png" alt="mr natch">
 
 
