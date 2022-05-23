@@ -298,6 +298,10 @@ persp(-40:40, -20:20, rs3, phi=30, theta=30, expand=30, scale="FALSE",
 Example 2.1
 
 ```r
+# astsa now has a trend script, so Figure 2.1 can be done in one line
+trend(chicken)    # includes a 95% CI
+
+# in the text
 summary(fit <- lm(chicken~time(chicken))) # regress price on time
 tsplot(chicken, ylab="cents per pound", col=4, lwd=2)
 abline(fit)      # add the fitted regression line to the plot            
@@ -360,6 +364,21 @@ acf1(resid(fit))
 Examples 2.4 and 2.5
 
 ```r
+# astsa now has a detrend script, so Figure 2.4 can be done as
+par(mfrow=2:1)
+tsplot( detrend(chicken), main="detrended" )
+tsplot( diff(chicken), main="first difference" )
+
+# and Figure 2.5 as
+dev.new()
+par(mfrow=c(3,1))     # plot ACFs
+acf1(chicken, 48, main="chicken")
+acf1(detrend(chicken), 48, main="detrended")
+acf1(diff(chicken), 48, main="first difference")
+
+###############
+
+# Figures 2.4 and 2.5 in the text
 fit = lm(chicken~time(chicken), na.action=NULL) # regress chicken on time
 par(mfrow=c(2,1))
 tsplot(resid(fit), main="detrended")
@@ -460,6 +479,12 @@ curve(dnorm, -3, 3,  xaxt='n', yaxt='n', ann=FALSE)
 Example 2.13
  
 ```r
+# Figure 2.14 using the trend script
+trend(soi, lowess=TRUE)
+lines(lowess(soi, f=.05), lwd=2, col=5) # El Niño cycle
+
+
+# similar to text but with CIs
 tsplot(soi, col=4)
 lines(lowess(soi, f=.05), lwd=2, col=6) # El Niño cycle
 # trend with CIs
