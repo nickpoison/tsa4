@@ -11,15 +11,12 @@ install.packages("remotes")    # if you don't have the package
 remotes::install_github("nickpoison/astsa/astsa_build")
 ```
 
-&#x1F4A1; You can also install `astsa` from the archive 
-[astsa_1.14.3.tar.gz](https://github.com/nickpoison/astsa/blob/master/astsa_1.14.3.tar.gz). Download it (there's a button) and in R, use _Install package(s) from local files..._ from the Packages tab.
-
 
 ### An intro to `astsa` capabilities can be found at  [FUN WITH ASTSA](https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/fun_with_astsa.md)
 
 ---
 
->  Note: when you are in a code block below, you can copy the contents of the block by moving your mouse to the upper right corner and clicking on the copy icon ( &#128203; ).
+> &#x1F4A1; Note: when you are in a code block below, you can copy the contents of the block by moving your mouse to the upper right corner and clicking on the copy icon ( &#128203; ).
 
 
 
