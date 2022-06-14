@@ -140,7 +140,6 @@ tsplot(xd, ylim=c(-5,55), main="random walk", ylab='')
 lines(x, col=4) 
 clip(0,200,0,50)
 abline(h=0, col=4, lty=2)
-clip(0,200,0,50)
 abline(a=0, b=.2, lty=2)
 ```
 
