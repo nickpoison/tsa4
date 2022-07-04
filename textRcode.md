@@ -92,7 +92,7 @@ names = c("Cortex","Thalamus","Cerebellum")
 u     = ts(rep(c(rep(.6,16), rep(-.6,16)), 4), start=0, freq=32) # stimulus signal
 par(mfrow=c(3,1))
 for (i in 1:3){ 
-  j = 2*i-1
+  j = 2*i - 1
   tsplot(x[,j:(j+1)], ylab="BOLD", xlab="", main=names[i], col=5:6, ylim=c(-.6,.6), 
          lwd=2, xaxt="n", spaghetti=TRUE)
   axis(seq(0,256,64), side=1, at=0:4)
