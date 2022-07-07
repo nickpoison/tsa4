@@ -1790,10 +1790,8 @@ sarima(u[,1], 0,0,0, xreg=u[,2:7])
 Example 6.13
 ```r
 ################################## 
-# CAUTION:  R is pathetically slow
-#   If this takes a long time to run on your machine, 
-#   change lines below to 
-#        'tol=.01', 'tol=.001', or 'tol=.0001'   
+# NOTE:  If this takes a long time to run on your machine, set
+#        'tol=.01', 'tol=.001', or 'tol=.0001'   and/or
 #        'nboot=100', 'nboot=200', or 'nboot=250'         
 tol = sqrt(.Machine$double.eps)  # determines convergence of optimizer     
 nboot = 500                      # number of bootstrap replicates     
