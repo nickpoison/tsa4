@@ -1789,43 +1789,52 @@ sarima(u[,1], 0,0,0, xreg=u[,2:7])
 
 Example 6.13
 ```r
-library(plyr)                    # load plyr to track iterations
-
-################ 
-# NOTE: Change lines below to 
-#        'tol=.01'   or 'tol=.001'   
-#        'nboot=100' or 'nboot=200' 
-#       if this takes a long time to run - depends on your machine           
+################################## 
+# NOTE: If this takes a long time to run on your machine,
+#       change lines below to 
+#        'tol=.01', 'tol=.001', 'tol=.0001'   
+#        'nboot=100', 'nboot=200', 'nboot=250'   
+#  At 'tol = .0001' my machine does about 100 iterations per minute        
 tol = sqrt(.Machine$double.eps)  # determines convergence of optimizer     
 nboot = 500                      # number of bootstrap replicates     
-################# 
+################################## 
+
+pb = txtProgressBar(min = 0, max = nboot, initial = 0, style=3)  # progress bar
 
 y     = window(qinfl, c(1953,1), c(1965,2))  # inflation   
 z     = window(qintr, c(1953,1), c(1965,2))  # interest   
 num   = length(y) 
 A     = array(z, dim=c(1,1,num))
 input = matrix(1,num,1)  
+
 # Function to Calculate Likelihood   
 Linn  = function(para, y.data){  # pass data also
-   phi = para[1]; alpha = para[2]
-   b   = para[3]; Ups   = (1-phi)*b
-   cQ  = para[4]; cR    = para[5]  
+   phi = para[1];  alpha = para[2]
+   b   = para[3];  Ups   = (1-phi)*b
+   cQ  = para[4];  cR    = para[5]  
    kf  = Kfilter2(num,y.data,A,mu0,Sigma0,phi,Ups,alpha,1,cQ,cR,0,input)
    return(kf$like)    
 }
+
 # Parameter Estimation   
-mu0 = 1; Sigma0 = .01  
+mu0      = 1
+Sigma0   = .01  
 init.par = c(phi=.84, alpha=-.77, b=.85, cQ=.12, cR=1.1) # initial values   
+
 est = optim(init.par,  Linn, NULL, y.data=y, method="BFGS", hessian=TRUE, 
              control=list(trace=1, REPORT=1, reltol=tol))  
-SE  = sqrt(diag(solve(est$hessian)))                     
-phi = est$par[1]; alpha = est$par[2]
-b   = est$par[3]; Ups   = (1-phi)*b         
-cQ  = est$par[4]; cR    = est$par[5] 
+SE  = sqrt(diag(solve(est$hessian)))   
+
+phi   = est$par[1];  alpha = est$par[2]
+b     = est$par[3];  Ups   = (1-phi)*b         
+cQ    = est$par[4];  cR    = est$par[5] 
 round(cbind(estimate=est$par, SE), 3)  
+
+
 # BEGIN BOOTSTRAP   
 # Run the filter at the estimates 
-kf = Kfilter2(num,y,A,mu0,Sigma0,phi,Ups,alpha,1,cQ,cR,0,input)          
+kf = Kfilter2(num,y,A,mu0,Sigma0,phi,Ups,alpha,1,cQ,cR,0,input)  
+
 # Pull out necessary values from the filter and initialize  
 xp      = kf$xp
 innov   = kf$innov 
@@ -1838,17 +1847,19 @@ xp.star = xp
 k       = 4:50                   # hold first 3 observations fixed 
 para.star = matrix(0, nboot, 5)  # to store estimates
 init.par  =  c(.84, -.77, .85, .12, 1.1)    
-pr <- progress_text()            # displays progress
-pr$init(nboot)
+
 for (i in 1:nboot){
- pr$step()                      
+ setTxtProgressBar(pb,i)                       
  e.star[k] = sample(e[k], replace=TRUE)   
- for (j in k){ xp.star[j] = phi*xp.star[j-1] + Ups+K[j]*sqrt(sig[j])*e.star[j] }   
- y.star[k] = z[k]*xp.star[k] + alpha + sqrt(sig[k])*e.star[k]  
+ for (j in k){ 
+  xp.star[j] = phi*xp.star[j-1] + Ups+K[j]*sqrt(sig[j])*e.star[j] }   
+   y.star[k] = z[k]*xp.star[k] + alpha + sqrt(sig[k])*e.star[k]  
  est.star  = optim(init.par, Linn, NULL, y.data=y.star, method="BFGS", control=list(reltol=tol))     
  para.star[i,] = cbind(est.star$par[1], est.star$par[2], est.star$par[3], 
-                        abs(est.star$par[4]), abs(est.star$par[5]))   
-}                       
+                       abs(est.star$par[4]), abs(est.star$par[5]))   
+}
+close(pb) 
+
 # Some summary statistics  
 rmse = rep(NA,5)                 # SEs from the bootstrap
 for(i in 1:5){rmse[i]=sqrt(sum((para.star[,i]-est$par[i])^2)/nboot)
