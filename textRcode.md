@@ -2243,6 +2243,7 @@ ffbs = function(y,V,W,m0,C0){
     CC[t] = C[t] - (C[t]^2)/(R[t+1]^2)*(R[t+1]-CC[t+1])
     x[t]  = rnorm(1,m[t]+B[t]*(x[t+1]-a[t+1]),sqrt(H[t]))  }
 return(list(x=x,m=m,C=C,mm=mm,CC=CC,llike=llike))   }
+
 # Simulate states and data
 set.seed(1); W = 0.5; V = 1.0
 n  = 100; m0 = 0.0; C0 = 10.0; x0 = 0
@@ -2254,10 +2255,12 @@ y[1] = x[1] + v[1]
 for (t in 2:n){
   x[t] = x[t-1] + w[t]
   y[t] = x[t] + v[t]   }
+
 # actual smoother (for plotting)
 ks = Ksmooth0(num=n, y, A=1, m0, C0, Phi=1, cQ=sqrt(W), cR=sqrt(V))
 xsmooth = as.vector(ks$xs)
-#
+
+# run it
 run = ffbs(y,V,W,m0,C0)
 m   = run$m; C = run$C; mm = run$mm
 CC  = run$CC; L1 = m-2*C; U1  = m+2*C
@@ -2296,7 +2299,7 @@ lx    = apply(xs,2,q025)
 mx    = apply(xs,2,mean)
 ux    = apply(xs,2,q975)
 
-##  plot of the data
+##  plot data
 par(mfrow=c(2,2))
 tsplot(cbind(x,y), spag=TRUE,  ylab='', col=c(1,8), lwd=2)
 points(y)
@@ -2325,7 +2328,6 @@ legend('topleft', c('true smoother', 'data', 'posterior mean', '95% of draws'), 
 Example 6.27
 
 ```r
-library(plyr)   # used to view progress (install it if you don't have it)
 y = jj
 ### setup - model and initial parameters
 set.seed(90210)
@@ -2339,6 +2341,7 @@ R1 = diag(.04,4)      # this is Sigma0
 V = .1
 W11 = .1
 W22 = .1
+
 ##-- FFBS --##  
 ffbs = function(y,F,G,V,W11,W22,a1,R1){
   n  = length(y)
@@ -2372,6 +2375,7 @@ ffbs = function(y,F,G,V,W11,W22,a1,R1){
     xb[t,] = mmm + t(chol(CCC))%*%rnorm(4)  }
   return(xb)                                
 }
+
 ##-- Prior hyperparameters --##
 # b0 = 0     # mean for beta = phi -1
 # B0 = Inf   # var for  beta  (non-informative => use OLS for sampling beta)
@@ -2387,9 +2391,10 @@ M       = 1000
 niter   = burnin+step*M
 pars    = matrix(0,niter,4)
 xbs     = array(0,c(niter,n,4))
-pr <- progress_text()           # displays progress
-pr$init(niter)                  
+pb      = txtProgressBar(min=0, max=niter, initial=0, style=3)  # progress bar
+            
 for (iter in 1:niter){
+    setTxtProgressBar(pb,iter)  
     xb = ffbs(y,F,G,V,W11,W22,a1,R1)
      u = xb[,1] 
     yu = diff(u); xu = u[-n]    # for phihat and se(phihat)
@@ -2402,9 +2407,41 @@ G[1,1] = phies[1] + rt(1,dft)*phies[2]  # use a t
    W22 = 1/rgamma(1, (n0+ n-3)/2, (n0*s20w/2) + sum((xb[4:n,2] + xb[3:(n-1),2] + 
                   xb[2:(n-2),2] +xb[1:(n-3),2])^2)/2)
    xbs[iter,,] = xb
-   pars[iter,] = c(G[1,1], sqrt(V), sqrt(W11), sqrt(W22))
-   pr$step()             
+   pars[iter,] = c(G[1,1], sqrt(V), sqrt(W11), sqrt(W22))           
 }
+close(pb) 
+
+# Plot results
+ind = seq(burnin+1, niter, by=step)
+names= c(expression(phi), expression(sigma[v]), expression(sigma[w~11]), expression(sigma[w~22]))
+par(mfcol=c(3,4))
+for (i in 1:4){
+ tsplot(pars[ind,i],xlab="iterations", ylab="trace", main="")
+ mtext(names[i], side=3, line=.5, cex=1) 
+ acf(pars[ind,i],main="", lag.max=25, xlim=c(1,25), ylim=c(-.4,.4))
+ hist(pars[ind,i],main="",xlab="")
+ abline(v=mean(pars[ind,i]), lwd=2, col=3) 
+}
+
+dev.new()
+par(mfrow=c(2,1))
+  mxb = cbind(apply(xbs[ind,,1],2,mean), apply(xbs[,,2],2,mean))
+  lxb = cbind(apply(xbs[ind,,1],2,quantile,0.005), apply(xbs[ind,,2],2,quantile,0.005))
+  uxb = cbind(apply(xbs[ind,,1],2,quantile,0.995), apply(xbs[ind,,2],2,quantile,0.995))   
+  mxb = ts(cbind(mxb,rowSums(mxb)), start = tsp(jj)[1], freq=4) 
+  lxb = ts(cbind(lxb,rowSums(lxb)), start = tsp(jj)[1], freq=4)
+  uxb = ts(cbind(uxb,rowSums(uxb)), start = tsp(jj)[1], freq=4)
+  names=c('Trend', 'Season', 'Trend + Season')
+  L = min(lxb[,1])-.01; U = max(uxb[,1]) +.01
+tsplot(mxb[,1],  ylab=names[1], ylim=c(L,U))
+  xx=c(time(jj), rev(time(jj)))
+  yy=c(lxb[,1], rev(uxb[,1]))
+  polygon(xx, yy, border=NA, col=gray(.4, alpha = .2)) 
+  L = min(lxb[,3])-.01; U = max(uxb[,3]) +.01
+tsplot(mxb[,3],  ylab=names[3], ylim=c(L,U))
+  xx=c(time(jj), rev(time(jj)))
+  yy=c(lxb[,3], rev(uxb[,3]))
+  polygon(xx, yy, border=NA, col=gray(.4, alpha = .2))            
 
 # Plot results
 ind = seq(burnin+1, niter, by=step)
