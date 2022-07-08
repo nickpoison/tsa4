@@ -2442,38 +2442,6 @@ tsplot(mxb[,3],  ylab=names[3], ylim=c(L,U))
   xx=c(time(jj), rev(time(jj)))
   yy=c(lxb[,3], rev(uxb[,3]))
   polygon(xx, yy, border=NA, col=gray(.4, alpha = .2))            
-
-# Plot results
-ind = seq(burnin+1, niter, by=step)
-names= c(expression(phi), expression(sigma[v]), expression(sigma[w~11]), expression(sigma[w~22]))
-par(mfcol=c(3,4))
-for (i in 1:4){
- tsplot(pars[ind,i],xlab="iterations", ylab="trace", main="")
- mtext(names[i], side=3, line=.5, cex=1) 
- acf(pars[ind,i],main="", lag.max=25, xlim=c(1,25), ylim=c(-.4,.4))
- hist(pars[ind,i],main="",xlab="")
- abline(v=mean(pars[ind,i]), lwd=2, col=3) 
-}
-
-dev.new()
-par(mfrow=c(2,1))
-  mxb = cbind(apply(xbs[ind,,1],2,mean), apply(xbs[,,2],2,mean))
-  lxb = cbind(apply(xbs[ind,,1],2,quantile,0.005), apply(xbs[ind,,2],2,quantile,0.005))
-  uxb = cbind(apply(xbs[ind,,1],2,quantile,0.995), apply(xbs[ind,,2],2,quantile,0.995))   
-  mxb = ts(cbind(mxb,rowSums(mxb)), start = tsp(jj)[1], freq=4) 
-  lxb = ts(cbind(lxb,rowSums(lxb)), start = tsp(jj)[1], freq=4)
-  uxb = ts(cbind(uxb,rowSums(uxb)), start = tsp(jj)[1], freq=4)
-  names=c('Trend', 'Season', 'Trend + Season')
-  L = min(lxb[,1])-.01; U = max(uxb[,1]) +.01
-tsplot(mxb[,1],  ylab=names[1], ylim=c(L,U))
-  xx=c(time(jj), rev(time(jj)))
-  yy=c(lxb[,1], rev(uxb[,1]))
-  polygon(xx, yy, border=NA, col=gray(.4, alpha = .2)) 
-  L = min(lxb[,3])-.01; U = max(uxb[,3]) +.01
-tsplot(mxb[,3],  ylab=names[3], ylim=c(L,U))
-  xx=c(time(jj), rev(time(jj)))
-  yy=c(lxb[,3], rev(uxb[,3]))
-  polygon(xx, yy, border=NA, col=gray(.4, alpha = .2)) 
 ```
 
 
