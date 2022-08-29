@@ -320,7 +320,7 @@ legend("topright", legend=c("Mortality", "Temperature", "Pollution"), lty=1, lwd
 ##-- scatterplot matrix
 dev.new()  
 panel.cor <- function(x, y, ...){
-usr <- par("usr"); on.exit(par(usr))
+usr <- par("usr")
 par(usr = c(0, 1, 0, 1))
 r <- round(cor(x, y), 2)
 text(0.5, 0.5, r, cex = 1.75)
