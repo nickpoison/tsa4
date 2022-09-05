@@ -1790,9 +1790,9 @@ sarima(u[,1], 0,0,0, xreg=u[,2:7])
 Example 6.13
 ```r
 ################################## 
-# NOTE:  If this takes a long time to run on your machine, set
-#        'tol=.01', 'tol=.001', or 'tol=.0001'   and/or
-#        'nboot=100', 'nboot=200', or 'nboot=250'         
+# NOTE:  If this takes a long time to run on your machine, try
+#         tol   = .0001   and if you need more speed
+#         nboot = 250         
 tol = sqrt(.Machine$double.eps)  # determines convergence of optimizer     
 nboot = 500                      # number of bootstrap replicates     
 ################################## 
@@ -1837,7 +1837,6 @@ kf = Kfilter2(num,y,A,mu0,Sigma0,phi,Ups,alpha,1,cQ,cR,0,input)
 xp      = kf$xp
 innov   = kf$innov 
 sig     = kf$sig 
-K       = kf$K 
 e       = innov/sqrt(sig)
 e.star  = e                      # initialize values
 y.star  = y  
@@ -1850,9 +1849,10 @@ for (i in 1:nboot){
  setTxtProgressBar(pb,i)                       
  e.star[k] = sample(e[k], replace=TRUE)   
  for (j in k){ 
+    K        = (phi*Pp[j]*z[j])/sig[j]
   xp.star[j] = phi*xp.star[j-1] + Ups+K[j]*sqrt(sig[j])*e.star[j] }   
    y.star[k] = z[k]*xp.star[k] + alpha + sqrt(sig[k])*e.star[k]  
- est.star  = optim(init.par, Linn, NULL, y.data=y.star, method="BFGS", control=list(reltol=tol))     
+ est.star = optim(init.par, Linn, NULL, y.data=y.star, method="BFGS", control=list(reltol=tol))     
  para.star[i,] = cbind(est.star$par[1], est.star$par[2], est.star$par[3], 
                        abs(est.star$par[4]), abs(est.star$par[5]))   
 }
