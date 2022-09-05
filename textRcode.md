@@ -253,7 +253,7 @@ Y   = .01*t + rnorm(num)
 par(mfrow=c(3,1))
 tsplot(cbind(X,Y), spag=TRUE, col=astsa.col(c(4,2),.7), lwd=2, ylab='data')  
 ccf2(X, Y,  ylim=c(-.3,.3), col=4, lwd=2)
-Yw = resid(lm(Y~t))  # whiten Y by removing trend
+Yw = detrend(Y)  # whiten Y by removing trend
 ccf2(X, Yw, ylim=c(-.3,.3), col=4, lwd=2)
 ```
 
