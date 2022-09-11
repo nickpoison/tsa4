@@ -1718,22 +1718,6 @@ est      = optim(init.par, Linn, NULL, method='L-BFGS-B', lower=L, upper=U,
 SE       = sqrt(diag(solve(est$hessian)))
 round(cbind(estimate=est$par, SE), 3) # results
 
-# Residual Analysis (not shown)
-phi1   = est$par[1]; phi2 = est$par[2]
-cR     = est$par[3]; b1   = est$par[4]
-b2     = est$par[5]; b3   = est$par[6]
-b4     = est$par[7]; alf  = est$par[8]
-mu0    = matrix(c(0,0), 2, 1)
-Sigma0 = diag(100, 2)
-Phi    = matrix(c(phi1, phi2, 1, 0), 2)
-S      = matrix(1,2)
-Ups    = matrix(c(b1, 0, b2, 0, b3, 0, 0, 0, 0, 0), 2, 5)
-Gam    = matrix(c(0, 0, 0, b4, alf), 1, 5) 
-sQ     = matrix(c(phi1, phi2), 2)*sR
-kf     = Kfilter(y, A, mu0, Sigma0, Phi, sQ, sR, Ups=Ups, Gam=Gam, input=input, S=S, version=2)
-res    = ts(drop(kf$innov), start=start(cmort), freq=frequency(cmort))
-sarima(res, 0,0,0, no.constant=TRUE)  # gives a full residual analysis
-
 # Similar fit with but with trend in the X of ARMAX
 trend  = time(cmort) - mean(time(cmort))
 u      = ts.intersect(M=cmort, M1=lag(cmort,-1), M2=lag(cmort,-2), T1=lag(tempr,-1), 
