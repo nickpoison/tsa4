@@ -1364,8 +1364,11 @@ fit$resid.cov # estimate of noise cov matrix
 
 ## Chapter 6
 
-The code here uses the updated scripts and data as of _version 1.16.3._  Original code may be found here:
+The code here uses the updated scripts and data as of _version 1.16.3._ 
+Details of the updates are in the help files: `?Kfilter` and `?Ksmooth` for details after installing
+**astsa version 1.16.3 or higher**.  Original code may be found here:
 [Original Chapter 6 Info and Code](https://github.com/nickpoison/tsa4/blob/master/chap6.md)
+
 
 
 
@@ -1391,7 +1394,7 @@ v   = rnorm(num,0,1)
 mu  = cumsum(w)     # states:  mu[0], mu[1], . . ., mu[50] 
 y   = mu[-1] + v    # obs:  y[1], . . ., y[50]
 
-# filter and smooth (Ksmooth0 does both)
+# filter and smooth (Ksmooth does both)
 mu0 = 0;  sigma0 = 1;  phi = 1;  sQ = 1;  sR = 1   
 ks = Ksmooth(y, A=1, mu0, sigma0, phi, sQ, sR)   
 
