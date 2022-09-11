@@ -205,7 +205,6 @@ tsplot(y1, type="s", col=4, xaxt="n", yaxt="n")  # y2 not shown
  points(y1, pch=21, cex=1.1, bg=6)
 acf(y1, lag.max=4, plot=FALSE) 
 acf(y2, lag.max=4, plot=FALSE) 
-
 ```
 
 Example 1.27
@@ -295,7 +294,7 @@ Example 2.1
 
 ```r
 # astsa now has a trend script, so Figure 2.1 can be done in one line
-trend(chicken)    # includes a 95% CI
+trend(chicken, lwd=2)    # includes a 95% CI
 
 # in the text
 summary(fit <- lm(chicken~time(chicken))) # regress price on time
@@ -314,7 +313,7 @@ tsplot(part, main="Particulates", col=2, type="o", pch=19, ylab="")
 
 ##-- together 
 dev.new()
-tsplot(cbind(cmort, tempr,part), spag=TRUE, ylab="", col=c(6,4,2))
+tsplot(cbind(cmort, tempr, part), spag=TRUE, ylab="", col=c(6,4,2))
 legend("topright", legend=c("Mortality", "Temperature", "Pollution"), lty=1, lwd=2, col=c(6,4,2), bg="white")
 
 ##-- scatterplot matrix
@@ -371,20 +370,6 @@ par(mfrow=c(3,1))     # plot ACFs
 acf1(chicken, 48, main="chicken")
 acf1(detrend(chicken), 48, main="detrended")
 acf1(diff(chicken), 48, main="first difference")
-
-###############
-
-# Figures 2.4 and 2.5 in the text
-fit = lm(chicken~time(chicken), na.action=NULL) # regress chicken on time
-par(mfrow=c(2,1))
-tsplot(resid(fit), main="detrended")
-tsplot(diff(chicken), main="first difference")
-
-dev.new()
-par(mfrow=c(3,1))     # plot ACFs
-acf1(chicken, 48, main="chicken")
-acf1(resid(fit), 48, main="detrended")
-acf1(diff(chicken), 48, main="first difference")
 ``` 
 
 
@@ -396,6 +381,7 @@ tsplot(diff(globtemp), type="o")
  mean(diff(globtemp))     # drift estimate = .008
 acf1(diff(gtemp), 48, main="")
 ```
+
 Example 2.7
 
 ```r
@@ -409,6 +395,7 @@ qqnorm(varve, main="", col=4)
 qqnorm(log(varve), main="", col=4)
  qqline(log(varve), col=2, lwd=2)
 ```
+
 Example 2.8  
 
 ```r
@@ -477,21 +464,7 @@ Example 2.13
 ```r
 # Figure 2.14 using the trend script
 trend(soi, lowess=TRUE)
-lines(lowess(soi, f=.05), lwd=2, col=5) # El Niño cycle
-
-
-# similar to text but with CIs
-tsplot(soi, col=4)
 lines(lowess(soi, f=.05), lwd=2, col=6) # El Niño cycle
-# trend with CIs
-lo = predict(loess(soi~ time(soi)), se=TRUE)
-trnd = ts(lo$fit, start=1950, freq=12) 
-lines(trnd, col=6, lwd=2)
- L = trnd - qt(0.975, lo$df)*lo$se
- U = trnd + qt(0.975, lo$df)*lo$se
- xx = c(time(soi), rev(time(soi)))
- yy = c(L, rev(U))
-polygon(xx, yy, border=8, col=gray(.6, alpha=.2) )
 ```
 
 
@@ -586,7 +559,7 @@ arg = Arg(a)/(2*pi)  # arg in cycles/pt
 
 par(mfrow=c(3,1))
 set.seed(8675309)    # Jenny, it's me again
-ar2 = sarima.sim(ar=c(1.5,-.75), n = 144, S=12)
+ar2 = sarima.sim(ar=c(1.5,-.75), n=144, S=12)
 tsplot(ar2, xlab="Year")
 
 ACF = ARMAacf(ar=c(1.5,-.75), ma=0, 50)
@@ -641,7 +614,7 @@ Example 3.26
 
 ```r
 set.seed(666)
-x     = sarima.sim(ar =.9, ma=.5, n=100)
+x     = sarima.sim(ar=.9, ma=.5, n=100)
 xr    = rev(x) # xr is the reversed data
 pxr   = predict(arima(xr, order=c(1,0,1)), 10) # predict the reversed data
 pxrp  = rev(pxr$pred) # reorder the predictors (for plotting)
@@ -733,8 +706,6 @@ points(para[1:12], Sc[1:12], pch=16, col=4)
 
 
 
-
-
 Example 3.36
 
 ```r
@@ -772,7 +743,6 @@ for (i in 1:1000){
 }
 
 # Picture
-dev.new()
 hist(phi.star.yw, 15, main="", prob=TRUE, xlim=c(.65,1.05), ylim=c(0,14), 
       col=astsa.col(4,.3), xlab=expression(hat(phi)))
 lines(density(phi.yw, bw=.02), lwd=2)  
@@ -796,11 +766,14 @@ Example 3.39, 3.40, and 3.43
 
 ```r
 tsplot(gnp, col=4)
+
 dev.new()
 acf2(gnp, 50)               # compare to acf2(1:250, 50)       
 gnpgr = diff(log(gnp))      # growth rate
+
 dev.new()
 tsplot(gnpgr, col=4)
+
 dev.new()
 acf2(gnpgr, 24)  
 sarima(gnpgr, 1, 0, 0)      # AR(1)
@@ -812,6 +785,7 @@ Example 3.41
 
 ```r
 sarima(log(varve), 0,1,1, no.constant=TRUE, gg=TRUE, col=4)   # ARIMA(0,1,1)
+
 dev.new()
 sarima(log(varve), 1,1,1, no.constant=TRUE, gg=TRUE, col=4)   # ARIMA(1,1,1)
 ```
@@ -846,12 +820,11 @@ sarima(fish$rec, 2,0,0, xreg = cbind(fish$soiL6, fish$dL6, intract))
 Example 3.46
 
 ```r
-set.seed(111111)
+set.seed(666)
 SAR = sarima.sim(sar=.9, S=12, n=37) + 50
 layout(matrix(c(1,2, 1,3), nc=2), heights=c(1.5,1))
 tsplot(SAR, type="c", xlab="Year")
  abline(v=1:3, col=4, lty=2)
- Months = c("J","F","M","A","M","J","J","A","S","O","N","D")
  points(SAR, pch=Months, cex=1.35, font=4, col=1:6)
 
 phi  = c(rep(0,11),.9)
@@ -888,6 +861,7 @@ lx    = log(x)
 dlx   = diff(lx) 
 ddlx  = diff(dlx, 12)
 tsplot(cbind(x, lx, dlx, ddlx), main="")
+
 # below of interest for showing seasonal persistence (not shown here):
 par(mfrow=c(2,1))
 monthplot(dlx)
@@ -897,6 +871,7 @@ sarima(lx, 1,1,1, 0,1,1, 12)   # model 1
 sarima(lx, 0,1,1, 0,1,1, 12)   # model 2 (the winner)
 sarima(lx, 1,1,0, 0,1,1, 12)   # model 3
 
+dev.new()
 sarima.for(lx, 12, 0,1,1, 0,1,1,12)  # forecasts
 ``` 
 
@@ -1389,7 +1364,8 @@ fit$resid.cov # estimate of noise cov matrix
 
 ## Chapter 6
 
-[Some Extra Chapter 6 Info](https://github.com/nickpoison/tsa4/blob/master/chap6.md)
+The code here uses the updated scripts and data as of _version 1.16.3._  Original code may be found here:
+[Original Chapter 6 Info and Code](https://github.com/nickpoison/tsa4/blob/master/chap6.md)
 
 
 
@@ -1400,9 +1376,6 @@ tsplot(blood, type='o', col=c(6,4,2), lwd=2, pch=19, cex=1)
 
 Example 6.2
 ```r
-tsplot(cbind(globtemp, globtempl), spag=TRUE, lwd=2, col=astsa.col(c(6,4),.5), ylab="Temperature Deviations")
-
-# or the updated version (one is land only and the other ocean only)
 tsplot(cbind(gtemp_land, gtemp_ocean), spaghetti=TRUE, lwd=2, pch=20, type="o", 
         col=astsa.col(c(4,2),.5), ylab="Temperature Deviations", main="Global Warming")
 legend("topleft", legend=c("Land Surface", "Sea Surface"), lty=1, pch=20, col=c(4,2), bg="white")
@@ -1413,79 +1386,64 @@ Example 6.5
 # generate data 
 set.seed(1)  
 num = 50
-w = rnorm(num+1,0,1)
-v = rnorm(num,0,1)
-                               
-mu = cumsum(w)  # states:  mu[0], mu[1], . . ., mu[50] 
-y = mu[-1] + v  # obs:  y[1], . . ., y[50]
+w   = rnorm(num+1,0,1)
+v   = rnorm(num,0,1)
+mu  = cumsum(w)     # states:  mu[0], mu[1], . . ., mu[50] 
+y   = mu[-1] + v    # obs:  y[1], . . ., y[50]
 
 # filter and smooth (Ksmooth0 does both)
-mu0 = 0; sigma0 = 1;  phi = 1; cQ = 1; cR = 1   
-ks = Ksmooth0(num, y, 1, mu0, sigma0, phi, cQ, cR)   
+mu0 = 0;  sigma0 = 1;  phi = 1;  sQ = 1;  sR = 1   
+ks = Ksmooth(y, A=1, mu0, sigma0, phi, sQ, sR)   
 
 # pictures 
 par(mfrow=c(3,1))
-Time = 1:num
 
-tsplot(Time, mu[-1], type='p', main="Prediction", ylim=c(-5,10))      
-  lines(ks$xp)
-  lines(ks$xp+2*sqrt(ks$Pp), lty="dashed", col="blue")
-  lines(ks$xp-2*sqrt(ks$Pp), lty="dashed", col="blue")
+tsplot(mu[-1], type='p', col=4, pch=19, ylab=expression(mu[~t]), main="Prediction", ylim=c(-5,10)) 
+  lines(ks$Xp, col=6)
+  lines(ks$Xp+2*sqrt(ks$Pp), lty=6, col=6)
+  lines(ks$Xp-2*sqrt(ks$Pp), lty=6, col=6)
 
-tsplot(Time, mu[-1], type='p', main="Filter", ylim=c(-5,10))
-  lines(ks$xf)
-  lines(ks$xf+2*sqrt(ks$Pf), lty="dashed", col="blue")
-  lines(ks$xf-2*sqrt(ks$Pf), lty="dashed", col="blue")
+tsplot(mu[-1], type='p', col=4, pch=19, ylab=expression(mu[~t]), main="Filter", ylim=c(-5,10)) 
+  lines(ks$Xf, col=6)
+  lines(ks$Xf+2*sqrt(ks$Pf), lty=6, col=6)
+  lines(ks$Xf-2*sqrt(ks$Pf), lty=6, col=6)
 
-tsplot(Time, mu[-1], type='p',  main="Smoother", ylim=c(-5,10))
-  lines(ks$xs)
-  lines(ks$xs+2*sqrt(ks$Ps), lty="dashed", col="blue")
-  lines(ks$xs-2*sqrt(ks$Ps), lty="dashed", col="blue") 
+tsplot(mu[-1], type='p', col=4, pch=19, ylab=expression(mu[~t]), main="Smoother", ylim=c(-5,10)) 
+  lines(ks$Xs, col=6)
+  lines(ks$Xs+2*sqrt(ks$Ps), lty=6, col=6)
+  lines(ks$Xs-2*sqrt(ks$Ps), lty=6, col=6)
 
-mu[1]; ks$x0n; sqrt(ks$P0n)   # initial value info
-
-# In case you can't see the differences in the figures...
-# ... either get new glasses or ... 
-# ... plot them on the same graph (not shown in text)
-dev.new()
-tsplot(Time, mu[-1], type='o', pch=19, cex=1)
-lines(ks$xp, col=4, lwd=3)
-lines(ks$xf, col=3, lwd=3) 
-lines(ks$xs, col=2, lwd=3)
-names = c("predictor","filter","smoother")
-legend("bottomright", names, col=4:2, lwd=3, lty=1, bg="white")
+mu[1]; ks$X0n; sqrt(ks$P0n)   # initial value info
 ```
 
 
-Example 6.6
+Example 6.6 
 ```r
 # Generate Data
 set.seed(999)
 num = 100
 N = num+1
 x = sarima.sim(n=N, ar=.8)
-# below used in text
-# x = arima.sim(n=N, list(ar = .8))
 y = ts(x[-1] + rnorm(num,0,1))     
 
 # Initial Estimates 
 u = ts.intersect(y, lag(y,-1), lag(y,-2)) 
 varu = var(u)
 coru = cor(u) 
-phi = coru[1,3]/coru[1,2]             
-q = (1-phi^2)*varu[1,2]/phi   
+phi = coru[1,3]/coru[1,2] 
+q = (1-phi^2)*varu[1,2]/phi 
 r = varu[1,1] - q/(1-phi^2) 
 (init.par = c(phi, sqrt(q), sqrt(r))) 
 
 # Function to evaluate the likelihood 
 Linn=function(para){
-  phi = para[1]; sigw = para[2]; sigv = para[3]   
-  Sigma0 = (sigw^2)/(1-phi^2); Sigma0[Sigma0<0]=0   
-  kf = Kfilter0(num,y,1,mu0=0,Sigma0,phi,sigw,sigv)
+  phi = para[1]; sigw = para[2]; sigv = para[3] 
+  Sigma0 = (sigw^2)/(1-phi^2); Sigma0[Sigma0<0]=0 
+  kf = Kfilter(y,A=1,mu0=0,Sigma0,phi,sigw,sigv)
   return(kf$like)   
   }
 
-# Estimation  
+# Estimation
 (est = optim(init.par, Linn, gr=NULL, method="BFGS", hessian=TRUE, control=list(trace=1,REPORT=1)))      
 SE = sqrt(diag(solve(est$hessian)))
 cbind(estimate=c(phi=est$par[1],sigw=est$par[2],sigv=est$par[3]), SE)
@@ -1501,18 +1459,18 @@ Example 6.7
 y = cbind(globtemp/sd(globtemp), globtempl/sd(globtempl))
 num = nrow(y)
 input = rep(1,num)
-A = array(rep(1,2), dim=c(2,1,num))
+A = matrix(c(1,1), nrow=2)
 mu0 = -.35; Sigma0 = 1;  Phi = 1
 
 # Function to Calculate Likelihood 
 Linn=function(para){
- cQ = para[1]      # sigma_w
-  cR1 = para[2]    # 11 element of chol(R)
-  cR2 = para[3]    # 22 element of chol(R)
-  cR12 = para[4]   # 12 element of chol(R)
- cR = matrix(c(cR1,0,cR12,cR2),2)  # put the matrix together
+ sQ = para[1]      # sigma_w
+  sR1 = para[2]    # 11 element of  sR
+  sR2 = para[3]    # 22 element of sR
+  sR21 = para[4]   # 21 element of sR
+ sR = matrix(c(sR1,sR21,0,sR2), 2)  # put the matrix together
  drift = para[5]
- kf = Kfilter1(num,y,A,mu0,Sigma0,Phi,drift,0,cQ,cR,input)
+ kf = Kfilter(y,A,mu0,Sigma0,Phi,sQ,sR,Ups=drift,Gam=0,input)
  return(kf$like) 
  }
 
@@ -1523,23 +1481,23 @@ SE = sqrt(diag(solve(est$hessian)))
 
 # Summary of estimation  
 estimate = est$par; u = cbind(estimate, SE)
-rownames(u)=c("sigw","cR11", "cR22", "cR12", "drift"); u  
+rownames(u)=c("sigw","sR11", "sR22", "sR21", "drift"); u  
 
 # Smooth (first set parameters to their final estimates)
-cQ    = est$par[1]  
- cR1  = est$par[2]   
- cR2  = est$par[3]   
- cR12 = est$par[4]  
-cR    = matrix(c(cR1,0,cR12,cR2), 2)
-(R    = t(cR)%*%cR)    #  to view the estimated R matrix
+sQ    = est$par[1]  
+ sR1  = est$par[2]   
+ sR2  = est$par[3]   
+ sR21 = est$par[4]  
+sR    = matrix(c(sR1,sR21,0,sR2), 2)
+(R    = sR%*%t(sR))   #  to view the estimated R matrix
 drift = est$par[5]  
-ks    = Ksmooth1(num,y,A,mu0,Sigma0,Phi,drift,0,cQ,cR,input)  
+ks    = Ksmooth(y,A,mu0,Sigma0,Phi,sQ,sR,Ups=drift,Gam=0,input) 
 
 # Plot 
 tsplot(y, spag=TRUE, margins=.5, type='o', pch=2:3, col=4:3, lty=6, ylab='Temperature Deviations')
-xsm  = ts(as.vector(ks$xs), start=1880)
+xsm  = ts(as.vector(ks$Xs), start=1880)
 rmse = ts(sqrt(as.vector(ks$Ps)), start=1880)
-lines(xsm, lwd=2)
+lines(xsm, lwd=2, col=6)
   xx = c(time(xsm), rev(time(xsm)))
   yy = c(xsm-2*rmse, rev(xsm+2*rmse))
 polygon(xx, yy, border=NA, col=gray(.6, alpha=.25))
@@ -1561,17 +1519,16 @@ varu = var(u); coru = cor(u)
 phi = coru[1,3]/coru[1,2]             
 q = (1-phi^2)*varu[1,2]/phi   
 r = varu[1,1] - q/(1-phi^2) 
-cr = sqrt(r); cq = sqrt(q); mu0 = 0; Sigma0 = 2.8
-(em = EM0(num, y, 1, mu0, Sigma0, phi, cq, cr, 75, .00001))   
+sr = sqrt(r); sq = sqrt(q); mu0 = 0; Sigma0 = 2.8
+(em = EM0(num, y, 1, mu0, Sigma0, phi, sq, sr, 50, .00001))   
 
 # Standard Errors  (this uses nlme)
-phi = em$Phi; cq = chol(em$Q); cr = chol(em$R)
+phi = em$Phi; cq = sqrt(em$Q); sr = sqrt(em$R)
 mu0 = em$mu0; Sigma0 = em$Sigma0
-para = c(phi, cq, cr)
-
-# Evaluate likelihood at estimates 
+para = c(phi, sq, sr)
+ # evaluate likelihood at estimates 
 Linn=function(para){
-  kf = Kfilter0(num, y, 1, mu0, Sigma0, para[1], para[2], para[3])
+  kf = Kfilter(y, A=1, mu0, Sigma0, para[1], para[2], para[3])
   return(kf$like) 
   }
 emhess = fdHess(para, function(para) Linn(para))
@@ -1596,15 +1553,15 @@ for(k in 1:num) if (y[k,1] > 0) A[,,k]= diag(1,3)
 mu0    = matrix(0,3,1) 
 Sigma0 = diag(c(.1,.1,1) ,3)
 Phi    = diag(1,3)
-cQ     = diag(c(.1,.1,1), 3)
-cR     = diag(c(.1,.1,1), 3)  
-(em = EM1(num, y, A, mu0, Sigma0, Phi, cQ, cR, 100, .001))    
+sQ     = diag(c(.1,.1,1), 3)
+sR     = diag(c(.1,.1,1), 3)  
+(em = EM1(num, y, A, mu0, Sigma0, Phi, sQ, sR, 100, .0001)) 
 
 # Graph smoother
-ks  = Ksmooth1(num, y, A, em$mu0, em$Sigma0, em$Phi, 0, 0, chol(em$Q), chol(em$R), 0)
-y1s = ks$xs[1,,] 
-y2s = ks$xs[2,,] 
-y3s = ks$xs[3,,]
+ks  = Ksmooth (y, A, em$mu0, em$Sigma0, em$Phi, sQ=t(chol(em$Q)), sR=t(chol(em$R)))
+y1s = ks$Xs[1,,] 
+y2s = ks$Xs[2,,] 
+y3s = ks$Xs[3,,]
 p1  = 2*sqrt(ks$Ps[1,1,]) 
 p2  = 2*sqrt(ks$Ps[2,2,]) 
 p3  = 2*sqrt(ks$Ps[3,3,])
@@ -1632,48 +1589,44 @@ polygon(xx, yy, border=8, col=astsa.col(8, alpha = .1))
 Example 6.10
 ```r
 num = length(jj)
-A = cbind(1,1,0,0) 
+A   = cbind(1,1,0,0) 
 
 # Function to Calculate Likelihood 
-Linn=function(para){
+Linn = function(para){
  Phi = diag(0,4) 
  Phi[1,1] = para[1] 
  Phi[2,]=c(0,-1,-1,-1); Phi[3,]=c(0,1,0,0); Phi[4,]=c(0,0,1,0)
- cQ1 = para[2]; cQ2 = para[3]     # sqrt q11 and sqrt q22
- cQ=diag(0,4); cQ[1,1]=cQ1; cQ[2,2]=cQ2
- cR = para[4]                     # sqrt r11
- kf = Kfilter0(num,jj,A,mu0,Sigma0,Phi,cQ,cR)
+ sQ1 = para[2]; sQ2 = para[3]     # sqrt q11 and sqrt q22
+ sQ  = diag(0,4); sQ[1,1]=sQ1; sQ[2,2]=sQ2
+ sR = para[4]                     # sqrt r11
+ kf = Kfilter(jj, A, mu0, Sigma0, Phi, sQ, sR)
  return(kf$like)  
  }
 
 # Initial Parameters 
 mu0      = c(.7,0,0,0) 
-Sigma0   = diag(.04,4)  
-init.par = c(1.03, .1, .1, .5)  # Phi[1,1], the 2 Qs and R
+Sigma0   = diag(.04, 4)  
+init.par = c(1.03, .1, .1, .5)   # Phi[1,1], the 2 Qs and R
 
 # Estimation
 est = optim(init.par, Linn, NULL, method="BFGS", hessian=TRUE, control=list(trace=1,REPORT=1))
 SE  = sqrt(diag(solve(est$hessian)))
 u   = cbind(estimate=est$par,SE)
-rownames(u)=c("Phi11","sigw1","sigw2","sigv"); u     
+rownames(u)=c("Phi11","sigw1","sigw2","sigv"); u 
 
 # Smooth
 Phi      = diag(0,4) 
-Phi[1,1] = est$par[1] 
-Phi[2,]  = c(0,-1,-1,-1) 
-Phi[3,]  = c(0,1,0,0) 
-Phi[4,]  = c(0,0,1,0)
-cQ1      = est$par[2]
-cQ2      = est$par[3]      
-cQ       = diag(0,4)
-cQ[1,1]  = cQ1 
-cQ[2,2]  = cQ2   
-cR       = est$par[4]   
-ks       = Ksmooth0(num, jj, A, mu0, Sigma0, Phi, cQ, cR)   
+Phi[1,1] = est$par[1]; Phi[2,]  = c(0,-1,-1,-1) 
+Phi[3,]  = c(0,1,0,0); Phi[4,]  = c(0,0,1,0)
+sQ       = diag(0,4)
+sQ[1,1]  = est$par[2]
+sQ[2,2]  = est$par[3]   
+sR       = est$par[4]   
+ks       = Ksmooth(jj, A, mu0, Sigma0, Phi, sQ, sR)   
 
 # Plots
-Tsm   = ts(ks$xs[1,,], start=1960, freq=4)
-Ssm   = ts(ks$xs[2,,], start=1960, freq=4)
+Tsm   = ts(ks$Xs[1,,], start=1960, freq=4)
+Ssm   = ts(ks$Xs[2,,], start=1960, freq=4)
 p1    = 3*sqrt(ks$Ps[1,1,]); p2 = 3*sqrt(ks$Ps[2,2,])
 par(mfrow=c(2,1))
 tsplot(Tsm, main='Trend Component', ylab='Trend')
@@ -1690,10 +1643,10 @@ dev.new()
 n.ahead = 12
 y       = ts(append(jj, rep(0,n.ahead)), start=1960, freq=4)
 rmspe   = rep(0,n.ahead) 
-x00     = ks$xf[,,num]
+x00     = ks$Xf[,,num]
 P00     = ks$Pf[,,num]
-Q       = t(cQ)%*%cQ 
-R       = t(cR)%*%(cR)
+Q       = sQ%*%t(sQ) 
+R       = sR%*%t(sR)
 for (m in 1:n.ahead){
        xp = Phi%*%x00
        Pp = Phi%*%P00%*%t(Phi)+Q
@@ -1712,7 +1665,6 @@ low  = ts(y[(num+1):(num+n.ahead)]-2*rmspe, start=1981, freq=4)
 polygon(xx, yy, border=8, col=gray(.5, alpha = .3))
 abline(v=1981, lty=3)
 ```
-
 
 
 Example 6.12
@@ -1736,24 +1688,26 @@ ded     = ts.intersect(M=cmort, T1=lag(tempr,-1), P=part, P4=lag(part,-4), trend
 y       = ded[,1]
 input   = ded[,2:6]
 num     = length(y)
-A       = array(c(1,0), dim = c(1,2,num))
+A       = matrix(c(1,0), 1, 2) #array(c(1,0), dim = c(1,2,num))
 
 # Function to Calculate Likelihood
 Linn=function(para){
- phi1   = para[1]; phi2 = para[2]; cR = para[3];  b1 = para[4]
+ phi1   = para[1]; phi2 = para[2]; sR = para[3];  b1 = para[4]
  b2     = para[5];   b3 = para[6]; b4 = para[7]; alf = para[8]
  mu0    = matrix(c(0,0), 2, 1)
  Sigma0 = diag(100, 2)
  Phi    = matrix(c(phi1, phi2, 1, 0), 2)
- Theta  = matrix(c(phi1, phi2), 2)
+ S      = matrix(1,2)
  Ups    = matrix(c(b1, 0, b2, 0, b3, 0, 0, 0, 0, 0), 2, 5)
- Gam    = matrix(c(0, 0, 0, b4, alf), 1, 5); cQ = cR; S = cR^2
- kf     = Kfilter2(num, y, A, mu0, Sigma0, Phi, Ups, Gam, Theta, cQ, cR, S, input)
+ Gam    = matrix(c(0, 0, 0, b4, alf), 1, 5) 
+ sQ     = matrix(c(phi1, phi2), 2)*sR
+# S      = sR^2
+ kf     = Kfilter(y, A, mu0, Sigma0, Phi, sQ, sR, Ups=Ups, Gam=Gam, input=input, S=S, version=2)
 return(kf$like) 
 }
 
 # Estimation - prelim analysis gives good starting values
-init.par = c(phi1=.3, phi2=.3, cR=5, b1=-.2, b2=.1, b3=.05, b4=-1.6, alf=mean(cmort)) 
+init.par = c(phi1=.3, phi2=.3, sR=5, b1=-.2, b2=.1, b3=.05, b4=-1.6, alf=mean(cmort)) 
 L = c( 0,  0,  1, -1,  0,  0, -2, 70)   # lower bound on parameters
 U = c(.5, .5, 10,  0, .5, .5,  0, 90)   # upper bound - used in optim
 est      = optim(init.par, Linn, NULL, method='L-BFGS-B', lower=L, upper=U, 
@@ -1769,13 +1723,12 @@ b4     = est$par[7]; alf  = est$par[8]
 mu0    = matrix(c(0,0), 2, 1)
 Sigma0 = diag(100, 2)
 Phi    = matrix(c(phi1, phi2, 1, 0), 2)
-Theta  = matrix(c(phi1, phi2), 2)
+S      = matrix(1,2)
 Ups    = matrix(c(b1, 0, b2, 0, b3, 0, 0, 0, 0, 0), 2, 5)
-Gam    = matrix(c(0, 0, 0, b4, alf), 1, 5)
-cQ     = cR
-S      = cR^2
-kf     = Kfilter2(num, y, A, mu0, Sigma0, Phi, Ups, Gam, Theta, cQ, cR, S, input)
-res    = ts(as.vector(kf$innov), start=start(cmort), freq=frequency(cmort))
+Gam    = matrix(c(0, 0, 0, b4, alf), 1, 5) 
+sQ     = matrix(c(phi1, phi2), 2)*sR
+kf     = Kfilter(y, A, mu0, Sigma0, Phi, sQ, sR, Ups=Ups, Gam=Gam, input=input, S=S, version=2)
+res    = ts(drop(kf$innov), start=start(cmort), freq=frequency(cmort))
 sarima(res, 0,0,0, no.constant=TRUE)  # gives a full residual analysis
 
 # Similar fit with but with trend in the X of ARMAX
@@ -1790,14 +1743,11 @@ sarima(u[,1], 0,0,0, xreg=u[,2:7])
 Example 6.13
 ```r
 ################################## 
-# NOTE:  If this takes a long time to run on your machine, try
-#         tol   = .0001   and if you need more speed
-#         nboot = 250         
-tol = sqrt(.Machine$double.eps)  # determines convergence of optimizer     
-nboot = 500                      # number of bootstrap replicates     
+# NOTE:  If this takes a long on your machine, 
+#          increase `tol` and/or decrease `nboot`
+tol   = .0001    # determines convergence of optimizer     
+nboot = 500      # number of bootstrap replicates     
 ################################## 
-
-pb = txtProgressBar(min = 0, max = nboot, initial = 0, style=3)  # progress bar
 
 y     = window(qinfl, c(1953,1), c(1965,2))  # inflation   
 z     = window(qintr, c(1953,1), c(1965,2))  # interest   
@@ -1809,15 +1759,15 @@ input = matrix(1,num,1)
 Linn  = function(para, y.data){  # pass data also
    phi = para[1];  alpha = para[2]
    b   = para[3];  Ups   = (1-phi)*b
-   cQ  = para[4];  cR    = para[5]  
-   kf  = Kfilter2(num,y.data,A,mu0,Sigma0,phi,Ups,alpha,1,cQ,cR,0,input)
+   sQ  = para[4];  sR    = para[5]  
+   kf  = Kfilter(y.data,A,mu0,Sigma0,phi,sQ ,sR ,Ups ,Gam=alpha,input)
    return(kf$like)    
 }
 
 # Parameter Estimation   
 mu0      = 1
 Sigma0   = .01  
-init.par = c(phi=.84, alpha=-.77, b=.85, cQ=.12, cR=1.1) # initial values   
+init.par = c(phi=.84, alpha=-.77, b=.85, sQ=.12, sR=1.1)  # initial values   
 
 est = optim(init.par,  Linn, NULL, y.data=y, method="BFGS", hessian=TRUE, 
              control=list(trace=1, REPORT=1, reltol=tol))  
@@ -1825,16 +1775,17 @@ SE  = sqrt(diag(solve(est$hessian)))
 
 phi   = est$par[1];  alpha = est$par[2]
 b     = est$par[3];  Ups   = (1-phi)*b         
-cQ    = est$par[4];  cR    = est$par[5] 
+sQ    = est$par[4];  sR    = est$par[5] 
 round(cbind(estimate=est$par, SE), 3)  
 
 
 # BEGIN BOOTSTRAP   
 # Run the filter at the estimates 
-kf = Kfilter2(num,y,A,mu0,Sigma0,phi,Ups,alpha,1,cQ,cR,0,input)  
+kf  = Kfilter(y, A, mu0, Sigma0, phi, sQ, sR, Ups, Gam=alpha, input) 
 
 # Pull out necessary values from the filter and initialize  
-xp      = kf$xp
+xp      = kf$Xp
+Pp      = kf$Pp
 innov   = kf$innov 
 sig     = kf$sig 
 e       = innov/sqrt(sig)
@@ -1845,14 +1796,17 @@ k       = 4:50                   # hold first 3 observations fixed
 para.star = matrix(0, nboot, 5)  # to store estimates
 init.par  =  c(.84, -.77, .85, .12, 1.1)    
 
+pb = txtProgressBar(min = 0, max = nboot, initial = 0, style=3)  # progress bar
+
 for (i in 1:nboot){
  setTxtProgressBar(pb,i)                       
  e.star[k] = sample(e[k], replace=TRUE)   
  for (j in k){ 
-    K        = (phi*Pp[j]*z[j])/sig[j]
-  xp.star[j] = phi*xp.star[j-1] + Ups+K[j]*sqrt(sig[j])*e.star[j] }   
+   K  = (phi*Pp[j]*z[j])/sig[j]  
+  xp.star[j] = phi*xp.star[j-1] + Ups +   K*sqrt(sig[j])*e.star[j]
+  } 
    y.star[k] = z[k]*xp.star[k] + alpha + sqrt(sig[k])*e.star[k]  
- est.star = optim(init.par, Linn, NULL, y.data=y.star, method="BFGS", control=list(reltol=tol))     
+ est.star  = optim(init.par, Linn, NULL, y.data=y.star, method='BFGS', control=list(reltol=tol))     
  para.star[i,] = cbind(est.star$par[1], est.star$par[2], est.star$par[3], 
                        abs(est.star$par[4]), abs(est.star$par[5]))   
 }
@@ -1866,12 +1820,13 @@ for(i in 1:5){rmse[i]=sqrt(sum((para.star[,i]-est$par[i])^2)/nboot)
 # Plot phi and sigw  (scatter.hist in astsa v1.13)
 phi  = para.star[,1] 
 sigw = abs(para.star[,4]) 
-phi  = ifelse(phi<0, NA, phi)    # any phi < 0 not plotted
 scatter.hist(sigw, phi, ylab=expression(phi), xlab=expression(sigma[~w]), 
              hist.col=astsa.col(5,.4), pt.col=5, pt.size=1.5)
 ```
 
+
 Example 6.14
+
 ```r
 set.seed(123)
 num   = 50
@@ -1885,10 +1840,11 @@ mu0   = matrix(0,2); Sigma0 = diag(1,2)
 Linn  = function(para){
   sigw = para[1] 
   sigv = para[2]
-  cQ   = diag(c(sigw,0))
-  kf   = Kfilter0(num, y, A, mu0, Sigma0, Phi, cQ, sigv)
+  sQ   = diag(c(sigw,0))
+  kf   = Kfilter(y, A, mu0, Sigma0, Phi, sQ, sigv)
 return(kf$like) 
 }
+
 ## Estimation ##
 init.par = c(.1, 1)
 (est  = optim(init.par, Linn, NULL, method="BFGS", hessian=TRUE, control=list(trace=1,REPORT=1)))
@@ -1896,15 +1852,18 @@ SE    = sqrt(diag(solve(est$hessian)))
 # Summary of estimation
 estimate = est$par; u = cbind(estimate, SE)
 rownames(u) = c("sigw","sigv"); u
+
 # Smooth
 sigw  = est$par[1]
-cQ    = diag(c(sigw,0))
+sQ    = diag(c(sigw,0))
 sigv  = est$par[2]
-ks    = Ksmooth0(num, y, A, mu0, Sigma0, Phi, cQ, sigv)
-xsmoo = ts(ks$xs[1,1,]); psmoo = ts(ks$Ps[1,1,])
-upp   = xsmoo+2*sqrt(psmoo)
-low   = xsmoo-2*sqrt(psmoo)
-#
+ks    = Ksmooth(y, A, mu0, Sigma0, Phi, sQ, sigv)
+xsmoo = ts(ks$Xs[1,1,])
+psmoo = ts(ks$Ps[1,1,])
+upp   = xsmoo + 2*sqrt(psmoo)
+low   = xsmoo - 2*sqrt(psmoo)
+
+
 tsplot(x, ylab="", ylim=c(-1,8), col=1)
 lines(y, type='o', col=8)
 lines(xsmoo, col=4, lty=2, lwd=3)
@@ -1915,6 +1874,7 @@ legend("bottomright", c("Smoother", "GCV Spline"), lty=c(2,1), lwd=c(3,1), col=c
 ```
 
 Example 6.16
+
 ```r
 library(depmixS4)
 model <- depmix(EQcount ~1, nstates=2, data=data.frame(EQcount), family=poisson('identity'), respstart=c(15,25))
@@ -2211,237 +2171,164 @@ abline(v=u[1,1])
 
 Example 6.26 
 
-&emsp; Adapted from code by: [Hedibert Freitas Lopes](http://hedibert.org/)
-
 ```r
-##-- Notation --##
-#           y(t) = x(t) + v(t);    v(t) ~ iid N(0,V)                     
-#           x(t) = x(t-1) + w(t);  w(t) ~ iid N(0,W)                        
-#  priors:  x(0) ~ N(m0,C0);  V ~ IG(a,b);  W ~ IG(c,d)
-#    FFBS:  x(t|t) ~ N(m,C);  x(t|n) ~ N(mm,CC);  x(t|t+1) ~ N(a,R)  
-##-- 
-ffbs = function(y,V,W,m0,C0){
-  n  = length(y);  a  = rep(0,n);  R  = rep(0,n)
-  m  = rep(0,n);   C  = rep(0,n);  B  = rep(0,n-1)     
-  H  = rep(0,n-1); mm = rep(0,n);  CC = rep(0,n)
-  x  = rep(0,n); llike = 0.0
-  for (t in 1:n){
-    if(t==1){a[1] = m0; R[1] = C0 + W
-      }else{ a[t] = m[t-1]; R[t] = C[t-1] + W }
-    f      = a[t]
-    Q      = R[t] + V
-    A      = R[t]/Q
-    m[t]   = a[t]+A*(y[t]-f)
-    C[t]   = R[t]-Q*A**2
-    B[t-1] = C[t-1]/R[t]
-    H[t-1] = C[t-1]-R[t]*B[t-1]**2
-    llike  = llike + dnorm(y[t],f,sqrt(Q),log=TRUE) }
-  mm[n] = m[n]; CC[n] = C[n]
-  x[n]  = rnorm(1,m[n],sqrt(C[n]))
-  for (t in (n-1):1){
-    mm[t] = m[t] + C[t]/R[t+1]*(mm[t+1]-a[t+1])
-    CC[t] = C[t] - (C[t]^2)/(R[t+1]^2)*(R[t+1]-CC[t+1])
-    x[t]  = rnorm(1,m[t]+B[t]*(x[t+1]-a[t+1]),sqrt(H[t]))  }
-return(list(x=x,m=m,C=C,mm=mm,CC=CC,llike=llike))   }
+# generate some data from the model - 2 parameters
+set.seed(1)
+sQ = 1; sR = 3; n  = 100
+mu0 = 0; Sigma0=10; x0=rnorm(1,mu0,Sigma0)
+w  = rnorm(n); v  = rnorm(n)
+x = c(x0   + sQ*w[1])  # initialize states
+y = c(x[1] + sR*v[1])  # initialize obs
+for (t in 2:n){ 
+  x[t] = x[t-1] + sQ*w[t]
+  y[t] = x[t] + sR*v[t]
+  }
 
-# Simulate states and data
-set.seed(1); W = 0.5; V = 1.0
-n  = 100; m0 = 0.0; C0 = 10.0; x0 = 0
-w  = rnorm(n,0,sqrt(W))
-v  = rnorm(n,0,sqrt(V))
-x  = y = rep(0,n)
-x[1] = x0   + w[1]
-y[1] = x[1] + v[1]
-for (t in 2:n){
-  x[t] = x[t-1] + w[t]
-  y[t] = x[t] + v[t]   }
+# set up the Gibbs sampler
+burn   = 50;  n.iter = 1000
+niter  = burn + n.iter
+draws  = c()
+# priors for R (a,b) and Q (c,d) IG distributions
+a = 2; b = 2; c = 2; d = 1  
+# (1) initialize - sample sQ and sR  
+sR = sqrt(1/rgamma(1,a,b)); sQ =  sqrt(1/rgamma(1,c,d))
 
-# actual smoother (for plotting)
-ks = Ksmooth0(num=n, y, A=1, m0, C0, Phi=1, cQ=sqrt(W), cR=sqrt(V))
-xsmooth = as.vector(ks$xs)
+# progress bar
+pb = txtProgressBar(min = 0, max = niter, initial = 0, style=3)  
 
 # run it
-run = ffbs(y,V,W,m0,C0)
-m   = run$m; C = run$C; mm = run$mm
-CC  = run$CC; L1 = m-2*C; U1  = m+2*C
-L2  = mm-2*CC; U2 = mm+2*CC
-N   = 50
-Vs  = seq(0.1,2,length=N)
-Ws  = seq(0.1,2,length=N)
-likes = matrix(0,N,N)
-for (i in 1:N){
- for (j in 1:N){
-   V   = Vs[i]
-   W   = Ws[j]
-   run = ffbs(y,V,W,m0,C0)    
-  likes[i,j] = run$llike  }  }  
-# Hyperparameters
-a = 0.01; b = 0.01; c = 0.01; d = 0.01
-# MCMC step
-set.seed(90210)
-burn  = 10;  M = 1000
-niter = burn + M
-V1    = V;  W1 = W
-draws = NULL
-all_draws = NULL
 for (iter in 1:niter){
-  run   = ffbs(y,V1,W1,m0,C0)
-  x     = run$x
-  V1    = 1/rgamma(1,a+n/2,b+sum((y-x)^2)/2)
-  W1    = 1/rgamma(1,c+(n-1)/2,d+sum(diff(x)^2)/2)
-  draws = rbind(draws,c(V1,W1,x))    }
-all_draws = draws[,1:2]
-q025  = function(x){quantile(x,0.025)}
-q975  = function(x){quantile(x,0.975)}
-draws = draws[(burn+1):(niter),]
-xs    = draws[,3:(n+2)]
-lx    = apply(xs,2,q025)
-mx    = apply(xs,2,mean)
-ux    = apply(xs,2,q975)
+## (2)  sample the states  
+ run   = ffbs(y,1,0,10,1,sQ,sR)  # ffbs(y,A,mu0,Sigma0,Phi,Ups,Gam,sQ,sR,input)
+## (1)  sample the parameters    
+  Xs   = as.matrix(run$Xs)
+  R    = 1/rgamma(1,a+n/2,b+sum((y-Xs)^2)/2)
+ sR    = sqrt(R)
+  Q    = 1/rgamma(1,c+(n-1)/2,d+sum(diff(Xs)^2)/2)
+ sQ    = sqrt(Q)
+## store everything 
+ draws = rbind(draws,c(sQ,sR,Xs))
+ setTxtProgressBar(pb,iter)  
+}
+close(pb)
 
-##  plot data
-par(mfrow=c(2,2))
-tsplot(cbind(x,y), spag=TRUE,  ylab='', col=c(1,8), lwd=2)
+# pull out the results for easy plotting
+draws  = draws[(burn+1):(niter),]
+ q025  = function(x){quantile(x,0.025)}
+ q975  = function(x){quantile(x,0.975)}
+xs     = draws[,3:(n+2)]
+lx     = apply(xs,2,q025)
+mx     = apply(xs,2,mean)
+ux     = apply(xs,2,q975)
+
+# some graphics 
+tsplot(cbind(x,y,mx), spag=TRUE,  ylab='', col=c(6,8,4), lwd=c(1,1,1.5), type='o', pch=c(NA,1,NA))
+legend('topleft', legend=c("x(t)","y(t)","xs(t)"), lty=1, col=c(6,8,4), lwd=1.5, bty="n", pch=c(NA,1,NA))
 points(y)
-legend(0, 11, legend=c("x(t)","y(t)"), lty=1, col=c(1,8), lwd=2, bty="n", pch=c(-1,1))
-contour(Vs, Ws, exp(likes), xlab=expression(sigma[v]^2), ylab=expression(sigma[w]^2), 
-         drawlabels=FALSE, ylim=c(0,1.2))
-points(draws[,1:2], pch=16, col=rgb(.9,0,0,0.3), cex=.7)
-hist(draws[,1], ylab="Density",main="", xlab=expression(sigma[v]^2))
-abline(v=mean(draws[,1]), col=3, lwd=3)
-hist(draws[,2],main="", ylab="Density", xlab=expression(sigma[w]^2))
-abline(v=mean(draws[,2]), col=3, lwd=3)
-
-## plot states
-dev.new()
-tsplot(y, ylab='', type='o', col=8)
-lines(xsmooth, lwd=4, col=rgb(1,0,1,alpha=.4))
-lines(mx, col= 4) 
  xx=c(1:100, 100:1)
  yy=c(lx, rev(ux))
-polygon(xx, yy, border=NA, col= gray(.6,alpha=.2))
-legend('topleft', c('true smoother', 'data', 'posterior mean', '95% of draws'), lty=1, 
-         lwd=c(3,1,1,10), pch=c(-1,1,-1,-1), col=c(6, gray(.4), 4, gray(.6, alpha=.5)), 
-         bg='white' )  
+polygon(xx, yy, border=NA, col=astsa.col(4,.1))
 ```
+
+
 
 Example 6.27
 
 ```r
-y = jj
+y = jj    # the data
+
 ### setup - model and initial parameters
 set.seed(90210)
-n = length(y)
-F = c(1,1,0,0)      # this is A 
-G = diag(0,4)       # G is Phi 
-  G[1,1] = 1.03 
-  G[2,]  = c(0,-1,-1,-1); G[3,]=c(0,1,0,0); G[4,]=c(0,0,1,0)
-a1 = rbind(.7,0,0,0)  # this is mu0
-R1 = diag(.04,4)      # this is Sigma0
-V = .1
-W11 = .1
-W22 = .1
+n   = length(y)
+A   = matrix(c(1,1,0,0), 1, 4)
+Phi = diag(0,4)
+  Phi[1,1] = 1.03 
+  Phi[2,]  = c(0,-1,-1,-1); Phi[3,]=c(0,1,0,0); Phi[4,]=c(0,0,1,0)
+mu0 = rbind(.7,0,0,0)
+Sigma0 = diag(.04, 4)
+sR = 1                    # observation noise standard deviation
+sQ = diag(c(.1,.1,0,0))   # state noise standard deviations on the diagonal
 
-##-- FFBS --##  
-ffbs = function(y,F,G,V,W11,W22,a1,R1){
-  n  = length(y)
-  Ws = diag(c(W11,W22,1,1))  # this is Q with 1s as a device only
-  iW = diag(1/diag(Ws),4)    
-  a  = matrix(0,n,4)         # this is m_t
-  R  = array(0,c(n,4,4))     # this is V_t
-  m  = matrix(0,n,4)
-  C  = array(0,c(n,4,4))
-  a[1,]  = a1[,1]
-  R[1,,] = R1
-  f      = t(F)%*%a[1,]
-  Q      = t(F)%*%R[1,,]%*%F + V
-  A      = R[1,,]%*%F/Q[1,1]
-  m[1,]  = a[1,]+A%*%(y[1]-f)
-  C[1,,] = R[1,,]-A%*%t(A)*Q[1,1]
-  for (t in 2:n){
-    a[t,]  = G%*%m[t-1,]
-    R[t,,] = G%*%C[t-1,,]%*%t(G) + Ws
-    f      = t(F)%*%a[t,]
-    Q      = t(F)%*%R[t,,]%*%F + V
-    A      = R[t,,]%*%F/Q[1,1]
-    m[t,]  = a[t,] + A%*%(y[t]-f)
-    C[t,,] = R[t,,] - A%*%t(A)*Q[1,1]      }
-  xb       = matrix(0,n,4)
-  xb[n,]  = m[n,] + t(chol(C[n,,]))%*%rnorm(4)
-  for (t in (n-1):1){
-    iC  = solve(C[t,,])
-    CCC = solve(t(G)%*%iW%*%G + iC)
-    mmm = CCC%*%(t(G)%*%iW%*%xb[t+1,] + iC%*%m[t,])
-    xb[t,] = mmm + t(chol(CCC))%*%rnorm(4)  }
-  return(xb)                                
-}
+### initializing and hyperparameters
+burn   = 50
+n.iter = 1000
+niter  = burn + n.iter
+draws  = NULL
+a = 2; b = 2; c = 2; d = 1   # hypers (c and d for both Qs)
 
-##-- Prior hyperparameters --##
-# b0 = 0     # mean for beta = phi -1
-# B0 = Inf   # var for  beta  (non-informative => use OLS for sampling beta)
-n0 = 10      # use same for all- the prior is 1/Gamma(n0/2, n0*s20_/2)
-s20v = .001  # for V
-s20w =.05    # for Ws
+pb = txtProgressBar(min = 0, max = niter, initial = 0, style=3)  # progress bar
 
-##-- MCMC scheme --##
-set.seed(90210)
-burnin  = 100 
-step    = 10   
-M       = 1000  
-niter   = burnin+step*M
-pars    = matrix(0,niter,4)
-xbs     = array(0,c(niter,n,4))
-pb      = txtProgressBar(min=0, max=niter, initial=0, style=3)  # progress bar
-            
+### start Gibbs
 for (iter in 1:niter){
-    setTxtProgressBar(pb,iter)  
-    xb = ffbs(y,F,G,V,W11,W22,a1,R1)
-     u = xb[,1] 
-    yu = diff(u); xu = u[-n]    # for phihat and se(phihat)
-  regu = lm(yu~0+xu)                # est of beta = phi-1
+# draw states 
+  run  = ffbs(y,A,mu0,Sigma0,Phi,sQ,sR)   # initial values are given above
+  xs   = run$Xs
+# obs variance
+  R    = 1/rgamma(1,a+n/2,b+sum((as.vector(y)-as.vector(A%*%xs[,,]))^2))
+ sR    = sqrt(R)
+# beta where phi = 1+beta  
+ Y     = diff(xs[1,,])
+ D     = as.vector(lag(xs[1,,],-1))[-1]
+ regu  = lm(Y~0+D)  # est beta = phi-1
  phies = as.vector(coef(summary(regu)))[1:2] + c(1,0) # phi estimate and SE
-   dft = df.residual(regu)   
-G[1,1] = phies[1] + rt(1,dft)*phies[2]  # use a t
-    V  = 1/rgamma(1, (n0+n)/2, (n0*s20v/2) + sum((y-xb[,1]-xb[,2])^2)/2)
-   W11 = 1/rgamma(1, (n0+n-1)/2, (n0*s20w/2) + sum((xb[-1,1]-phies[1]*xb[-n,1])^2)/2)
-   W22 = 1/rgamma(1, (n0+ n-3)/2, (n0*s20w/2) + sum((xb[4:n,2] + xb[3:(n-1),2] + 
-                  xb[2:(n-2),2] +xb[1:(n-3),2])^2)/2)
-   xbs[iter,,] = xb
-   pars[iter,] = c(G[1,1], sqrt(V), sqrt(W11), sqrt(W22))           
+ dft   = df.residual(regu)
+ Phi[1,1]  = phies[1] + rt(1,dft)*phies[2]  # use a t to sample phi
+# state variances
+  u   = xs[,,2:n] - Phi%*%xs[,,1:(n-1)]
+  uu  = u%*%t(u)/(n-2)
+  Q1  = 1/rgamma(1,c+(n-1)/2,d+uu[1,1]/2)
+  sQ1 = sqrt(Q1)
+  Q2  = 1/rgamma(1,c+(n-1)/2,d+uu[2,2]/2)
+  sQ2 = sqrt(Q2) 
+  sQ  = diag(c(sQ1, sQ2, 0,0))
+# store results
+ trend = xs[1,,]
+ season= xs[2,,] 
+ draws = rbind(draws,c(Phi[1,1],sQ1,sQ2,sR,trend,season))
+ setTxtProgressBar(pb,iter)  
 }
-close(pb) 
+close(pb)
 
-# Plot results
-ind = seq(burnin+1, niter, by=step)
-names= c(expression(phi), expression(sigma[v]), expression(sigma[w~11]), expression(sigma[w~22]))
-par(mfcol=c(3,4))
+##- display results -##
+
+# set up
+u     = draws[(burn+1):(niter),]
+parms = u[,1:4]
+q025  = function(x){quantile(x,0.025)}
+q975  = function(x){quantile(x,0.975)}
+
+##  plot parameters (display at end)
+names= c(expression(phi), expression(sigma[w1]), expression(sigma[w2]), expression(sigma[v]))
+par(mfrow=c(4,1), mar=c(2,1,2,1)+1)
 for (i in 1:4){
- tsplot(pars[ind,i],xlab="iterations", ylab="trace", main="")
- mtext(names[i], side=3, line=.5, cex=1) 
- acf(pars[ind,i],main="", lag.max=25, xlim=c(1,25), ylim=c(-.4,.4))
- hist(pars[ind,i],main="",xlab="")
- abline(v=mean(pars[ind,i]), lwd=2, col=3) 
+hist(parms[,i], col=astsa.col(5,.4), main=names[i], xlab='', cex.main=2)
+ u1 = apply(parms,2,q025); u2 = apply(parms,2,mean); u3 = apply(parms,2,q975);
+abline(v=c(u1[i],u2[i],u3[i]), lwd=2, col=c(3,6,3))
 }
 
+###  plot states  (display at end)
+# trend
 dev.new()
-par(mfrow=c(2,1))
-  mxb = cbind(apply(xbs[ind,,1],2,mean), apply(xbs[,,2],2,mean))
-  lxb = cbind(apply(xbs[ind,,1],2,quantile,0.005), apply(xbs[ind,,2],2,quantile,0.005))
-  uxb = cbind(apply(xbs[ind,,1],2,quantile,0.995), apply(xbs[ind,,2],2,quantile,0.995))   
-  mxb = ts(cbind(mxb,rowSums(mxb)), start = tsp(jj)[1], freq=4) 
-  lxb = ts(cbind(lxb,rowSums(lxb)), start = tsp(jj)[1], freq=4)
-  uxb = ts(cbind(uxb,rowSums(uxb)), start = tsp(jj)[1], freq=4)
-  names=c('Trend', 'Season', 'Trend + Season')
-  L = min(lxb[,1])-.01; U = max(uxb[,1]) +.01
-tsplot(mxb[,1],  ylab=names[1], ylim=c(L,U))
-  xx=c(time(jj), rev(time(jj)))
-  yy=c(lxb[,1], rev(uxb[,1]))
-  polygon(xx, yy, border=NA, col=gray(.4, alpha = .2)) 
-  L = min(lxb[,3])-.01; U = max(uxb[,3]) +.01
-tsplot(mxb[,3],  ylab=names[3], ylim=c(L,U))
-  xx=c(time(jj), rev(time(jj)))
-  yy=c(lxb[,3], rev(uxb[,3]))
-  polygon(xx, yy, border=NA, col=gray(.4, alpha = .2))            
+par(mfrow=2:1)
+tr    = ts(u[,5:(n+4)], start=1960, frequency=4)
+ltr   = ts(apply(tr,2,q025), start=1960, frequency=4)
+mtr   = ts(apply(tr,2,mean), start=1960, frequency=4)
+utr   = ts(apply(tr,2,q975), start=1960, frequency=4)
+
+tsplot(mtr, ylab='', col=4, main='trend')
+ xx=c(time(mtr), rev(time(mtr)))
+ yy=c(ltr, rev(utr))
+polygon(xx, yy, border=NA, col=astsa.col(4,.1)) 
+
+# trend + season
+sea    = ts(u[,(n+5):(2*n)], start=1960, frequency=4)
+lsea   = ts(apply(sea,2,q025), start=1960, frequency=4)
+msea   = ts(apply(sea,2,mean), start=1960, frequency=4)
+usea   = ts(apply(sea,2,q975), start=1960, frequency=4)
+tsplot(msea+mtr, ylab='', col=4, main='trend + season')
+ xx=c(time(msea), rev(time(msea)))
+ yy=c(lsea+ltr, rev(usea+utr))
+polygon(xx, yy, border=NA, col=astsa.col(4,.1)) 
 ```
 
 
