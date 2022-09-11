@@ -1693,7 +1693,7 @@ ded     = ts.intersect(M=cmort, T1=lag(tempr,-1), P=part, P4=lag(part,-4), trend
 y       = ded[,1]
 input   = ded[,2:6]
 num     = length(y)
-A       = matrix(c(1,0), 1, 2) #array(c(1,0), dim = c(1,2,num))
+A       = matrix(c(1,0), 1, 2)  
 
 # Function to Calculate Likelihood
 Linn=function(para){
@@ -1723,7 +1723,7 @@ round(cbind(estimate=est$par, SE), 3) # results
 
 # Residual Analysis (not shown)
 phi1   = est$par[1]; phi2 = est$par[2]
-cR     = est$par[3]; b1   = est$par[4]
+sR     = est$par[3]; b1   = est$par[4]
 b2     = est$par[5]; b3   = est$par[6]
 b4     = est$par[7]; alf  = est$par[8]
 mu0    = matrix(c(0,0), 2, 1)
