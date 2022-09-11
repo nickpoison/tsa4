@@ -1684,7 +1684,9 @@ dcmort  = resid(fit2 <- lm(cmort~trend, na.action=NULL))  # detrended mort
 u       = ts.intersect(dM=dcmort, dM1=lag(dcmort,-1), dM2=lag(dcmort,-2), T1=lag(tempr,-1), P=part, P4=lag(part,-4))
 sarima(u[,1], 0,0,0, xreg=u[,2:6])  # ARMAX fit with residual analysis 
 
-# all estimates at once
+#################################################
+##  All estimates at once                      ##
+#################################################
 trend   = time(cmort) - mean(time(cmort)) # center time
 const   = time(cmort)/time(cmort)         # appropriate time series of 1s
 ded     = ts.intersect(M=cmort, T1=lag(tempr,-1), P=part, P4=lag(part,-4), trend, const)
@@ -1700,7 +1702,7 @@ Linn=function(para){
  mu0    = matrix(c(0,0), 2, 1)
  Sigma0 = diag(100, 2)
  Phi    = matrix(c(phi1, phi2, 1, 0), 2)
- S      = matrix(1,2)
+ S      = 1
  Ups    = matrix(c(b1, 0, b2, 0, b3, 0, 0, 0, 0, 0), 2, 5)
  Gam    = matrix(c(0, 0, 0, b4, alf), 1, 5) 
  sQ     = matrix(c(phi1, phi2), 2)*sR
@@ -1710,13 +1712,30 @@ return(kf$like)
 }
 
 # Estimation - prelim analysis gives good starting values
-init.par = c(phi1=.3, phi2=.3, sR=5, b1=-.2, b2=.1, b3=.05, b4=-1.6, alf=mean(cmort)) 
+init.par = c(phi1=.3, phi2=.3, sR=4, b1=-.1, b2=.1, b3=.04, b4=-1.3, alf=mean(cmort)) 
 L = c( 0,  0,  1, -1,  0,  0, -2, 70)   # lower bound on parameters
 U = c(.5, .5, 10,  0, .5, .5,  0, 90)   # upper bound - used in optim
 est      = optim(init.par, Linn, NULL, method='L-BFGS-B', lower=L, upper=U, 
                  hessian=TRUE, control=list(trace=1, REPORT=1, factr=10^8))
 SE       = sqrt(diag(solve(est$hessian)))
 round(cbind(estimate=est$par, SE), 3) # results
+#################################################
+
+# Residual Analysis (not shown)
+phi1   = est$par[1]; phi2 = est$par[2]
+cR     = est$par[3]; b1   = est$par[4]
+b2     = est$par[5]; b3   = est$par[6]
+b4     = est$par[7]; alf  = est$par[8]
+mu0    = matrix(c(0,0), 2, 1)
+Sigma0 = diag(100, 2)
+Phi    = matrix(c(phi1, phi2, 1, 0), 2)
+S      = 1
+Ups    = matrix(c(b1, 0, b2, 0, b3, 0, 0, 0, 0, 0), 2, 5)
+Gam    = matrix(c(0, 0, 0, b4, alf), 1, 5) 
+sQ     = matrix(c(phi1, phi2), 2)*sR
+kf     = Kfilter(y, A, mu0, Sigma0, Phi, sQ, sR, Ups=Ups, Gam=Gam, input=input, S=S, version=2)
+res    = ts(drop(kf$innov), start=start(cmort), freq=frequency(cmort))
+sarima(res, 0,0,0, no.constant=TRUE)  # gives a full residual analysis
 
 # Similar fit with but with trend in the X of ARMAX
 trend  = time(cmort) - mean(time(cmort))
