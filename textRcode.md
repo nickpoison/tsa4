@@ -1749,8 +1749,8 @@ sarima(u[,1], 0,0,0, xreg=u[,2:7])
 Example 6.13
 ```r
 ################################## 
-# NOTE:  If this takes a long on your machine, 
-#          increase `tol` and/or decrease `nboot`
+# NOTE:  If this takes a long time on your machine, 
+#        increase `tol` and/or decrease `nboot`
 tol   = .0001    # determines convergence of optimizer     
 nboot = 500      # number of bootstrap replicates     
 ################################## 
