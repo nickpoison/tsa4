@@ -1364,10 +1364,8 @@ fit$resid.cov # estimate of noise cov matrix
 
 ## Chapter 6
 
-The code here uses the updated scripts and data as of _version 1.16.3._ 
-Details of the updates are in the help files: `?Kfilter` and `?Ksmooth` for details after installing
-**astsa version 1.16.3 or higher**.  Original code may be found here:
-[Original Chapter 6 Info and Code](https://github.com/nickpoison/tsa4/blob/master/chap6.md)
+The code here uses the updated scripts and data as of _version 1.16.5._ 
+Details of the updates are in the help files: `?Kfilter`, `?Ksmooth`, and `?EM`.  Original code may be found here: [Original Chapter 6 Info and Code](https://github.com/nickpoison/tsa4/blob/master/chap6.md)
 
 
 
@@ -1508,6 +1506,8 @@ polygon(xx, yy, border=NA, col=gray(.6, alpha=.25))
 
 
 Example 6.8
+
+
 ```r
 library(nlme)   # loads package nlme (comes with R)
 
@@ -1522,11 +1522,11 @@ varu = var(u); coru = cor(u)
 phi = coru[1,3]/coru[1,2]             
 q = (1-phi^2)*varu[1,2]/phi   
 r = varu[1,1] - q/(1-phi^2) 
-sr = sqrt(r); sq = sqrt(q); mu0 = 0; Sigma0 = 2.8
-(em = EM0(num, y, 1, mu0, Sigma0, phi, sq, sr, 50, .00001))   
+mu0 = 0; Sigma0 = 2.8
+( em = EM(y, 1, mu0, Sigma0, phi, q, r) )   
 
 # Standard Errors  (this uses nlme)
-phi = em$Phi; cq = sqrt(em$Q); sr = sqrt(em$R)
+phi = em$Phi; sq = sqrt(em$Q); sr = sqrt(em$R)
 mu0 = em$mu0; Sigma0 = em$Sigma0
 para = c(phi, sq, sr)
  # evaluate likelihood at estimates 
@@ -1546,22 +1546,26 @@ u
 
 
 Example 6.9
+
+
 ```r
-y    = cbind(WBC, PLT, HCT)
+y    = blood
 num  = nrow(y)       
-A    = array(0, dim=c(3,3,num))  # creates num 3x3 zero matrices
-for(k in 1:num) if (y[k,1] > 0) A[,,k]= diag(1,3) 
+A    = array(0, dim=c(3,3,num))   
+for(k in 1:num) if (!is.na(y[k,1])) A[,,k]= diag(1,3) 
 
 # Initial values 
 mu0    = matrix(0,3,1) 
 Sigma0 = diag(c(.1,.1,1) ,3)
 Phi    = diag(1,3)
-sQ     = diag(c(.1,.1,1), 3)
-sR     = diag(c(.1,.1,1), 3)  
-(em = EM1(num, y, A, mu0, Sigma0, Phi, sQ, sR, 100, .0001)) 
+Q      = diag(c(.1,.1,1), 3)
+R     = diag(c(.1,.1,1), 3)  
+( em = EM(y, A, mu0, Sigma0, Phi, Q, R) ) 
 
 # Graph smoother
-ks  = Ksmooth (y, A, em$mu0, em$Sigma0, em$Phi, sQ=t(chol(em$Q)), sR=t(chol(em$R)))
+sQ = em$Q %^% .5
+sR = sqrt(em$R)
+ks  = Ksmooth(y, A, em$mu0, em$Sigma0, em$Phi, sQ , sR)
 y1s = ks$Xs[1,,] 
 y2s = ks$Xs[2,,] 
 y3s = ks$Xs[3,,]
