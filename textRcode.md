@@ -1456,6 +1456,9 @@ Example 6.7
 ```r
 ##- slight change from text, the data scaled -##
 ##- you can remove the scales to get to the original analysis -##
+
+##- ALSO note that regression parameters not used are set to NULL (the default) instead of 0 now. 
+
 # Setup 
 y = cbind(globtemp/sd(globtemp), globtempl/sd(globtempl))
 num = nrow(y)
@@ -1471,7 +1474,7 @@ Linn=function(para){
   sR21 = para[4]   # 21 element of sR
  sR = matrix(c(sR1,sR21,0,sR2), 2)  # put the matrix together
  drift = para[5]
- kf = Kfilter(y,A,mu0,Sigma0,Phi,sQ,sR,Ups=drift,Gam=0,input)
+ kf = Kfilter(y,A,mu0,Sigma0,Phi,sQ,sR,Ups=drift,Gam=NULL,input)  # NOTE Gamma is set to NULL now (instead of 0)
  return(kf$like) 
  }
 
@@ -1492,7 +1495,7 @@ sQ    = est$par[1]
 sR    = matrix(c(sR1,sR21,0,sR2), 2)
 (R    = sR%*%t(sR))   #  to view the estimated R matrix
 drift = est$par[5]  
-ks    = Ksmooth(y,A,mu0,Sigma0,Phi,sQ,sR,Ups=drift,Gam=0,input) 
+ks    = Ksmooth(y,A,mu0,Sigma0,Phi,sQ,sR,Ups=drift,Gam=NULL,input)  # NOTE Gamma is set to NULL now (instead of 0)
 
 # Plot 
 tsplot(y, spag=TRUE, margins=.5, type='o', pch=2:3, col=4:3, lty=6, ylab='Temperature Deviations')
