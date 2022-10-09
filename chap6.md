@@ -1,5 +1,12 @@
 ## Chapter 6 - Old Kalman Filter and Smoother Details and Code
 
+### &#129409;   Yo - some changes as of version 1.16.5 (but below still works with v1.16). 
+
+The old Kalman filter and smoother scripts and the EM scripts now are marked with an `x` ... e.g., `Kfilter1` is now `xKfilter1` etc. etc. etc. BUT, older scripts can be changed to the newer ones with only slight changes.  The gain in speed is worth the effort!!
+<br/><br/>
+
+
+
 ### &#128685; this stuff is old
 
  The  three levels of code   `Kfilter0/Ksmooth0`,  `Kfilter1/Ksmooth1`, and `Kfilter2/Ksmooth2`
