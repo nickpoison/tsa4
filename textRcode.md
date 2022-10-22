@@ -12,7 +12,9 @@ remotes::install_github("nickpoison/astsa/astsa_build")
 ```
 
 
-### An intro to `astsa` capabilities can be found at  [FUN WITH ASTSA](https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/fun_with_astsa.md)
+#### &#10024; An intro to `astsa` capabilities can be found at  [FUN WITH ASTSA](https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/fun_with_astsa.md)
+
+#### &#10024; Here is [A Road Map](https://nickpoison.github.io/) if you want a broad view of what is available.
 
 ---
 
