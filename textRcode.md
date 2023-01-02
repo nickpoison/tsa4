@@ -2044,7 +2044,7 @@ tsplot(FLU, type='p', pch=19, ylab='flu', cex=1.2)
 
 
 
-
+<a name="6.23"></a>
 Example 6.23
 ```r
 y   = log(nyse^2) 
