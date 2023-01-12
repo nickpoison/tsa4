@@ -564,9 +564,15 @@ set.seed(8675309)    # Jenny, it's me again
 ar2 = sarima.sim(ar=c(1.5,-.75), n=144, S=12)
 tsplot(ar2, xlab="Year")
 
-ACF = ARMAacf(ar=c(1.5,-.75), ma=0, 50)
+ACF = ARMAacf(ar=c(1.5,-.75), ma=0, 50)[-1]
 tsplot(ACF, type="h", xlab="lag")
 abline(h=0, col=8)
+
+# alternately - not in text
+ACF = ts(ARMAacf(ar=c(1.5,-.75), ma=0, 50), start=0)
+tsplot(ACF, type="h", xlab="lag")
+abline(h=0, col=8)
+
 
 # psi-weights - not in text
 psi = ts(ARMAtoMA(ar=c(1.5,-.75), ma=0, 50), start=0, freq=12)
