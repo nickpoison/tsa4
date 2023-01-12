@@ -569,8 +569,8 @@ tsplot(ACF, type="h", xlab="lag")
 abline(h=0, col=8)
 
 # alternately - not in text
-ACF = ts(ARMAacf(ar=c(1.5,-.75), ma=0, 50), start=0)
-tsplot(ACF, type="h", xlab="lag")
+ACF = ARMAacf(ar=c(1.5,-.75), ma=0, 50)
+tsplot(0:50, ACF, type="h", xlab="lag")
 abline(h=0, col=8)
 
 
