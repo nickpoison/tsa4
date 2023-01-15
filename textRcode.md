@@ -564,8 +564,8 @@ tsplot(ACF, type="h", xlab="lag")
 abline(h=0, col=8)
 
 # alternately - not in text
-ACF = ts(ARMAacf(ar=c(1.5,-.75), ma=0, 50), start=0)
-tsplot(ACF, type="h", xlab="lag")
+ACF = ARMAacf(ar=c(1.5,-.75), ma=0, 50)
+tsplot(0:50, ACF, type="h", xlab="lag")
 abline(h=0, col=8)
 
 
@@ -573,6 +573,13 @@ abline(h=0, col=8)
 psi = ts(ARMAtoMA(ar=c(1.5,-.75), ma=0, 50), start=0, freq=12)
 tsplot(psi, type='o', cex=1.1, ylab=expression(psi-weights), xaxt='n', xlab='Index')
 axis(1, at=0:4, labels=c('0','12','24','36','48'))
+
+# you can play the same game with the ACF - not in text
+ACF = ts(ARMAacf(ar=c(1.5,-.75), ma=0, 50), start=0, frequency=12)
+tsplot(ACF, type='h', xaxt='n', xlab='LAG')
+abline(h=0, col=8)
+axis(1, at=0:4, labels=c('0','12','24','36','48'))
+
 ```
 
 Example 3.12
