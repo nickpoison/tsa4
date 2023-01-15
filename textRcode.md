@@ -1,15 +1,10 @@
 
 ## R Code Used in the Examples - tsa4 
 
-<img align="left" src="https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/figs/tsa4.jpg" alt="tsa4"  height="200" />  This is an updated version of the code in [Time Series Analysis and Its Applications, 4th Edition](https://github.com/nickpoison/tsa4) 
+<img align="left" src="https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/figs/tsa4.jpg" alt="&nbsp; tsa4 &nbsp;"  height="200" />  This is an updated version of the code in [Time Series Analysis and Its Applications, 4th Edition](https://github.com/nickpoison/tsa4) 
 
 
-&#x2728; While the text was written under `astsa` version 1.8, the code below uses the most recent version, which has some additional capabilities.  You can install the latest version of the package from GitHub:
-
-```r
-install.packages("remotes")    # if you don't have the package
-remotes::install_github("nickpoison/astsa/astsa_build")
-```
+&#x2728; See the [NEWS](https://github.com/nickpoison/astsa/blob/master/NEWS.md) for further details about the state of the package and the changelog.
 
 
 #### &#10024; An intro to `astsa` capabilities can be found at  [FUN WITH ASTSA](https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/fun_with_astsa.md)
