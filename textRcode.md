@@ -4,13 +4,16 @@
 <img align="left" src="https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/figs/tsa4.jpg" alt="&nbsp; tsa4 &nbsp;"  height="200" />  This is an updated version of the code in [Time Series Analysis and Its Applications, 4th Edition](https://github.com/nickpoison/tsa4) 
 
 
-&#x2728; See the [NEWS](https://github.com/nickpoison/astsa/blob/master/NEWS.md) for further details about the state of the package and the changelog.
+#### &#x2728; See the [NEWS](https://github.com/nickpoison/astsa/blob/master/NEWS.md) for further details about the state of the package and the changelog.
 
 
 #### &#10024; An intro to `astsa` capabilities can be found at  [FUN WITH ASTSA](https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/fun_with_astsa.md)
 
 #### &#10024; Here is [A Road Map](https://nickpoison.github.io/) if you want a broad view of what is available.
 
+<br/><br/>
+
+---
 ---
 
 >  __Note__ when you are in a code block below, you can copy the contents of the block by moving your mouse to the upper right corner and clicking on the copy icon ( &#128203; ).
