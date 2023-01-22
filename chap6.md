@@ -1,18 +1,23 @@
 ## Chapter 6 - Old Kalman Filter and Smoother Details and Code
 
-### &#129409;   Yo - some changes as of version 1.16.5 (but below still works with v1.16). 
 
-The old Kalman filter and smoother scripts and the EM scripts now are marked with an `x` ... e.g., `Kfilter1` is now `xKfilter1` etc. etc. etc. BUT, older scripts can be changed to the newer ones with only slight changes.  The gain in speed is worth the effort!!
+
+> __Note__ The old Kalman filter and smoother scripts and the EM scripts now are marked with an `x` ... e.g., `Kfilter1` is now `xKfilter1` etc. etc. etc. BUT, older scripts can be changed to the newer ones with only slight changes.  The gain in speed is worth the effort!!
+
+> __Warning__ Eventually, the old scripts with an `x` prefix will be removed.
 <br/><br/>
 
+---
 
+### &#128685; this is the OLD stuff and does not apply in version 2.0 or later
 
-### &#128685; this stuff is old
+The  three levels of code  `Kfilter0/Ksmooth0`,  `Kfilter1/Ksmooth1`, and `Kfilter2/Ksmooth2`
+have been superseded by the newer `Kfilter` and `Ksmooth` scripts. The new scripts are faster, easier to work with, and they remove the need for 3 different scripts.  
 
- The  three levels of code   `Kfilter0/Ksmooth0`,  `Kfilter1/Ksmooth1`, and `Kfilter2/Ksmooth2`
-have been superseded by the newer `Kfilter` and `Ksmooth` scripts (as of version 1.16.3). The new scripts are faster, easier to work with, and they remove the need for 3 different scripts.  
+This page contains a description of the old code and lists the older Chapter 6 code. What you see here does NOT apply anymore. 
 
-+ The older scripts will remain and this page contains a description of the old code and lists the older Chapter 6 code.
+### StaRt Old Stuff:
+
 
 + For various models, each script provides the Kalman filter/smoother, the innovations
  and the corresponding variance-covariance matrices, and the value of the innovations likelihood at the location of the parameter values passed to the script. MLE is then accomplished by calling  the script that runs the filter. _The model is specified by passing the model parameters._
@@ -60,7 +65,7 @@ The call to the filter is `Kfilter2(n,y,A,mu0,Sigma0,Phi,Ups,Gam,Theta,cQ,cR,S,i
 ---
 ---
 
-## Old Chapter 6 Code
+## OLD Chapter 6 Code
 
 Example 6.1
 ```r
