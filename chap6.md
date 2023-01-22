@@ -9,7 +9,7 @@
 
 ---
 
-### &#128685; this is the OLD stuff and does not apply in version 2.0 or later
+### &#128685; this is the OLD stuff and will NOT work in version 2.0 or later
 
 The  three levels of code  `Kfilter0/Ksmooth0`,  `Kfilter1/Ksmooth1`, and `Kfilter2/Ksmooth2`
 have been superseded by the newer `Kfilter` and `Ksmooth` scripts. The new scripts are faster, easier to work with, and they remove the need for 3 different scripts.  
