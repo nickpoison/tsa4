@@ -2423,9 +2423,9 @@ for (i in 11:15){
 } 
 
  # Multiple Coherency 
-coh.15 = stoch.reg(Y, cols.full = c(1,5), cols.red = NULL, alpha, L, M, plot.which = "coh")  
+coh.15 = stoch.reg(Y, cols.full = c(1,5), cols.red = NULL, alpha, L, M, plot.which = "coh", 
+                     main="Inflow with Temp & Precip")  
 text(.45,.98, plt.name[6], cex=1.2) 
-title(main = c("Inflow with", "Temp and Precip")) 
 
 # Partial F (note F-stat is called eF in the code)
 numer.df = 2*nq
@@ -2434,7 +2434,6 @@ denom.df = Yspec$df-2*nq
 dev.new()
 par(mfrow=c(3,1), mar=c(3,3,2,1)+.5, mgp = c(1.5,0.4,0), cex.lab=1.2)  
 out.15 = stoch.reg(Y, cols.full = c(1,5), cols.red = 5, alpha, L, M, plot.which = "F.stat")
- Grid()
  eF = out.15$eF 
  pvals = pf(eF, numer.df, denom.df, lower.tail = FALSE)
  pID = FDR(pvals, fdr)
