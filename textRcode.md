@@ -1377,7 +1377,7 @@ fit$resid.cov # estimate of noise cov matrix
 
 ## Chapter 6
 
-The code here uses the updated scripts in `astsa` _version 2.0._   Details of the updates are in the help files: `?Kfilter`, `?Ksmooth`, and `?EM`.  Original code may be found here: [Original Chapter 6 Info and Code](https://github.com/nickpoison/tsa4/blob/master/chap6.md)
+> __Warning__ The code here uses the updated scripts in `astsa` _version 2.0._   Details of the updates are in the help files of `Kfilter`, `Ksmooth`, and `EM`.  Original code (prior to version 2.0) may be found here: [Original Chapter 6 Info and Code](https://github.com/nickpoison/tsa4/blob/master/chap6.md)
 
 
 
