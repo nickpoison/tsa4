@@ -686,13 +686,14 @@ Example 3.33
 ```r
 x = diff(log(varve))       # data
 r = acf1(x, 1, plot=FALSE) # acf(1)
-c(0) -> w -> z -> Sc -> Sz -> Szw -> para # initialize all variables
+c(0) -> z -> Sc -> Sz -> Szw -> para # initialize .. 
+c(x[1]) -> w                         # .. all variables
 num = length(x)            # 633
 
 ## Gauss-Newton Estimation
 para[1] = (1-sqrt(1-4*(r^2)))/(2*r)  # MME to start (not very good)
 niter   = 12             
-for (j in 1:niter){
+for (j in 1:niter){  
  for (t in 2:num){ w[t] = x[t]   - para[j]*w[t-1]
                    z[t] = w[t-1] - para[j]*z[t-1]
  }
@@ -707,7 +708,7 @@ cbind(iteration=1:niter-1, thetahat=para[1:niter], Sc, Sz)
 ## Plot conditional SS and results
 c(0) -> w -> cSS
 th = -seq(.3, .94, .01)
-for (p in 1:length(th)){
+for (p in 1:length(th)){   
  for (t in 2:num){ w[t] = x[t] - th[p]*w[t-1] 
  }
 cSS[p] = sum(w^2)
