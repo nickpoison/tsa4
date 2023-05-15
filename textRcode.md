@@ -706,7 +706,7 @@ para[j+1] = para[j] + Szw[j]/Sz[j]
 cbind(iteration=1:niter-1, thetahat=para[1:niter], Sc, Sz)
 
 ## Plot conditional SS and results
-c(0) -> w -> cSS
+c(0) -> cSS
 th = -seq(.3, .94, .01)
 for (p in 1:length(th)){   
  for (t in 2:num){ w[t] = x[t] - th[p]*w[t-1] 
