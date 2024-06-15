@@ -16,20 +16,24 @@
 <br/>
 
 &#9940; &#9940;  __WARNING:__   If loaded, the package `dplyr` may (and most likely will) corrupt the base scripts  `filter` 
-and  `lag`  that we use often. In this case, to avoid problems, either detach the problem package
+and  `lag`  that we use often. In this case, to avoid problems, you have a few options:
 
 ```r
-detach(package:dplyr)
+# either detach it
+detach(package:dplyr)  
 
-```
+# or fix it yourself if you want dplyr 
+# this is a great idea from  https://stackoverflow.com/a/65186251
+library(dplyr, exclude = c("filter", "lag"))  # remove the culprits
+Lag <- dplyr::lag            # and do what the dplyr ... 
+Filter <- dplyr::filter      # ... maintainers refuse to do
 
-or issue the commands 
-
-```r
+# or just take back the commands
 filter = stats::filter
 lag = stats::lag
 
 ```
+
 before analyzing time series data.  &#128534; If you are wondering how it is possible to corrupt a base package, you are not alone. 
 
 
@@ -41,10 +45,10 @@ before analyzing time series data.  &#128534; If you are wondering how it is pos
 >  __Note__ when you are in a code block below, you can copy the contents of the block by moving your mouse to the upper right corner and clicking on the copy icon ( &#128203; ).
 
 ---
---- 
+---
 
 ### Table of Contents
-  
+
   * [Chapter 1 - Characteristics of Time Series](#chapter-1)
   * [Chapter 2 - Time Series Regression and Exploratory Data Analysis](#chapter-2)
   * [Chapter 3 - ARIMA Models](#chapter-3)
@@ -52,7 +56,7 @@ before analyzing time series data.  &#128534; If you are wondering how it is pos
   * [Chapter 5 - Additional Time Domain Topics](#chapter-5)
   * [Chapter 6 - State Space Models](#chapter-6)
   * [Chapter 7 - Statistical Methods in the Frequency Domain](#chapter-7)
- 
+
 ---
 
 ## Chapter 1
@@ -71,13 +75,13 @@ tsplot(globtemp, col=4, type="o", ylab="Global Temperature Deviations")
 
 # or with the updated values
 tsplot(gtemp_land, col=4, type="o", ylab="Global Temperature Deviations")
-``` 
+```
 
 Example 1.3  
 
 ```r
 tsplot(speech)  
-``` 
+```
 
 Example 1.4  
 
@@ -130,7 +134,7 @@ tsplot(EXP6, col=4, main="Explosion")
 # or try (not in text)
 tsplot(cbind(EQ5,EXP6), col=4)
 ```
- 
+
 Example 1.9
 
 ```r
@@ -389,7 +393,7 @@ par(mfrow=c(3,1))     # plot ACFs
 acf1(chicken, 48, main="chicken")
 acf1(detrend(chicken), 48, main="detrended")
 acf1(diff(chicken), 48, main="first difference")
-``` 
+```
 
 
 Example 2.6
@@ -479,7 +483,7 @@ curve(dnorm, -3, 3,  xaxt='n', yaxt='n', ann=FALSE)
 
 
 Example 2.13
- 
+
 ```r
 # Figure 2.14 using the trend script
 trend(soi, lowess=TRUE)
@@ -906,7 +910,7 @@ sarima(lx, 1,1,0, 0,1,1, 12)   # model 3
 
 dev.new()
 sarima.for(lx, 12, 0,1,1, 0,1,1,12)  # forecasts
-``` 
+```
 
 [<sub>top</sub>](#table-of-contents)
 
@@ -1113,7 +1117,7 @@ u <- spec.ic(soi,  detrend=TRUE, col=4, lwd=2, nxm=4)
 # plot AIC and BIC
 dev.new()
 tsplot(0:30, u[[1]][,2:3], type='o', col=2:3, xlab='ORDER', nxm=5, lwd=2, gg=TRUE)  
-``` 
+```
 
 
 Example 4.21
