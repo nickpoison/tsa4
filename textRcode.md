@@ -1,7 +1,7 @@
 
 ## R Code Used in the Examples - tsa4 
 
-<img align="left" src="https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/figs/tsa4.jpg" alt="&nbsp; tsa4 &nbsp;"  height="200" />  This is an updated version of the code in [Time Series Analysis and Its Applications, 4th Edition](https://github.com/nickpoison/tsa4) 
+<img align="left" src="https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/figs/tsa4.jpg" alt="&nbsp; tsa4 &nbsp;"  height="200" />  This is the site for the 4th edition.  The site for the 5th edition is here: [Time Series Analysis and Its Applications, 5th Edition](https://github.com/nickpoison/tsa5/blob/master/textRcode.md) 
 
 
 #### &#x2728; See the [NEWS](https://github.com/nickpoison/astsa/blob/master/NEWS.md) for further details about the state of the package and the changelog.
