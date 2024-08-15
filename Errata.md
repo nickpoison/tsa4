@@ -1,6 +1,8 @@
 ## Edition 4 Errata  
 
+_For some reason, equations are being displayed properly on this page ... we don't know why, but it's  not that big of a problem ... so here we go:_
 
+<br/>
 
 ### Chapter 1 
 
@@ -8,7 +10,7 @@
 
 ### Chapter 2 
 
-- __Eq (2.38)-(2.39):__ To be more general, the time subscript should have been $t_i$ so the equations would read $$m_t = \sum_{i=1}^n  w_i(t) x_{t_i}\, ,  \tag{2.38}   $$ where 
+- __Eq (2.38)-(2.39):__ To be more general, the time subscript should have been $t_i$ so the equations would read $$m_t = \sum_{i=1}^n  w_i(t) x_{t_i}  \tag{2.38}$$ where 
 $$w_i(t)= K\bigl(\tfrac{t-{t_i}}{b}\bigr) \Bigm/   \sum_{j=1}^n K\bigl(\tfrac{t-{t_j}}{b}\bigr) \tag{2.39}$$
 ... and typically $K(z)=\exp(-z^2/2)$ is used (no need for constants because the weights are normalized).
 
