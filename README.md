@@ -11,6 +11,7 @@
 
 - This is the new home of  [Time Series Analysis and Its Applications, Edition 4](http://www.stat.pitt.edu/stoffer/tsa4/) but the old entry page is still there.
 
+- Edition 4 errata is here: [Errata](https://github.com/nickpoison/tsa4/blob/master/Errata.md)
 
 
 ## astsa
@@ -32,5 +33,4 @@
 - _Why use Python if you can use R?_ &nbsp; &nbsp; -Mr Natural
 
 &emsp; &ensp;<img src="https://github.com/nickpoison/astsa/blob/master/fun_with_astsa/figs/tool.png" alt="mr natch">
-
 
