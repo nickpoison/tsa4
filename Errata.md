@@ -10,8 +10,8 @@ _[aides who called tRump a moron](https://www.politico.com/story/2018/09/04/trum
 
 ### Chapter 2 
 
- __Eq (2.38)-(2.39):__ To be more general, the time subscript should have been $t_i$ so the equations would read $$m_t = \sum_{i=1}^n  w_i(t) x_{t_i}  \tag{2.38}$$ where<br/>
-   $$~~~~~~~~~~w_i(t)= K\bigl(\tfrac{t-{t_i}}{b}\bigr) \Bigm/   \sum_{j=1}^n K\bigl(\tfrac{t-{t_j}}{b}\bigr) \tag{2.39}$$<br/>
+ __Eq (2.38)-(2.39):__ To be more general, the time subscript should have been $t_i$ so the equations would read $$m_t = \sum_{i=1}^n  w_i(t) x_{t_i}  \tag{2.38}$$ where<br/><br/>
+   $$~~~~~~~~~~~~~~~~~~~~~~~~w_i(t)= K\bigl(\tfrac{t-{t_i}}{b}\bigr) \Bigm/   \sum_{j=1}^n K\bigl(\tfrac{t-{t_j}}{b}\bigr) \tag{2.39}$$<br/><br/>
 ... and typically $K(z)=\exp(-z^2/2)$ is used (no need for constants because the weights are normalized).
 
 
@@ -30,8 +30,7 @@ lines(ksmooth(time(SOI), SOI, kernel="normal", bandwidth=12), lwd=2, col=4)
 
 ###  Chapter 3 
 
-- __Eq (3.10):__ The sum should be to $k$ (and not $k-1$):<br/>
-$$~~~~~~~~~~x_t = \phi^{-k} x_{t+k} - \sum_{j=1}^{k} \phi^{-j} w_{t+j}\,. $$
+- __Eq (3.10):__ The sum should be to $k$ (and not $k-1$):  $~x_t = \phi^{-k} x_{t+k} - \sum_{j=1}^{k} \phi^{-j} w_{t+j}\,.$
 
 
 ### Chapter 4 
