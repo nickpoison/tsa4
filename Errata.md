@@ -11,7 +11,8 @@ _[aides who called tRump a moron](https://www.politico.com/story/2018/09/04/trum
 ### Chapter 2 
 
  __Eq (2.38)-(2.39):__ To be more general, the time subscript should have been $t_i$ so the equations would read $$m_t = \sum_{i=1}^n  w_i(t) x_{t_i}  \tag{2.38}$$ where<br/><br/>
-   $$~~~~~~~~~~~~~~~~~~~~~~~~w_i(t)= K\bigl(\tfrac{t-{t_i}}{b}\bigr) \Bigm/   \sum_{j=1}^n K\bigl(\tfrac{t-{t_j}}{b}\bigr) \tag{2.39}$$<br/><br/>
+   $$~~~~~~~~~~~~~~~~~~~~~~~~w_i(t)= K\bigl(\tfrac{t-{t_i}}{b}\bigr) \Bigm/   \sum_{j=1}^n K\bigl(\tfrac{t-{t_j}}{b}\bigr) \tag{2.39}$$
+ <br/><br/>
 ... and typically $K(z)=\exp(-z^2/2)$ is used (no need for constants because the weights are normalized).
 
 
