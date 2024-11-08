@@ -58,6 +58,17 @@ acf(innov[[1]])
 
  - __Property 6.7, equation (6.137):__ Left off the conditioning arguments ... the $\pi_j(t)$  in the numerator and in the denominator  should be $\pi_j(t \mid t-1)$ . 
 
+ - __Example 6.13:__  There is a correction in the code for this example.  The correction has been made here [textRcode](https://github.com/nickpoison/tsa4/blob/master/textRcode.md).  Under Example 6.13 code, the correction is for bootstrapping (lines 60-63) and the results are a little different (but the discussion is still correct): 
+
+   ```r
+    for (j in k){               # this is line 60
+      K  = (phi*Pp[j-1]*z[j-1])/sig[j-1]  
+     xp.star[j] = phi*xp.star[j-1] + Ups +   K*sqrt(sig[j-1])*e.star[j-1]
+     } 
+   ```
+
+   
+
 
 ### Chapter 7 
 
