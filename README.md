@@ -11,8 +11,6 @@
 - All the (updated) code used in the text  is in [textRcode.md](https://github.com/nickpoison/tsa4/blob/master/textRcode.md)
 
 
-- This is the new home of  [Time Series Analysis and Its Applications, Edition 4](http://www.stat.pitt.edu/stoffer/tsa4/) but the old entry page is still there.
-
 - Edition 4 errata is here: [Errata](https://github.com/nickpoison/tsa4/blob/master/Errata.md)
 
 
